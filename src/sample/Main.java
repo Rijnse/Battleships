@@ -28,7 +28,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
 
-        FileInputStream inputstream = new FileInputStream("C:\\Users\\Rinse\\Documents\\GitHub\\Battleships\\Afbeelding1.jpg");
+        FileInputStream inputstream = new FileInputStream("Afbeelding1.jpg");
         Image image = new Image(inputstream);
         ImageView imageView = new ImageView(image);
 
