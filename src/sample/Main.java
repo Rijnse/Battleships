@@ -27,31 +27,11 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-
-        FileInputStream inputstream = new FileInputStream("Afbeelding1.jpg");
-        Image image = new Image(inputstream);
-        ImageView imageView = new ImageView(image);
-
-        Button exit = new Button();
-        exit.setText("Click me if you dare!");
-        exit.setStyle("-fx-border-color: #ff0000; -fx-border-width: 5px;");
-        exit.setOnAction(new EventHandler() {
-            @Override
-            public void handle(Event event) {
-                System.exit(0);
-            }
-        });
-
-
-        Label label = new Label("Dikke vette huts!");
-        VBox box = new VBox(20, label, imageView, exit);
-        box.setAlignment(Pos.CENTER);
-
-        primaryStage.setTitle("Battleships");
-        primaryStage.setScene(new Scene(box, 500, 700));
+        Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
+        primaryStage.setTitle("Test huts");
+        primaryStage.setScene(new Scene(root, 300, 275));
         primaryStage.show();
     }
-
 
     public static void main(String[] args) {
         launch(args);
