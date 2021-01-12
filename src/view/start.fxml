@@ -31,7 +31,7 @@
                   <Button fx:id="joinbig" layoutX="28.0" layoutY="13.0" mnemonicParsing="false" onAction="#bigJoinButtonpress" prefHeight="71.0" prefWidth="294.0" text="Join game" />
                   <TextField fx:id="hostport" layoutX="101.0" layoutY="14.0" promptText="Port" visible="false" />
                   <TextField fx:id="hostname" layoutX="101.0" layoutY="39.0" promptText="Username" visible="false" />
-                  <Button fx:id="hostbutton" layoutX="101.0" layoutY="72.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="149.0" text="Host game!" visible="false" />
+                  <Button fx:id="hostbutton" layoutX="101.0" layoutY="72.0" mnemonicParsing="false" onAction="#hostGame" prefHeight="25.0" prefWidth="149.0" text="Host game!" visible="false" />
                </children>
             </AnchorPane>
         </items>

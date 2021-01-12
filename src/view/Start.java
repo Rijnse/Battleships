@@ -8,6 +8,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import model.networking.Client;
 
 import java.io.IOException;
 
@@ -21,7 +22,6 @@ public class Start {
     @FXML private TextField joinip;
     @FXML private TextField joinport;
     @FXML private TextField joinname;
-
 
     public void bigHostButtonpress(ActionEvent e) {
         if (joinbig.isVisible()) {
@@ -65,12 +65,22 @@ public class Start {
         Parent root;
 
         if(e.getSource()==joinbutton || e.getSource()==hostbutton){
-            stage = (Stage) joinbutton.getScene().getWindow();
-            root = FXMLLoader.load(getClass().getResource("../view/lobby.fxml"));
+            if (e.getSource()==joinbutton) {
+                stage = (Stage) joinbutton.getScene().getWindow();
+            }
+            else {
+                stage = (Stage) hostbutton.getScene().getWindow();
+            }
 
+            root = FXMLLoader.load(getClass().getResource("../view/lobby.fxml"));
             Scene scene = new Scene(root);
             stage.setScene(scene);
             stage.show();
         }
+    }
+
+    @FXML
+    public void hostGame(ActionEvent e) {
+
     }
 }

@@ -66,6 +66,7 @@
             <AnchorPane id="chatbutton" prefHeight="43.0" prefWidth="42.0" stylesheets="@../resources/buttonpicture.css" />
          </graphic></Button>
       <Button fx:id="leavebutton" layoutX="21.0" layoutY="24.0" mnemonicParsing="false" onAction="#leaveGame" prefHeight="42.0" prefWidth="90.0" text="Leave game" />
-      <Button fx:id="balenciaga" layoutX="720.0" layoutY="223.0" mnemonicParsing="false" onAction="#audioPlayerButton" text="balenciaga" />
+      <Button fx:id="balenciaga" layoutX="781.0" layoutY="24.0" mnemonicParsing="false" onAction="#audioPlayerButton" prefHeight="25.0" prefWidth="82.0" text="Start music" />
+      <Button fx:id="mutebutton" layoutX="782.0" layoutY="54.0" mnemonicParsing="false" onAction="#muteMusic" prefHeight="25.0" prefWidth="82.0" text="Mute music" />
     </children>
 </AnchorPane>

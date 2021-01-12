@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Slider;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
@@ -34,13 +35,26 @@ public class Lobby {
     }
 
     @FXML private Button balenciaga;
+    @FXML private Button mutebutton;
     MediaPlayer mediaPlayer;
     @FXML
     public void audioPlayerButton(ActionEvent e) throws MalformedURLException {
         if (e.getSource() == balenciaga) {
-            Media hit = new Media(new File("src/resources/music.mp3").toURI().toURL().toString());
-            mediaPlayer = new MediaPlayer(hit);
-            mediaPlayer.play();
+                Media hit = new Media(new File("src/resources/music.mp3").toURI().toURL().toString());
+                mediaPlayer = new MediaPlayer(hit);
+                mediaPlayer.setVolume(0.5);
+                mediaPlayer.play();
+        }
+    }
+
+    @FXML
+    public void muteMusic(ActionEvent e) {
+        if (e.getSource() == mutebutton) {
+            if (mediaPlayer.isMute()) {
+                mediaPlayer.setMute(false);
+            } else {
+                mediaPlayer.setMute(true);
+            }
         }
     }
 }
