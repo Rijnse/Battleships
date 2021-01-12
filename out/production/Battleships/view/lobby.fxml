@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.Lobby">
+    <children>
+    <Text layoutX="154.0" layoutY="84.0" strokeType="OUTSIDE" strokeWidth="0.0" text="BATTLESHIPS">
+        <font>
+            <Font name="Alien Encounters" size="87.0" />
+        </font></Text>
+    <Text layoutX="158.0" layoutY="115.0" strokeType="OUTSIDE" strokeWidth="0.0" text="DEVELOPED BY STIJN ODINK AND RINSE DIJKSTRA">
+        <font>
+            <Font name="Alien Encounters" size="24.0" />
+        </font>
+    </Text>
+    </children>
+</AnchorPane>
