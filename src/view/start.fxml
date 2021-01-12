@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.Start">
+   <children>
+      <Text layoutX="154.0" layoutY="235.0" strokeType="OUTSIDE" strokeWidth="0.0" text="BATTLESHIPS">
+         <font>
+            <Font name="Alien Encounters" size="87.0" />
+         </font></Text>
+      <Text layoutX="158.0" layoutY="266.0" strokeType="OUTSIDE" strokeWidth="0.0" text="DEVELOPED BY STIJN ODINK AND RINSE DIJKSTRA">
+         <font>
+            <Font name="Alien Encounters" size="24.0" />
+         </font>
+      </Text>
+      <SplitPane centerShape="false" dividerPositions="0.4" layoutX="278.0" layoutY="290.0" orientation="VERTICAL" prefHeight="264.0" prefWidth="345.0" style="-fx-background-color: transparent;">
+        <items>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="115.0" prefWidth="343.0">
+               <children>
+                  <Button fx:id="hostbig" layoutX="28.0" layoutY="13.0" mnemonicParsing="false" onAction="#bigHostButtonpress" prefHeight="71.0" prefWidth="294.0" text="Host game" />
+                  <TextField fx:id="joinip" layoutX="101.0" layoutY="1.0" promptText="IP address" visible="false" />
+                  <TextField fx:id="joinport" layoutX="101.0" layoutY="24.0" promptText="Port" visible="false" />
+                  <TextField fx:id="joinname" layoutX="101.0" layoutY="49.0" promptText="Username" visible="false" />
+                  <Button fx:id="joinbutton" layoutX="102.0" layoutY="76.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="149.0" text="Join game!" visible="false" />
+               </children>
+            </AnchorPane>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="154.0" prefWidth="359.0" SplitPane.resizableWithParent="false">
+               <children>
+                  <Button fx:id="joinbig" layoutX="28.0" layoutY="13.0" mnemonicParsing="false" onAction="#bigJoinButtonpress" prefHeight="71.0" prefWidth="294.0" text="Join game" />
+                  <TextField fx:id="hostport" layoutX="101.0" layoutY="14.0" promptText="Port" visible="false" />
+                  <TextField fx:id="hostname" layoutX="101.0" layoutY="39.0" promptText="Username" visible="false" />
+                  <Button fx:id="hostbutton" layoutX="101.0" layoutY="72.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="149.0" text="Host game!" visible="false" />
+               </children>
+            </AnchorPane>
+        </items>
+      </SplitPane>
+   </children>
+</AnchorPane>

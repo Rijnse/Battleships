@@ -1,3 +1,5 @@
+package model;
+
 public class ProtocolMessages {
     public static final String TURN = "T";
     public static final String TIME = "TIME";
