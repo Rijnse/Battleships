@@ -18,4 +18,8 @@ public class ProtocolMessages {
 
     public static final char[] COLUMNS = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O'};
     public static final int[] ROWS = {0,1,2,3,4,5,6,7,8,9};
+
+    public enum Ship {
+        EMPTY, CARRIER, BATTLESHIP, DESTROYER, SUPERPATROL, PATROLBOAT
+    }
 }
