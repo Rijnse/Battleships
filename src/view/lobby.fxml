@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
@@ -33,6 +34,38 @@
             <Font size="20.0" />
          </font>
       </Text>
-      <HBox layoutX="283.0" layoutY="174.0" prefHeight="100.0" prefWidth="200.0" />
+      <AnchorPane layoutX="274.0" layoutY="165.0" prefHeight="86.0" prefWidth="304.0">
+         <children>
+            <Text layoutX="80.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Player one:" wrappingWidth="65.97265625" />
+            <Text layoutX="80.0" layoutY="51.0" strokeType="OUTSIDE" strokeWidth="0.0" text="This is a placeholder!">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Text>
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="52.0" layoutX="14.0" layoutY="17.0" stroke="BLACK" strokeType="INSIDE" width="57.0" />
+         </children>
+      </AnchorPane>
+      <AnchorPane layoutX="274.0" layoutY="265.0" prefHeight="86.0" prefWidth="304.0">
+         <children>
+            <Text layoutX="80.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Player two:" wrappingWidth="65.97265625" />
+            <Text layoutX="80.0" layoutY="51.0" strokeType="OUTSIDE" strokeWidth="0.0" text="This is a placeholder!">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Text>
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ff1f1f" height="52.0" layoutX="14.0" layoutY="17.0" stroke="BLACK" strokeType="INSIDE" width="57.0" />
+         </children>
+      </AnchorPane>
+      <Button layoutX="290.0" layoutY="467.0" mnemonicParsing="false" prefHeight="96.0" prefWidth="406.0" style="-fx-background-color: #32e662;" text="Start the game!" textFill="WHITE">
+         <font>
+            <Font size="30.0" />
+         </font>
+      </Button>
+      <Button layoutX="88.0" layoutY="495.0" mnemonicParsing="false" prefHeight="52.0" prefWidth="57.0">
+         <graphic>
+            <AnchorPane id="chatbutton" prefHeight="43.0" prefWidth="42.0" stylesheets="@../resources/buttonpicture.css" />
+         </graphic></Button>
+      <Button fx:id="leavebutton" layoutX="21.0" layoutY="24.0" mnemonicParsing="false" onAction="#leaveGame" prefHeight="42.0" prefWidth="90.0" text="Leave game" />
+      <Button fx:id="balenciaga" layoutX="720.0" layoutY="223.0" mnemonicParsing="false" onAction="#audioPlayerButton" text="balenciaga" />
     </children>
 </AnchorPane>

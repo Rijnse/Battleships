@@ -2,8 +2,14 @@ package view;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
+
+import java.io.IOException;
 
 public class Start {
     @FXML private Button hostbig;
@@ -50,6 +56,21 @@ public class Start {
             joinbutton.setVisible(false);
             hostbig.setVisible(true);
             joinbig.setText("Join game");
+        }
+    }
+
+    @FXML
+    public void switchToLobby(ActionEvent e) throws IOException {
+        Stage stage;
+        Parent root;
+
+        if(e.getSource()==joinbutton || e.getSource()==hostbutton){
+            stage = (Stage) joinbutton.getScene().getWindow();
+            root = FXMLLoader.load(getClass().getResource("../view/lobby.fxml"));
+
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
         }
     }
 }
