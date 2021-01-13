@@ -1,8 +1,14 @@
 package model.game;
 
 public class HumanPlayer extends Player{
+    private String name;
 
     public HumanPlayer(String name) {
-        super(name);
+        super();
+        this.name = name;
+    }
+
+    public String getName() {
+        return this.name;
     }
 }

@@ -184,16 +184,4 @@ public class Board {
     public boolean isEmptyField(String coordinates) {
         return this.fields[index(coordinates)].getShip() == null;
     }
-
-    public static void main(String[] args) {
-        Field[] array = new Field[150];
-        for (Field k : array) {
-            k = new Field();
-        }
-        //array[2] = new Field(SHIPS[0]);
-        //array[3] = new Field(SHIPS[0]);
-        Board board = new Board(array);
-        System.out.println(board.boardToString());
-    }
-
 }
