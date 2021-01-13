@@ -11,4 +11,10 @@ public class HumanPlayer extends Player{
     public String getName() {
         return this.name;
     }
+
+    @Override
+    public int determineMove(Board board) {
+        String command = "";
+        return board.index(command);
+    }
 }

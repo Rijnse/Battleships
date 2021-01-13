@@ -20,4 +20,6 @@ public abstract class Player {
     public Board getBoard() {
         return this.board;
     }
+
+    public abstract int determineMove(Board board);
 }
