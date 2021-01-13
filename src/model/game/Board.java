@@ -5,58 +5,45 @@ import model.ProtocolMessages;
 public class Board {
     public static final int WIDTH = 15;
     public static final int HEIGHT = 10;
+    public static final String COLUMNS = "ABCDEFGHIJKLMNO";
 
-    private ProtocolMessages.Ship[] fields;
+    private Field[] fields;
 
     public Board() {
         //TODO randomized board maker
     }
 
+    //example of string 0,C1,C1,C1,C1,C1,0,P0,0 etc. Read left to right, top to bottom
     public Board(String boardarray) {
         //TODO initializing board using protocol defined string
     }
 
-    public Board(ProtocolMessages.Ship[] array) {
+    public Board(Field[] array) {
         this.fields = array;
     }
 
-    public ProtocolMessages.Ship[] getFieldsArray() {
+    public String boardToString() {
+        //TODO converts the board object to a protocol defined string
+        return null;
+    }
+
+    public Field[] getFieldsArray() {
         return fields;
     }
 
     //used by ComputerPlayer for determining moves
     public Board deepCopy() {
-        ProtocolMessages.Ship[] copy = new ProtocolMessages.Ship[WIDTH*HEIGHT];
+        Field[] copy = new Field[WIDTH*HEIGHT];
         for (int i = 0; i < fields.length; i++) {
-            switch (fields[i]) {
-                case EMPTY:
-                    copy[i] = ProtocolMessages.Ship.EMPTY;
-                    break;
-                case CARRIER:
-                    copy[i] = ProtocolMessages.Ship.CARRIER;
-                    break;
-                case BATTLESHIP:
-                    copy[i] = ProtocolMessages.Ship.BATTLESHIP;
-                    break;
-                case DESTROYER:
-                    copy[i] = ProtocolMessages.Ship.DESTROYER;
-                    break;
-                case SUPERPATROL:
-                    copy[i] = ProtocolMessages.Ship.SUPERPATROL;
-                    break;
-                case PATROLBOAT:
-                    copy[i] = ProtocolMessages.Ship.PATROLBOAT;
-                    break;
-            }
+            copy[i] = new Field(fields[i].isHit(), fields[i].getShip());
         }
         return new Board(copy);
     }
 
     //example: A1 -> 0, B1 -> 15, A2 -> 1
     public int index(String coordinates) {
-        String columns = "ABCDEFGHIJKLMNO";
         String[] split = coordinates.split("");
-        int col = columns.indexOf(split[0]);
+        int col = COLUMNS.indexOf(split[0]);
         int row = (Integer.parseInt(split[1])) - 1;
         return (col * 15) + row;
     }
@@ -69,26 +56,19 @@ public class Board {
         return 0 <= index(coordinates) && index(coordinates) < WIDTH*HEIGHT;
     }
 
-    public ProtocolMessages.Ship getField(int i) {
+    public Field getField(int i) {
         return this.fields[i];
     }
 
-    public ProtocolMessages.Ship getField(String coordinates) {
+    public Field getField(String coordinates) {
         return this.fields[index(coordinates)];
     }
 
     public boolean isEmptyField(int i) {
-        return this.fields[i] == ProtocolMessages.Ship.EMPTY;
+        return this.fields[i].getShip() == null;
     }
 
     public boolean isEmptyField(String coordinates) {
-        return this.fields[index(coordinates)] == ProtocolMessages.Ship.EMPTY;
-    }
-
-
-
-    public static void main(String[] args) {
-        Board board = new Board();
-        System.out.println(board.index("B1"));
+        return this.fields[index(coordinates)].getShip() == null;
     }
 }
