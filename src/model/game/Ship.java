@@ -2,7 +2,7 @@ package model.game;
 import model.ProtocolMessages;
 
 public class Ship {
-    private int identifier; // between 0 and 9, depends on ship type
+    private int identifier; // between 0 and 9, depends on ship type, -1 if empty
     private ProtocolMessages.Ship type;
 
     public Ship(int identifier, ProtocolMessages.Ship type) {
@@ -14,7 +14,7 @@ public class Ship {
         return this.identifier;
     }
 
-    public ProtocolMessages.Ship getShip() {
+    public ProtocolMessages.Ship getType() {
         return this.type;
     }
 

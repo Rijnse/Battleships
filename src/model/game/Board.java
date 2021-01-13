@@ -7,6 +7,40 @@ public class Board {
     public static final int HEIGHT = 10;
     public static final String COLUMNS = "ABCDEFGHIJKLMNO";
 
+    private static final Ship[] SHIPS = {
+            new Ship(0, ProtocolMessages.Ship.CARRIER),
+            new Ship(1, ProtocolMessages.Ship.CARRIER),
+
+            new Ship(0, ProtocolMessages.Ship.BATTLESHIP),
+            new Ship(1, ProtocolMessages.Ship.BATTLESHIP),
+            new Ship(2, ProtocolMessages.Ship.BATTLESHIP),
+
+            new Ship(0, ProtocolMessages.Ship.DESTROYER),
+            new Ship(1, ProtocolMessages.Ship.DESTROYER),
+            new Ship(2, ProtocolMessages.Ship.DESTROYER),
+            new Ship(3, ProtocolMessages.Ship.DESTROYER),
+            new Ship(4, ProtocolMessages.Ship.DESTROYER),
+
+            new Ship(0, ProtocolMessages.Ship.SUPERPATROL),
+            new Ship(1, ProtocolMessages.Ship.SUPERPATROL),
+            new Ship(2, ProtocolMessages.Ship.SUPERPATROL),
+            new Ship(3, ProtocolMessages.Ship.SUPERPATROL),
+            new Ship(4, ProtocolMessages.Ship.SUPERPATROL),
+            new Ship(5, ProtocolMessages.Ship.SUPERPATROL),
+            new Ship(6, ProtocolMessages.Ship.SUPERPATROL),
+            new Ship(7, ProtocolMessages.Ship.SUPERPATROL),
+
+            new Ship(0, ProtocolMessages.Ship.PATROLBOAT),
+            new Ship(1, ProtocolMessages.Ship.PATROLBOAT),
+            new Ship(2, ProtocolMessages.Ship.PATROLBOAT),
+            new Ship(3, ProtocolMessages.Ship.PATROLBOAT),
+            new Ship(4, ProtocolMessages.Ship.PATROLBOAT),
+            new Ship(5, ProtocolMessages.Ship.PATROLBOAT),
+            new Ship(6, ProtocolMessages.Ship.PATROLBOAT),
+            new Ship(7, ProtocolMessages.Ship.PATROLBOAT),
+            new Ship(8, ProtocolMessages.Ship.PATROLBOAT),
+            new Ship(9, ProtocolMessages.Ship.PATROLBOAT),
+    };
     private Field[] fields;
 
     public Board() {
@@ -15,7 +49,64 @@ public class Board {
 
     //example of string 0,C1,C1,C1,C1,C1,0,P0,0 etc. Read left to right, top to bottom
     public Board(String boardarray) {
-        //TODO initializing board using protocol defined string
+        Ship placeholder = null;
+        Field[] array = new Field[WIDTH*HEIGHT];
+        String[] strarray = boardarray.split(",");
+        for (int i = 0; i < strarray.length; i++) {
+            if (strarray[i].equals("0")) {
+                array[i] = new Field();
+            }
+            else {
+                switch (strarray[i].charAt(0)) {
+                    case 'C':
+                        for (int k = 0; k < SHIPS.length; k++) {
+                            if (SHIPS[k].getIdentifier() == Integer.parseInt(String.valueOf(strarray[i].charAt(1))) && SHIPS[k].getType() == ProtocolMessages.Ship.CARRIER) {
+                                placeholder = SHIPS[k];
+                                break;
+                            }
+                        }
+                        array[i] = new Field(placeholder);
+                        break;
+                    case 'B':
+                        for (int k = 0; k < SHIPS.length; k++) {
+                            if (SHIPS[k].getIdentifier() == Integer.parseInt(String.valueOf(strarray[i].charAt(1))) && SHIPS[k].getType() == ProtocolMessages.Ship.BATTLESHIP) {
+                                placeholder = SHIPS[k];
+                                break;
+                            }
+                        }
+                        array[i] = new Field(placeholder);
+                        break;
+                    case 'D':
+                        for (int k = 0; k < SHIPS.length; k++) {
+                            if (SHIPS[k].getIdentifier() == Integer.parseInt(String.valueOf(strarray[i].charAt(1))) && SHIPS[k].getType() == ProtocolMessages.Ship.DESTROYER) {
+                                placeholder = SHIPS[k];
+                                break;
+                            }
+                        }
+                        array[i] = new Field(placeholder);
+                        break;
+                    case 'S':
+                        for (int k = 0; k < SHIPS.length; k++) {
+                            if (SHIPS[k].getIdentifier() == Integer.parseInt(String.valueOf(strarray[i].charAt(1))) && SHIPS[k].getType() == ProtocolMessages.Ship.SUPERPATROL) {
+                                placeholder = SHIPS[k];
+                                break;
+                            }
+                        }
+                        array[i] = new Field(placeholder);
+                        break;
+                    case 'P':
+                        for (int k = 0; k < SHIPS.length; k++) {
+                            if (SHIPS[k].getIdentifier() == Integer.parseInt(String.valueOf(strarray[i].charAt(1))) && SHIPS[k].getType() == ProtocolMessages.Ship.PATROLBOAT) {
+                                placeholder = SHIPS[k];
+                                break;
+                            }
+                        }
+                        array[i] = new Field(placeholder);
+                        break;
+                }
+            }
+        }
+        this.fields = array;
     }
 
     public Board(Field[] array) {
@@ -23,8 +114,30 @@ public class Board {
     }
 
     public String boardToString() {
-        //TODO converts the board object to a protocol defined string
-        return null;
+        String result = "";
+        for (int i = 0; i < fields.length; i++) {
+            switch (fields[i].getShip().getType()) {
+                case CARRIER:
+                    result = result + ("C" + fields[i].getShip().getIdentifier()) + ",";
+                    break;
+                case BATTLESHIP:
+                    result = result + ("B" + fields[i].getShip().getIdentifier()) + ",";
+                    break;
+                case DESTROYER:
+                    result = result + ("D" + fields[i].getShip().getIdentifier()) + ",";
+                    break;
+                case SUPERPATROL:
+                    result = result + ("S" + fields[i].getShip().getIdentifier()) + ",";
+                    break;
+                case PATROLBOAT:
+                    result = result + ("P" + fields[i].getShip().getIdentifier()) + ",";
+                    break;
+                default:
+                    result = result + 0 + ",";
+                    break;
+            }
+        }
+        return result;
     }
 
     public Field[] getFieldsArray() {
@@ -71,4 +184,16 @@ public class Board {
     public boolean isEmptyField(String coordinates) {
         return this.fields[index(coordinates)].getShip() == null;
     }
+
+    public static void main(String[] args) {
+        Field[] array = new Field[150];
+        for (Field k : array) {
+            k = new Field();
+        }
+        //array[2] = new Field(SHIPS[0]);
+        //array[3] = new Field(SHIPS[0]);
+        Board board = new Board(array);
+        System.out.println(board.boardToString());
+    }
+
 }

@@ -1,12 +1,14 @@
 package model.game;
 
+import model.ProtocolMessages;
+
 public class Field {
     private boolean hit;
     private Ship ship;
 
     public Field() {
         this.hit = false;
-        this.ship = null;
+        this.ship = new Ship(-1, ProtocolMessages.Ship.EMPTY);
     }
 
     public Field(Ship ship) {

@@ -20,6 +20,6 @@ public class ProtocolMessages {
     public static final int[] ROWS = {0,1,2,3,4,5,6,7,8,9};
 
     public enum Ship {
-        CARRIER, BATTLESHIP, DESTROYER, SUPERPATROL, PATROLBOAT
+        EMPTY, CARRIER, BATTLESHIP, DESTROYER, SUPERPATROL, PATROLBOAT
     }
 }
