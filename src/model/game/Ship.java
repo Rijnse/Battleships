@@ -34,6 +34,10 @@ public class Ship {
         return this.type;
     }
 
+    public void setType(ProtocolMessages.Ship ship) {
+        this.type = ship;
+    }
+
     @Override
     public String toString() {
         return this.type.toString() + this.identifier;

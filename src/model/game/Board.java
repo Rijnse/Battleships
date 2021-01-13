@@ -178,10 +178,10 @@ public class Board {
     }
 
     public boolean isEmptyField(int i) {
-        return this.fields[i].getShip() == null;
+        return this.fields[i].getShip().getType() == ProtocolMessages.Ship.EMPTY;
     }
 
     public boolean isEmptyField(String coordinates) {
-        return this.fields[index(coordinates)].getShip() == null;
+        return this.fields[index(coordinates)].getShip().getType() == ProtocolMessages.Ship.EMPTY;
     }
 }
