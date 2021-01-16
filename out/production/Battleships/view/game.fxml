@@ -6,11 +6,11 @@
 
 <AnchorPane prefHeight="495.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.Game">
     <children>
-        <Text layoutX="154.0" layoutY="84.0" strokeType="OUTSIDE" strokeWidth="0.0" text="BATTLESHIPS">
+        <Text layoutX="79.0" layoutY="89.0" strokeType="OUTSIDE" strokeWidth="0.0" text="BATTLESHIPS">
             <font>
                 <Font name="Alien Encounters" size="87.0" />
             </font></Text>
-        <Text layoutX="158.0" layoutY="115.0" strokeType="OUTSIDE" strokeWidth="0.0" text="DEVELOPED BY STIJN ODINK AND RINSE DIJKSTRA">
+        <Text layoutX="82.0" layoutY="108.0" strokeType="OUTSIDE" strokeWidth="0.0" text="DEVELOPED BY STIJN ODINK AND RINSE DIJKSTRA">
             <font>
                 <Font name="Alien Encounters" size="24.0" />
             </font>
