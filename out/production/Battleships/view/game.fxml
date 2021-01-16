@@ -15,7 +15,7 @@
                 <Font name="Alien Encounters" size="24.0" />
             </font>
         </Text>
-      <GridPane gridLinesVisible="true" layoutX="75.0" layoutY="150.0" prefHeight="150.0" prefWidth="225.0">
+      <GridPane fx:id="playerField" gridLinesVisible="true" layoutX="75.0" layoutY="150.0" prefHeight="150.0" prefWidth="225.0">
         <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="100.0" />
             <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="100.0" />
@@ -46,7 +46,7 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
       </GridPane>
-      <GridPane gridLinesVisible="true" layoutX="450.0" layoutY="150.0" prefHeight="150.0" prefWidth="225.0" AnchorPane.rightAnchor="75.0">
+      <GridPane fx:id="enemyField" gridLinesVisible="true" layoutX="450.0" layoutY="150.0" prefHeight="150.0" prefWidth="225.0" AnchorPane.rightAnchor="75.0">
          <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="100.0" />
             <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="100.0" />
@@ -100,7 +100,7 @@
       <Text layoutX="147.0" layoutY="146.0" strokeType="OUTSIDE" strokeWidth="0.0" text="&quot;player 1&quot; ships" />
       <Text layoutX="525.0" layoutY="146.0" strokeType="OUTSIDE" strokeWidth="0.0" text="&quot;player 2&quot; ships" />
       <TextField layoutX="301.0" layoutY="379.0" promptText="please enter coordinates" />
-      <Button layoutX="301.0" layoutY="416.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="149.0" style="-fx-background-color: #e02810;" text="FOIRE M8" textFill="WHITE" wrapText="true">
+      <Button layoutX="301.0" layoutY="416.0" mnemonicParsing="false" onAction="#updatePlayerField" prefHeight="47.0" prefWidth="149.0" style="-fx-background-color: #e02810;" text="FOIRE M8" textFill="WHITE" wrapText="true">
          <font>
             <Font size="16.0" />
          </font>
