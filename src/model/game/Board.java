@@ -153,12 +153,34 @@ public class Board {
         return new Board(copy);
     }
 
-    //example: A1 -> 0, B1 -> 15, A2 -> 1
-    public int index(String coordinates) {
+    /**
+     * @requires valid input String object
+     * @ensures returning of index
+     * @param coordinates in form "letter (between A and O) + number (between 1 and 10) e.g. "A1", "G6" or "O10"
+     * @return a number between 0 and 149, which resembles the index of the field in the board fields array
+     */
+    public static int index(String coordinates) {
         String[] split = coordinates.split("");
         int col = COLUMNS.indexOf(split[0]);
-        int row = (Integer.parseInt(split[1])) - 1;
-        return (col * 15) + row;
+        int row;
+        if (!COLUMNS.contains(split[0])) {
+            return -1;
+        }
+        if (split[1].equals("0")) {
+            return -1;
+        }
+        if (split.length == 2) {
+            row = (Integer.parseInt(split[1])) - 1;
+        }
+        else {
+            if (split[1].equals("1") && split[2].equals("0")) {
+                row = 9;
+            }
+            else {
+                return -1;
+            }
+        }
+        return (row * WIDTH) + col;
     }
 
     public boolean isField(int index) {
