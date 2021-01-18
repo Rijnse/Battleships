@@ -49,17 +49,17 @@
          <children>
             <StackPane prefHeight="150.0" prefWidth="200.0">
                <children>
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="22.6" stroke="BLACK" strokeType="INSIDE" width="21.4" />
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="22.6" stroke="WHITE" strokeType="INSIDE" width="21.4" />
                </children>
             </StackPane>
             <StackPane layoutX="10.0" layoutY="10.0" prefHeight="150.0" prefWidth="200.0" GridPane.columnIndex="1">
                <children>
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="22.6" stroke="BLACK" strokeType="INSIDE" width="21.4" />
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="22.6" stroke="WHITE" strokeType="INSIDE" width="21.4" />
                </children>
             </StackPane>
             <StackPane layoutX="31.0" layoutY="10.0" prefHeight="150.0" prefWidth="200.0" GridPane.rowIndex="1">
                <children>
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="22.6" stroke="BLACK" strokeType="INSIDE" width="21.4" />
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="22.6" stroke="WHITE" strokeType="INSIDE" width="21.4" />
                </children>
             </StackPane>
          </children>

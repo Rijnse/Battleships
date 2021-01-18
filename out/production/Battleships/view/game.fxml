@@ -124,7 +124,7 @@
       <AnchorPane layoutX="300.0" layoutY="396.0">
          <children>
             <TextField promptText="please enter coordinates" />
-            <Button layoutY="32.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="149.0" style="-fx-background-color: #e02810;" text="FOIRE M8" textFill="WHITE" wrapText="true">
+            <Button layoutY="32.0" mnemonicParsing="false" onAction="#updatePlayerField" prefHeight="47.0" prefWidth="149.0" style="-fx-background-color: #e02810;" text="FOIRE M8" textFill="WHITE" wrapText="true">
                <font>
                   <Font size="16.0" />
                </font>

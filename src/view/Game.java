@@ -14,6 +14,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import model.ProtocolMessages;
 import model.game.Field;
+import model.game.Ship;
 
 public class Game {
 
@@ -28,18 +29,43 @@ public class Game {
         }
         return null;
     }
-
-    public void updatePlayerField(Field field, int index){
+// Field field, int index
+    public void updatePlayerField(){
+        Field field = new Field(new Ship(1, ProtocolMessages.Ship.CARRIER));
+        field.setHit(true);
        Rectangle rect = (Rectangle) ((StackPane) playerField.getChildren().get(0)).getChildren().get(0);
+
+       switch (field.getShip().getType()) {
+           case CARRIER:
+               rect.setFill(Color.web("#b6d7a8"));
+               break;
+           case BATTLESHIP:
+               rect.setFill(Color.web("#a4c2f4"));
+               break;
+           case DESTROYER:
+               rect.setFill(Color.web("#ffe599"));
+               break;
+           case SUPERPATROL:
+               rect.setFill(Color.web("#f9cb9c"));
+               break;
+           case PATROLBOAT:
+               rect.setFill(Color.web("#ea9999"));
+               break;
+           case UNKNOWN:
+               rect.setFill(Color.web("#b7b7b7"));
+               break;
+           default:
+               rect.setFill(Color.web("#ffffff"));
+               break;
+       }
 
        if (field.isHit()) {
             rect.setStroke(Color.RED);
+            rect.setStrokeWidth(2.5);
        }
        else {
-           rect.setStroke(Color.WHITESMOKE);
+           rect.setStroke(Color.WHITE);
        }
-
-
     }
 
     public void updateEnemyField() {
