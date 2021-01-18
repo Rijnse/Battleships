@@ -1,6 +1,7 @@
 package model.game;
 
 import model.ProtocolMessages;
+import model.ProtocolMessages.*;
 
 public class Board {
     public static final int WIDTH = 15;
@@ -44,7 +45,28 @@ public class Board {
     private Field[] fields;
 
     public Board() {
-        //TODO randomized board maker
+        Field[] array = new Field[WIDTH * HEIGHT];
+        for (Field f : array) {
+            f = new Field();
+        }
+
+        for (Ship s : SHIPS) {
+            int randomOrientation = (int) (Math.random() * 2);
+            switch (s.getType()) {
+                case CARRIER:
+                    int randomIndex = (int) (Math.random() * 150);
+                    while (true) {
+                        if (array[randomIndex].getShip().getType().equals(ProtocolMessages.Ship.EMPTY)) {
+                            if (randomOrientation == 0) {
+                                if (array[randomIndex +1].getShip().getType().equals(ProtocolMessages.Ship.EMPTY)){
+
+                                }
+                            }
+                        }
+                        randomIndex++;
+                    }
+            }
+        }
     }
 
     //example of string 0,C1,C1,C1,C1,C1,0,P0,0 etc. Read left to right, top to bottom

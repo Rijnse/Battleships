@@ -23,31 +23,38 @@ public class ComputerPlayer extends Player {
             int k = i;
             int p = i;
             if (board.getField(i).getShip().getType() == ProtocolMessages.Ship.UNKNOWN) {
-                while ((board.getField(k).getShip().getType() == ProtocolMessages.Ship.UNKNOWN)){
+                while ((board.getField(k).getShip().getType() == ProtocolMessages.Ship.UNKNOWN)) {
                     k++;
                 }
-                while ((board.getField(p).getShip().getType() == ProtocolMessages.Ship.UNKNOWN)){
+                while ((board.getField(p).getShip().getType() == ProtocolMessages.Ship.UNKNOWN)) {
                     p = p + WIDTH;
                 }
-                if (k >= p){
-                    if (!((k + 1) % WIDTH == 1)) {return k;}
-                    else {return k + WIDTH - 1;}
+                if (k >= p && !board.getField(k).isHit()) {
+                    if (!((k + 1) % WIDTH == 1)) {
+                        return k;
+                    }
+                    else {
+                        return k + WIDTH - 1;
+                    }
                 }
                 else {
-                    if (135 < p &&  p < 149 ) {return p - WIDTH + 1;}
-                    else { return p;}
+                    if (135 < p && p < 149) {
+                        return p - WIDTH + 1;
+                    }
+                    else {
+                        return p;
+                    }
                 }
             }
         }
         int possible = randomMove();
         while (true) {
-        if (!board.getField(possible).isHit()) {
-            return possible;
-        }
-        possible ++;
+            if (!board.getField(possible).isHit()) {
+                return possible;
+            }
+            possible ++;
         }
     }
-
 
     public int randomMove () {
         return (int) (Math.random() * 150);
