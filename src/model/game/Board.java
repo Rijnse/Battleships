@@ -1,7 +1,6 @@
 package model.game;
 
 import model.ProtocolMessages;
-import model.ProtocolMessages.*;
 
 public class Board {
     public static final int WIDTH = 15;
@@ -46,26 +45,110 @@ public class Board {
 
     public Board() {
         Field[] array = new Field[WIDTH * HEIGHT];
-        for (Field f : array) {
-            f = new Field();
+        for (int i = 0; i < WIDTH * HEIGHT; i ++) {
+            array[i] = new Field();
         }
 
         for (Ship s : SHIPS) {
-            int randomOrientation = (int) (Math.random() * 2);
             switch (s.getType()) {
                 case CARRIER:
-                    int randomIndex = (int) (Math.random() * 150);
-                    while (true) {
-                        if (array[randomIndex].getShip().getType().equals(ProtocolMessages.Ship.EMPTY)) {
-                            if (randomOrientation == 0) {
-                                if (array[randomIndex +1].getShip().getType().equals(ProtocolMessages.Ship.EMPTY)){
-
-                                }
-                            }
-                        }
-                        randomIndex++;
-                    }
+                    checkPlacement(array, 5, s);
+                    break;
+                case BATTLESHIP:
+                    checkPlacement(array, 4, s);
+                    break;
+                case DESTROYER:
+                    checkPlacement(array, 3, s);
+                    break;
+                case SUPERPATROL:
+                    checkPlacement(array, 2, s);
+                    break;
+                case PATROLBOAT:
+                    checkPlacement(array, 1, s);
+                    break;
             }
+            }
+        this.fields=array;
+        }
+
+    public static void main(String[] args) {
+        Board board = new Board();
+        System.out.println(board.boardToString());
+    }
+
+    public boolean checkIfNotFull (Field[] array, int i) {
+        return array[i].getShip().getType().equals(ProtocolMessages.Ship.EMPTY);
+    }
+
+    public boolean checkRight (Field[] array, int index, int length) {
+        int k = index;
+        while (checkIfNotFull(array, k) && (k - index) < length && k < (WIDTH * HEIGHT - 1)) {
+            k++;
+        }
+        if ((k - index) < length) {
+            return false;
+        }
+        return (k % WIDTH) > (length - 2);
+    }
+
+    public boolean checkLeft (Field[] array, int index, int length) {
+        int k = index;
+        while (checkIfNotFull(array, k) && (index - k) < length && k > 1) {
+            k--;
+        }
+        if ((index - k) < length) {
+            return false;
+        }
+        return (k % WIDTH) < WIDTH - length;
+    }
+
+    public boolean checkTop (Field[] array, int index, int length) {
+        int k = index;
+        while (checkIfNotFull(array, k) && (index - k) < (index - (WIDTH * length)) && k >= WIDTH) {
+            k = k - 15;
+        }
+        return (index - k) >= (index - (WIDTH * length));
+    }
+
+    public boolean checkBottom (Field[] array, int index, int length) {
+        int k = index;
+        while (checkIfNotFull(array, k) && (index + k) > (index + (WIDTH * length)) && k < ((HEIGHT - 1) * WIDTH)) {
+            k = k + 15;
+        }
+        return (index + k) <= (index + (WIDTH * length));
+    }
+
+    public void checkPlacement (Field[] array, int length, Ship s) {
+        int randomOrientation = (int) (Math.random() * 2);
+        int randomIndex = (int) (Math.random() * 150);
+        while (randomIndex < 150) {
+            if (checkIfNotFull(array, randomIndex)) {
+                if (randomOrientation == 0) {
+                    if (checkRight(array, randomIndex, length)) {
+                        for (int i = randomIndex; i < (length + randomIndex); i ++) {
+                            array[i] = new Field(s);
+                        }
+                    }
+                    else if (checkLeft(array, randomIndex, length)) {
+                        for (int i = randomIndex; i > (randomIndex - length); i --) {
+                            array[i] = new Field(s);
+                        }
+                    }
+                }
+                else if (randomOrientation == 1) {
+                    if (checkTop(array, randomIndex, length)) {
+                        for (int i = randomIndex; i > (randomIndex - (length * WIDTH)); i = i - 15){
+                            array[i] = new Field(s);
+                        }
+                    }
+                    if (checkBottom(array, randomIndex, length)) {
+                        for (int i = randomIndex; i < (randomIndex + (length * WIDTH)); i = i + 15) {
+                            array[i] = new Field(s);
+                        }
+                    }
+                }
+            }
+            randomIndex++;
         }
     }
 
