@@ -8,4 +8,6 @@ public interface ViewDelegate {
     public void hostGame(int port, String username);
     public void joinGame(String ip, int port, String username);
     public void botGame();
+
+    public void sendMove(String coordinates);
 }

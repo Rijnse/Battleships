@@ -1,5 +1,6 @@
 package view;
 
+import controller.ViewController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -13,6 +14,8 @@ import model.networking.Client;
 import java.io.IOException;
 
 public class Start {
+    private ViewDelegate controller = ViewController.sharedInstance;
+
     @FXML private Button hostbig;
     @FXML private Button joinbig;
     @FXML private Button hostbutton;
@@ -79,8 +82,43 @@ public class Start {
         }
     }
 
+    /**
+     * @requires a valid input of the port and name fields, meaning that these values must != null
+     * @ensures that the hostGame method in the controller class is called
+     */
     @FXML
-    public void hostGame(ActionEvent e) {
+    public void hostGame() {
+        try {
+            int port = Integer.parseInt(hostport.getText());
+            if (hostname.getText().length() > 12 || hostname.getText().length() < 1) {
+                hostbutton.setText("The name entered is invalid!");
+            }
+            else {
+                controller.hostGame(port, hostname.getText());
+            }
+        }
+        catch (NumberFormatException exception) {
+            hostbutton.setText("The port entered is not valid!");
+        }
+    }
 
+
+    /**
+     * @requires a valid input of the port and name fields, meaning that these values must != null
+     * @ensures that the joinGame method in the controller class is called
+     */
+    public void joinGame() {
+        try {
+            int port = Integer.parseInt(hostport.getText());
+            if (hostname.getText().length() > 12 || hostname.getText().length() < 1) {
+                hostbutton.setText("The name entered is invalid!");
+            }
+            else {
+                controller.joinGame(joinip.getText(),port, hostname.getText());
+            }
+        }
+        catch (NumberFormatException exception) {
+            hostbutton.setText("The port entered is not valid!");
+        }
     }
 }

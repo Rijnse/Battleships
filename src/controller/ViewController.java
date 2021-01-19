@@ -35,4 +35,9 @@ public class ViewController implements ViewDelegate {
     public void botGame() {
 
     }
+
+    @Override
+    public void sendMove(String coordinates) {
+
+    }
 }

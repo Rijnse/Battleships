@@ -1,8 +1,11 @@
 package view;
 
+import controller.ViewController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.GridPane;
@@ -13,27 +16,25 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import model.ProtocolMessages;
+import model.game.Board;
 import model.game.Field;
 import model.game.Ship;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class Game {
+    private ViewDelegate controller = ViewController.sharedInstance;
 
     @FXML private GridPane playerField;
     @FXML private GridPane enemyField;
+    @FXML private Text gameTimer;
+    @FXML private Text turnTimer;
+    @FXML private TextField moveTextField;
+    @FXML private Button fireButton;
 
-    private Node getNodeFromGridPane(GridPane gridPane, int col, int row) {
-        for (Node node : gridPane.getChildren()) {
-            if (GridPane.getColumnIndex(node) == col && GridPane.getRowIndex(node) == row) {
-                return node;
-            }
-        }
-        return null;
-    }
-// Field field, int index
-    public void updatePlayerField(){
-        Field field = new Field(new Ship(1, ProtocolMessages.Ship.CARRIER));
-        field.setHit(true);
-       Rectangle rect = (Rectangle) ((StackPane) playerField.getChildren().get(0)).getChildren().get(0);
+    public void updatePlayerField(Field field, int index, GridPane pane){
+       Rectangle rect = (Rectangle) ((StackPane) pane.getChildren().get(index)).getChildren().get(0);
 
        switch (field.getShip().getType()) {
            case CARRIER:
@@ -68,6 +69,52 @@ public class Game {
        }
     }
 
-    public void updateEnemyField() {
+    //time in seconds
+    public void updateGeneralTime(int time) {
+        int minutes = time / 60;
+        int seconds = time % 60;
+        gameTimer.setText(minutes + ":" + seconds);
+    }
+
+    public void startTurnTimer() {
+        Timer timer = new Timer();
+        final int[] time = {30};
+        moveTextField.setEditable(true);
+        fireButton.setDisable(false);
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                if (!(time[0] < 0)) {
+                    if (time[0] < 10) {
+                        turnTimer.setText("0:0" + time[0]);
+                    }
+                    else {
+                        turnTimer.setText("0:" + time[0]);
+                    }
+                    time[0]--;
+                }
+                else {
+                    stopTurnTimer(timer);
+                }
+            }
+        }, 0, 1000);
+    }
+
+    public void stopTurnTimer(Timer timer) {
+        timer.cancel();
+        fireButton.setDisable(true);
+        moveTextField.setEditable(false);
+    }
+
+    public void pressFireButton() {
+        controller.sendMove(moveTextField.getText());
+    }
+
+    public GridPane getPlayerField() {
+        return playerField;
+    }
+
+    public GridPane getEnemyField() {
+        return enemyField;
     }
 }
