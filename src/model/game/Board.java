@@ -67,8 +67,8 @@ public class Board {
                     checkPlacement(array, 1, s);
                     break;
             }
+            this.fields=array;
             }
-        this.fields=array;
         }
 
     public static void main(String[] args) {
@@ -77,29 +77,39 @@ public class Board {
     }
 
     public boolean checkIfNotFull (Field[] array, int i) {
-        return array[i].getShip().getType().equals(ProtocolMessages.Ship.EMPTY);
+        return array[i].getShip().getType() == ProtocolMessages.Ship.EMPTY;
     }
 
     public boolean checkRight (Field[] array, int index, int length) {
         int k = index;
-        while (checkIfNotFull(array, k) && (k - index) < length && k < (WIDTH * HEIGHT - 1)) {
+        while (checkIfNotFull(array, k) && (k - index) < length && k < (WIDTH * HEIGHT)) {
             k++;
         }
         if ((k - index) < length) {
             return false;
         }
-        return (k % WIDTH) > (length - 2);
+        else if ((k % WIDTH) > (length - 2)){
+            return true;
+        }
+        else {
+        return false;
+        }
     }
 
     public boolean checkLeft (Field[] array, int index, int length) {
         int k = index;
-        while (checkIfNotFull(array, k) && (index - k) < length && k > 1) {
+        while (checkIfNotFull(array, k) && (index - k) < length && k > 0) {
             k--;
         }
         if ((index - k) < length) {
             return false;
         }
-        return (k % WIDTH) < WIDTH - length;
+        else if ((k % WIDTH) < WIDTH - length + 1) {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 
     public boolean checkTop (Field[] array, int index, int length) {
