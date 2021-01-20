@@ -8,8 +8,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import model.networking.Client;
 
 import java.io.IOException;
 
@@ -18,68 +18,90 @@ public class Start {
 
     @FXML private Button hostbig;
     @FXML private Button joinbig;
+    @FXML private Button computerbig;
+
+    @FXML private Button computerbutton;
     @FXML private Button hostbutton;
     @FXML private Button joinbutton;
+
     @FXML private TextField hostport;
     @FXML private TextField hostname;
     @FXML private TextField joinip;
     @FXML private TextField joinport;
     @FXML private TextField joinname;
+    @FXML private TextField computername;
 
-    public void bigHostButtonpress(ActionEvent e) {
+    @FXML private AnchorPane joinanchor;
+    @FXML private AnchorPane anchorhost;
+    @FXML private AnchorPane anchorcomputer;
+
+    public void bigHostButtonPress(ActionEvent e) {
         if (joinbig.isVisible()) {
-            hostport.setVisible(true);
-            hostname.setVisible(true);
-            hostbutton.setVisible(true);
+            anchorhost.setVisible(true);
             joinbig.setVisible(false);
+            computerbig.setVisible(false);
             hostbig.setText("<- Go back");
         }
         else {
-            hostport.setVisible(false);
-            hostname.setVisible(false);
-            hostbutton.setVisible(false);
+            anchorhost.setVisible(false);
             joinbig.setVisible(true);
+            computerbig.setVisible(true);
             hostbig.setText("Host game");
         }
     }
 
-    public void bigJoinButtonpress(ActionEvent e) {
+    public void bigJoinButtonPress(ActionEvent e) {
         if (hostbig.isVisible()) {
-            joinip.setVisible(true);
-            joinport.setVisible(true);
-            joinname.setVisible(true);
-            joinbutton.setVisible(true);
+            joinanchor.setVisible(true);
             hostbig.setVisible(false);
+            computerbig.setVisible(false);
             joinbig.setText("<- Go back");
         }
         else {
-            joinip.setVisible(false);
-            joinport.setVisible(false);
-            joinname.setVisible(false);
-            joinbutton.setVisible(false);
+            joinanchor.setVisible(false);
             hostbig.setVisible(true);
+            computerbig.setVisible(true);
             joinbig.setText("Join game");
         }
     }
 
+    public void bigComputerButtonPress() {
+        if (hostbig.isVisible()) {
+            anchorcomputer.setVisible(true);
+            hostbig.setVisible(false);
+            joinbig.setVisible(false);
+            computerbig.setText("<- Go back");
+        }
+        else {
+            anchorcomputer.setVisible(false);
+            hostbig.setVisible(true);
+            joinbig.setVisible(true);
+            computerbig.setText("Join game");
+        }
+    }
+
     @FXML
-    public void switchToLobby(ActionEvent e) throws IOException {
+    public void switchToLobby() throws IOException {
         Stage stage;
         Parent root;
 
-        if(e.getSource()==joinbutton || e.getSource()==hostbutton){
-            if (e.getSource()==joinbutton) {
-                stage = (Stage) joinbutton.getScene().getWindow();
-            }
-            else {
-                stage = (Stage) hostbutton.getScene().getWindow();
-            }
-
+            stage = (Stage) joinbutton.getScene().getWindow();
             root = FXMLLoader.load(getClass().getResource("../view/lobby.fxml"));
             Scene scene = new Scene(root);
             stage.setScene(scene);
             stage.show();
-        }
+    }
+
+    @FXML
+    public void switchToGameScreen() throws IOException {
+        Stage stage;
+        Parent root;
+
+        stage = (Stage) joinbutton.getScene().getWindow();
+        root = FXMLLoader.load(getClass().getResource("../view/game.fxml"));
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
     }
 
     /**
@@ -91,14 +113,18 @@ public class Start {
         try {
             int port = Integer.parseInt(hostport.getText());
             if (hostname.getText().length() > 12 || hostname.getText().length() < 1) {
-                hostbutton.setText("The name entered is invalid!");
+                hostbutton.setText("Name too long/short!");
             }
             else {
                 controller.hostGame(port, hostname.getText());
+                switchToLobby();
             }
         }
-        catch (NumberFormatException exception) {
-            hostbutton.setText("The port entered is not valid!");
+        catch (NumberFormatException e) {
+            hostbutton.setText("Invalid port!");
+        }
+        catch (IOException e) {
+            hostbutton.setText("Something went wrong!");
         }
     }
 
@@ -109,16 +135,36 @@ public class Start {
      */
     public void joinGame() {
         try {
-            int port = Integer.parseInt(hostport.getText());
-            if (hostname.getText().length() > 12 || hostname.getText().length() < 1) {
-                hostbutton.setText("The name entered is invalid!");
+            int port = Integer.parseInt(joinport.getText());
+            if (joinname.getText().length() > 12 || joinname.getText().length() < 1) {
+                joinbutton.setText("Name too long/short!");
             }
             else {
-                controller.joinGame(joinip.getText(),port, hostname.getText());
+                controller.joinGame(joinip.getText(),port, joinname.getText());
+                switchToLobby();
             }
         }
         catch (NumberFormatException exception) {
-            hostbutton.setText("The port entered is not valid!");
+            joinbutton.setText("Invalid port!");
+        }
+        catch (IOException e) {
+            joinbutton.setText("Something went wrong!");
         }
     }
+
+    public void computerGame() {
+        if (computername.getText().length() > 12 || computername.getText().length() < 1) {
+            computerbutton.setText("Name too long/short!");
+        }
+        else {
+            controller.botGame(computername.getText());
+            try {
+                switchToGameScreen();
+            } catch (IOException e) {
+                computerbutton.setText("Something went wrong!");
+            }
+        }
+    }
+
+
 }

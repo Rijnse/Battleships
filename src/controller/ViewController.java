@@ -32,7 +32,7 @@ public class ViewController implements ViewDelegate {
     }
 
     @Override
-    public void botGame() {
+    public void botGame(String username) {
 
     }
 
