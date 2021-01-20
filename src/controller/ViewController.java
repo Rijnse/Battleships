@@ -2,26 +2,27 @@ package controller;
 import model.game.HumanPlayer;
 import model.networking.Server;
 import view.Lobby;
-import view.View;
 import view.ViewDelegate;
 
 public class ViewController implements ViewDelegate {
-
-    protected View view;
-    public static ViewDelegate sharedInstance = new ViewController();
+    private static ViewController sharedInstance;
+    private Lobby lobby;
 
     private ViewController() {
 
     }
 
-    @Override
-    public View getView() {
-        return this.view;
+    public synchronized static ViewController getInstance() {
+        if(sharedInstance==null) {
+            sharedInstance = new ViewController();
+            return sharedInstance;
+        }
+        return sharedInstance;
     }
 
     @Override
-    public void setView(View view) {
-        this.view = view;
+    public void setLobby(Lobby lobby) {
+        this.lobby = lobby;
     }
 
     @Override
@@ -44,5 +45,10 @@ public class ViewController implements ViewDelegate {
     @Override
     public void sendMove(String coordinates) {
 
+    }
+
+    @Override
+    public void testMethod() {
+        lobby.updateLobbyInfo("Test", 123, "test", "whatever");
     }
 }

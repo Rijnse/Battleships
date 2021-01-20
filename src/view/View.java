@@ -11,19 +11,19 @@ import javafx.stage.Stage;
 import java.net.Socket;
 
 public class View extends Application {
-    private ViewDelegate controller;
+    private ViewController controller;
 
     @Override
     public void init() throws Exception {
         super.init();
-        this.controller = ViewController.sharedInstance;
+        this.controller = ViewController.getInstance();
     }
 
     @Override
     public void start(Stage primaryStage) throws Exception{
         Font.loadFont(getClass().getResourceAsStream("../resources/roboto.ttf"), 14);
 
-        Parent root = FXMLLoader.load(getClass().getResource("../view/game.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("../view/lobby.fxml"));
         primaryStage.setTitle("Battleships by StjinTjin and R1NS3");
         primaryStage.setScene(new Scene(root, 900, 600));
         primaryStage.show();
@@ -38,7 +38,7 @@ public class View extends Application {
         return controller;
     }
 
-    public void setController(ViewDelegate controller) {
+    public void setController(ViewController controller) {
         this.controller = controller;
     }
 }

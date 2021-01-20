@@ -4,6 +4,7 @@ import controller.ViewController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -17,17 +18,20 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 
 public class Lobby {
-    @FXML private Button leavebutton;
-    @FXML private Text ipaddress;
-    @FXML private Text port;
-    @FXML private Text playerOneName;
-    @FXML private Text playerTwoName;
+    @FXML public Button leavebutton;
+    @FXML public Text ipaddress;
+    @FXML public Text port;
+    @FXML public Text playerOneName;
+    @FXML public Text playerTwoName;
 
     @FXML private Button balenciaga;
     @FXML private Button mutebutton;
     MediaPlayer mediaPlayer;
 
-    private ViewDelegate controller = ViewController.sharedInstance;
+    @FXML
+    public void initialize() {
+        ViewController.getInstance().setLobby(this);
+    }
 
     @FXML
     public void leaveGame(ActionEvent e) throws IOException {

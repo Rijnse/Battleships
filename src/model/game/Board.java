@@ -1,11 +1,14 @@
 package model.game;
 
+import controller.ViewController;
 import model.ProtocolMessages;
+import view.ViewDelegate;
 
 public class Board {
     public static final int WIDTH = 15;
     public static final int HEIGHT = 10;
     public static final String COLUMNS = "ABCDEFGHIJKLMNO";
+
 
     private static final Ship[] SHIPS = {
             new Ship(0, ProtocolMessages.Ship.CARRIER),
@@ -48,32 +51,27 @@ public class Board {
         for (int i = 0; i < WIDTH * HEIGHT; i ++) {
             array[i] = new Field();
         }
+        this.fields = array;
 
         for (Ship s : SHIPS) {
             switch (s.getType()) {
                 case CARRIER:
-                    checkPlacement(array, 5, s);
+                    checkPlacement(this.fields, 5, s);
                     break;
                 case BATTLESHIP:
-                    checkPlacement(array, 4, s);
+                    checkPlacement(this.fields, 4, s);
                     break;
                 case DESTROYER:
-                    checkPlacement(array, 3, s);
+                    checkPlacement(this.fields, 3, s);
                     break;
                 case SUPERPATROL:
-                    checkPlacement(array, 2, s);
+                    checkPlacement(this.fields, 2, s);
                     break;
                 case PATROLBOAT:
-                    checkPlacement(array, 1, s);
+                    checkPlacement(this.fields, 1, s);
                     break;
             }
-            this.fields=array;
-            }
         }
-
-    public static void main(String[] args) {
-        Board board = new Board();
-        System.out.println(board.boardToString());
     }
 
     public boolean checkIfNotFull (Field[] array, int i) {
@@ -82,29 +80,29 @@ public class Board {
 
     public boolean checkRight (Field[] array, int index, int length) {
         int k = index;
-        while (checkIfNotFull(array, k) && (k - index) < length && k < (WIDTH * HEIGHT)) {
+        while (checkIfNotFull(array, k) && (k - index) < (length - 1) && k < ((WIDTH * HEIGHT) - 1)) {
             k++;
         }
-        if ((k - index) < length) {
+        if ((k - index) < (length - 1)) {
             return false;
         }
         else if ((k % WIDTH) > (length - 2)){
             return true;
         }
         else {
-        return false;
+            return false;
         }
     }
 
     public boolean checkLeft (Field[] array, int index, int length) {
         int k = index;
-        while (checkIfNotFull(array, k) && (index - k) < length && k > 0) {
+        while (checkIfNotFull(array, k) && (index - k) < (length - 1) && k > 0) {
             k--;
         }
-        if ((index - k) < length) {
+        if ((index - k) < (length - 1)) {
             return false;
         }
-        else if ((k % WIDTH) < WIDTH - length + 1) {
+        else if ((k % WIDTH) < WIDTH - (length - 1)) {
             return true;
         }
         else {
@@ -117,7 +115,7 @@ public class Board {
         while (checkIfNotFull(array, k) && k > (index - (WIDTH * (length - 1))) && k >= WIDTH) {
             k = k - WIDTH;
         }
-        if (k <= (index - (WIDTH * (length -1)))){
+        if (k == (index - (WIDTH * (length - 1)))){
             return true;
         }
         else {
@@ -127,10 +125,10 @@ public class Board {
 
     public boolean checkBottom (Field[] array, int index, int length) {
         int k = index;
-        while (checkIfNotFull(array, k) && (k) < (index + (WIDTH * (length - 1))) && k < (WIDTH * (HEIGHT - 1))) {
+        while (checkIfNotFull(array, k) && k < (index + (WIDTH * (length - 1))) && k < (WIDTH * (HEIGHT - 1))) {
             k = k + WIDTH;
         }
-        if (k >= (index + WIDTH * (length - 1))) {
+        if (k == (index + (WIDTH * (length - 1)))) {
             return true;
         }
         else {
@@ -141,39 +139,38 @@ public class Board {
     public void checkPlacement (Field[] array, int length, Ship s) {
         int randomOrientation = (int) (Math.random() * 2);
         int randomIndex = (int) (Math.random() * (WIDTH * HEIGHT));
-        while (true) {
+        boolean run = true;
+        while (run) {
             if (checkIfNotFull(array, randomIndex)) {
                 if (randomOrientation == 0) {
                     if (checkRight(array, randomIndex, length)) {
                         for (int i = randomIndex; i < (length + randomIndex); i++) {
                             array[i] = new Field(s);
                         }
-                        break;
                     } else if (checkLeft(array, randomIndex, length)) {
                         for (int i = randomIndex; i > (randomIndex - length); i--) {
                             array[i] = new Field(s);
                         }
-                        break;
                     }
-                }
-                else if (randomOrientation == 1) {
-                        if (checkTop(array, randomIndex, length)) {
-                            for (int i = randomIndex; i > (randomIndex - (WIDTH * length)); i = i - WIDTH) {
-                                array[i] = new Field(s);
-                            }
-                            break;
+                } else if (randomOrientation == 1) {
+                    if (checkTop(array, randomIndex, length)) {
+                        for (int i = randomIndex; i > (randomIndex - (WIDTH * length)); i = i - WIDTH) {
+                            array[i] = new Field(s);
                         }
-                        if (checkBottom(array, randomIndex, length)) {
-                            for (int i = randomIndex; i < (randomIndex + (length * WIDTH)); i = i + WIDTH) {
-                                array[i] = new Field(s);
-                            }
-                            break;
+                    } else if (checkBottom(array, randomIndex, length)) {
+                        for (int i = randomIndex; i < (randomIndex + (length * WIDTH)); i = i + WIDTH) {
+                            array[i] = new Field(s);
                         }
                     }
                 }
-            randomIndex = (int) (Math.random() * (WIDTH * HEIGHT));
+            }
+            if (array[randomIndex].getShip().getType() == ProtocolMessages.Ship.EMPTY) {
+                randomIndex = (int) (Math.random() * (WIDTH * HEIGHT));
+            } else {
+                run = false;
             }
         }
+    }
 
     //example of string 0,C1,C1,C1,C1,C1,0,P0,0 etc. Read left to right, top to bottom
     public Board(String boardarray) {

@@ -14,7 +14,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class Start {
-    private ViewDelegate controller = ViewController.sharedInstance;
+    private ViewDelegate controller = ViewController.getInstance();
 
     @FXML private Button hostbig;
     @FXML private Button joinbig;
