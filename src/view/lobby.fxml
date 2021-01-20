@@ -23,13 +23,13 @@
          </font>
       </Text>
       <Text layoutX="19.0" layoutY="205.0" strokeType="OUTSIDE" strokeWidth="0.0" text="IP address:" />
-      <Text layoutX="19.0" layoutY="231.0" strokeType="OUTSIDE" strokeWidth="0.0" text="This is a placeholder!">
+      <Text fx:id="ipaddress" layoutX="19.0" layoutY="231.0" strokeType="OUTSIDE" strokeWidth="0.0" text="-" wrappingWidth="173.998046875">
          <font>
             <Font size="20.0" />
          </font>
       </Text>
       <Text layoutX="19.0" layoutY="261.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Port:" />
-      <Text layoutX="19.0" layoutY="287.0" strokeType="OUTSIDE" strokeWidth="0.0" text="This is a placeholder!">
+      <Text fx:id="port" layoutX="19.0" layoutY="287.0" strokeType="OUTSIDE" strokeWidth="0.0" text="-" wrappingWidth="173.998046875">
          <font>
             <Font size="20.0" />
          </font>
@@ -37,7 +37,7 @@
       <AnchorPane layoutX="274.0" layoutY="165.0" prefHeight="86.0" prefWidth="304.0">
          <children>
             <Text layoutX="80.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Player one:" wrappingWidth="65.97265625" />
-            <Text layoutX="80.0" layoutY="51.0" strokeType="OUTSIDE" strokeWidth="0.0" text="This is a placeholder!">
+            <Text fx:id="playerOneName" layoutX="80.0" layoutY="51.0" strokeType="OUTSIDE" strokeWidth="0.0" text="This is a placeholder!">
                <font>
                   <Font size="20.0" />
                </font>
@@ -48,7 +48,7 @@
       <AnchorPane layoutX="274.0" layoutY="265.0" prefHeight="86.0" prefWidth="304.0">
          <children>
             <Text layoutX="80.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Player two:" wrappingWidth="65.97265625" />
-            <Text layoutX="80.0" layoutY="51.0" strokeType="OUTSIDE" strokeWidth="0.0" text="This is a placeholder!">
+            <Text fx:id="playerTwoName" layoutX="80.0" layoutY="51.0" strokeType="OUTSIDE" strokeWidth="0.0" text="This is a placeholder!">
                <font>
                   <Font size="20.0" />
                </font>

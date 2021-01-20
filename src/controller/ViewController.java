@@ -1,4 +1,7 @@
 package controller;
+import model.game.HumanPlayer;
+import model.networking.Server;
+import view.Lobby;
 import view.View;
 import view.ViewDelegate;
 
@@ -23,6 +26,8 @@ public class ViewController implements ViewDelegate {
 
     @Override
     public void hostGame(int port, String username) {
+        Server server = new Server(port);
+        HumanPlayer playerOne = new HumanPlayer(username);
 
     }
 

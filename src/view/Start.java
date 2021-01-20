@@ -76,7 +76,7 @@ public class Start {
             anchorcomputer.setVisible(false);
             hostbig.setVisible(true);
             joinbig.setVisible(true);
-            computerbig.setText("Join game");
+            computerbig.setText("Play against computer!");
         }
     }
 

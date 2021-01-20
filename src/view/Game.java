@@ -117,4 +117,12 @@ public class Game {
     public GridPane getEnemyField() {
         return enemyField;
     }
+
+
+    public void test() {
+        Board board = new Board("0,0,C1,C1,C1,C1,S5,S2,0,P6,0,0,0,0,0,0,P9,0,0,0,0,S5,S2,S1,0,0,D3,D3,D3,0,0,0,0,B1,0,0,0,0,S1,0,B0,P0,D2,D0,0,0,0,P2,B1,C0,0,S3,S3,0,0,B0,0,D2,D0,0,S7,S7,0,B1,C0,P4,0,S6,0,0,B0,0,D2,D0,0,0,0,0,B1,C0,0,0,S6,0,0,B0,0,S0,0,0,0,0,0,D4,C0,0,0,0,0,0,0,0,S0,0,0,0,0,0,D4,C0,B2,B2,B2,B2,0,P7,0,0,0,P3,0,0,0,D4,0,0,0,0,0,P5,0,0,0,0,P8,S4,S4,0,0,D1,D1,D1,0,P1,0,0,0,0,0,0,");
+        for (int i = 0; i < 150; i++) {
+           updatePlayerField(board.getField(i), i, playerField);
+        }
+    }
 }

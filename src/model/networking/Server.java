@@ -33,8 +33,4 @@ public class Server implements Runnable {
         return this.ip;
     }
 
-    public static void main(String[] args) {
-        Thread one = new Thread(new Server(69));
-        one.start();
-    }
 }
