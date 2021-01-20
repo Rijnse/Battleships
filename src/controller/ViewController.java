@@ -27,7 +27,11 @@ public class ViewController implements ViewDelegate {
 
     @Override
     public void hostGame(int port, String username) {
+
         Server server = new Server(port);
+        server.setup(port);
+
+        Thread srv = new Thread(server);
         HumanPlayer playerOne = new HumanPlayer(username);
 
     }

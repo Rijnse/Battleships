@@ -55,6 +55,10 @@ public class Lobby {
         playerTwoName.setText(twoname);
     }
 
+    @FXML public void pressStartButton() {
+
+    }
+
 
     @FXML
     public void audioPlayerButton(ActionEvent e) throws MalformedURLException {

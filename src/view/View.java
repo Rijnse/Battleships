@@ -23,7 +23,7 @@ public class View extends Application {
     public void start(Stage primaryStage) throws Exception{
         Font.loadFont(getClass().getResourceAsStream("../resources/roboto.ttf"), 14);
 
-        Parent root = FXMLLoader.load(getClass().getResource("../view/lobby.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("../view/game.fxml"));
         primaryStage.setTitle("Battleships by StjinTjin and R1NS3");
         primaryStage.setScene(new Scene(root, 900, 600));
         primaryStage.show();

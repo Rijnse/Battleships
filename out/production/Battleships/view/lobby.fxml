@@ -56,7 +56,7 @@
             <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ff1f1f" height="52.0" layoutX="14.0" layoutY="17.0" stroke="BLACK" strokeType="INSIDE" width="57.0" />
          </children>
       </AnchorPane>
-      <Button layoutX="290.0" layoutY="467.0" mnemonicParsing="false" onAction="#testMethod" prefHeight="96.0" prefWidth="406.0" style="-fx-background-color: #32e662;" text="Start the game!" textFill="WHITE">
+      <Button layoutX="290.0" layoutY="467.0" mnemonicParsing="false" onAction="#pressStartButton" prefHeight="96.0" prefWidth="406.0" style="-fx-background-color: #32e662;" text="Start the game!" textFill="WHITE">
          <font>
             <Font size="30.0" />
          </font>

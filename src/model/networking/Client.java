@@ -16,8 +16,9 @@ public class Client {
         this.player = new HumanPlayer(name);
         this.sock = sock;
     }
-    public Client(String name, String IP, String port) {
-        this.player = new HumanPlayer(name);
+
+    public Client(String name, String IP, String port, Player player) {
+        this.player = player;
         try {
             this.sock = new Socket(InetAddress.getByName(IP), Integer.parseInt(port));
         } catch (UnknownHostException e) {

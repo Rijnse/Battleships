@@ -47,6 +47,139 @@ public class Board {
     private Field[] fields;
 
     public Board() {
+        Field[][] array = new Field[HEIGHT][WIDTH];
+        for (int i = 0; i < HEIGHT; i ++) {
+            for (int k = 0; k < WIDTH; k++) {
+                array[i][k] = new Field();
+            }
+        }
+
+        for (Ship s : SHIPS) {
+            switch (s.getType()) {
+                case CARRIER:
+                    array = placeShip(array, 5, s);
+                    break;
+                case BATTLESHIP:
+                    array = placeShip(array, 4, s);
+                    break;
+                case DESTROYER:
+                    array = placeShip(array, 3, s);
+                    break;
+                case SUPERPATROL:
+                    array = placeShip(array, 2, s);
+                    break;
+                case PATROLBOAT:
+                    array = placeShip(array, 1, s);
+                    break;
+            }
+        }
+        Field[] result = new Field[WIDTH*HEIGHT];
+        for (int i = 0; i < HEIGHT; i ++) {
+            for (int k = 0; k < WIDTH; k++) {
+                result[(i*WIDTH)+k] = array[i][k];
+            }
+        }
+        this.fields = result;
+    }
+
+    public Field[][] placeShip(Field[][] array, int length, Ship ship) {
+        boolean run = true;
+        int index = -1;
+        char orientation = 'N';
+        while (run) {
+            index = randomIndexOnFreeField(array);
+            orientation = randomOrientation();
+            if (orientation == 'E') {
+                System.out.println("blyat");
+                if ((index % WIDTH) + (length - 1) < WIDTH) {
+                    int i = index;
+                    while (array[(i / WIDTH)][i % WIDTH].getShip().getType() == ProtocolMessages.Ship.EMPTY && i < (index + (length - 1))) {
+                        i++;
+                    }
+                    if (i == (index + (length - 1))) {
+                        for (int z = index; z < (index + length); z++) {
+                            array[(z / WIDTH)][z % WIDTH] = new Field(ship);
+                        }
+                        System.out.println(ship.getType() + " laid out right");
+                        run = false;
+                    }
+                    else {
+                        System.out.println("cock");
+                    }
+                }
+                else if ((index % WIDTH) - (length - 1) >= 0) {
+                    int i = index;
+                    while (array[(i / WIDTH)][i % WIDTH].getShip().getType() == ProtocolMessages.Ship.EMPTY && i > (index - (length - 1))) {
+                        i--;
+                    }
+                    if (i == (index - (length - 1))) {
+                        for (int z = index; z > (index - length); z--) {
+                            array[(z / WIDTH)][z % WIDTH] = new Field(ship);
+                        }
+                        System.out.println(ship.getType() + " laid out left");
+                        run = false;
+                    }
+                }
+            }
+            else if (orientation == 'S') {
+                System.out.println("konkie");
+                if (((index / 15)) + length < (HEIGHT + 1)) {
+                    int i = index;
+                    while (array[(i / WIDTH)][i % WIDTH].getShip().getType() == ProtocolMessages.Ship.EMPTY && i < (index + ((length - 1) * 15))) {
+                        i = i + WIDTH;
+                    }
+                    if (i == (index + ((length - 1) * 15))) {
+                        for (int z = index; z < (index + (length * WIDTH)); z = z + WIDTH) {
+                            array[(z / WIDTH)][z % WIDTH] = new Field(ship);
+                        }
+                        System.out.println(ship.getType() + " laid out bottom");
+                        run = false;
+                    }
+                }
+                else if (((index / 15)) - (length - 1) >= 0) {
+                    int i = index;
+                    while (array[(i / WIDTH)][i % WIDTH].getShip().getType() == ProtocolMessages.Ship.EMPTY && i > (index - ((length - 1) * 15))) {
+                        i = i - WIDTH;
+                    }
+                    if (i == (index - ((length - 1) * 15))) {
+                        for (int z = index; z > (index - (length*WIDTH)); z = z - WIDTH) {
+                            array[(z / WIDTH)][z % WIDTH] = new Field(ship);
+                        }
+                        System.out.println(ship.getType() + " laid out top");
+                        run = false;
+                    }
+                }
+            }
+        }
+        return array;
+    }
+
+    public static int randomIndexOnFreeField(Field[][] array) {
+        int random = (int) (Math.random() * 150);
+        if (array[(int) (random / WIDTH)][random % WIDTH].getShip().getType() == ProtocolMessages.Ship.EMPTY) {
+            return random;
+        }
+        else {
+            return randomIndexOnFreeField(array);
+        }
+    }
+
+    public static char randomOrientation() {
+        int random = (int) (Math.random() * 2);
+        if (random == 0) {
+            return 'S';
+        }
+        else {
+            return 'E';
+        }
+    }
+
+    public static void main(String[] args) {
+        Board board = new Board();
+        System.out.println(board.boardToString());
+    }
+
+    /*public Board() {
         Field[] array = new Field[WIDTH * HEIGHT];
         for (int i = 0; i < WIDTH * HEIGHT; i ++) {
             array[i] = new Field();
@@ -170,7 +303,7 @@ public class Board {
                 run = false;
             }
         }
-    }
+    }*/
 
     //example of string 0,C1,C1,C1,C1,C1,0,P0,0 etc. Read left to right, top to bottom
     public Board(String boardarray) {
