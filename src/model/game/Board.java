@@ -104,53 +104,66 @@ public class Board {
 
     public boolean checkTop (Field[] array, int index, int length) {
         int k = index;
-        while (checkIfNotFull(array, k) && (index - k) < (index - (WIDTH * length)) && k >= WIDTH) {
-            k = k - 15;
+        while (checkIfNotFull(array, k) && k > (index - (WIDTH * (length - 1))) && k >= WIDTH) {
+            k = k - WIDTH;
         }
-        return (index - k) >= (index - (WIDTH * length));
+        if (k <= (index - (WIDTH * (length -1)))){
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 
     public boolean checkBottom (Field[] array, int index, int length) {
         int k = index;
-        while (checkIfNotFull(array, k) && (index + k) > (index + (WIDTH * length)) && k < ((HEIGHT - 1) * WIDTH)) {
-            k = k + 15;
+        while (checkIfNotFull(array, k) && (k) < (index + (WIDTH * (length - 1))) && k < (WIDTH * (HEIGHT - 1))) {
+            k = k + WIDTH;
         }
-        return (index + k) <= (index + (WIDTH * length));
+        if (k >= (index + WIDTH * (length - 1))) {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 
     public void checkPlacement (Field[] array, int length, Ship s) {
         int randomOrientation = (int) (Math.random() * 2);
-        int randomIndex = (int) (Math.random() * 150);
-        while (randomIndex < 150) {
+        int randomIndex = (int) (Math.random() * (WIDTH * HEIGHT));
+        while (true) {
             if (checkIfNotFull(array, randomIndex)) {
                 if (randomOrientation == 0) {
                     if (checkRight(array, randomIndex, length)) {
-                        for (int i = randomIndex; i < (length + randomIndex); i ++) {
+                        for (int i = randomIndex; i < (length + randomIndex); i++) {
                             array[i] = new Field(s);
                         }
-                    }
-                    else if (checkLeft(array, randomIndex, length)) {
-                        for (int i = randomIndex; i > (randomIndex - length); i --) {
+                        break;
+                    } else if (checkLeft(array, randomIndex, length)) {
+                        for (int i = randomIndex; i > (randomIndex - length); i--) {
                             array[i] = new Field(s);
                         }
+                        break;
                     }
                 }
                 else if (randomOrientation == 1) {
-                    if (checkTop(array, randomIndex, length)) {
-                        for (int i = randomIndex; i > (randomIndex - (length * WIDTH)); i = i - 15){
-                            array[i] = new Field(s);
+                        if (checkTop(array, randomIndex, length)) {
+                            for (int i = randomIndex; i > (randomIndex - (WIDTH * length)); i = i - WIDTH) {
+                                array[i] = new Field(s);
+                            }
+                            break;
                         }
-                    }
-                    if (checkBottom(array, randomIndex, length)) {
-                        for (int i = randomIndex; i < (randomIndex + (length * WIDTH)); i = i + 15) {
-                            array[i] = new Field(s);
+                        if (checkBottom(array, randomIndex, length)) {
+                            for (int i = randomIndex; i < (randomIndex + (length * WIDTH)); i = i + WIDTH) {
+                                array[i] = new Field(s);
+                            }
+                            break;
                         }
                     }
                 }
+            randomIndex = (int) (Math.random() * (WIDTH * HEIGHT));
             }
-            randomIndex++;
         }
-    }
 
     //example of string 0,C1,C1,C1,C1,C1,0,P0,0 etc. Read left to right, top to bottom
     public Board(String boardarray) {
