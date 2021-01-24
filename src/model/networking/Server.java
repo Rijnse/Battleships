@@ -2,6 +2,7 @@ package model.networking;
 
 import controller.ViewController;
 import model.exceptions.ExitProgram;
+import model.game.Board;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -60,4 +61,35 @@ public class Server implements Runnable {
         return this.ip;
     }
 
+    public ClientHandler getPlayerOne() {
+        return playerOne;
+    }
+
+    public void setPlayerOne(ClientHandler playerOne) {
+        this.playerOne = playerOne;
+    }
+
+    public ClientHandler getPlayerTwo() {
+        return playerTwo;
+    }
+
+    public void setPlayerTwo(ClientHandler playerTwo) {
+        this.playerTwo = playerTwo;
+    }
+
+    public void startGame() {
+
+    }
+
+    public void attackCommand(String name) {
+
+    }
+
+    public void processMessage(String name, String message) {
+
+    }
+
+    public void processBoardInput(String name, Board board) {
+
+    }
 }

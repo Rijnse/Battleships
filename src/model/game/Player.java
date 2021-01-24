@@ -3,10 +3,13 @@ package model.game;
 public abstract class Player {
     private int score;
     private Board board;
+    private String name;
+    private Game currentGame = null;
 
-    public Player() {
+    public Player(String name) {
         this.score = 0;
         this.board = new Board();
+        this.name = name;
     }
 
     public int getScore() {
@@ -21,5 +24,21 @@ public abstract class Player {
         return this.board;
     }
 
-    public abstract int determineMove(Board board);
+    public abstract int determineMove();
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Game getCurrentGame() {
+        return currentGame;
+    }
+
+    public void setCurrentGame(Game currentGame) {
+        this.currentGame = currentGame;
+    }
 }

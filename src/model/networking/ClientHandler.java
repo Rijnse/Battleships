@@ -1,6 +1,7 @@
 package model.networking;
 
 import model.ProtocolMessages;
+import model.game.Board;
 import model.game.HumanPlayer;
 
 import java.io.*;
@@ -12,6 +13,15 @@ public class ClientHandler implements Runnable{
     private Socket sock;
 
     private Server server;
+
+    public Client getClient() {
+        return client;
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
+    }
+
     private Client client;
 
     public ClientHandler(Socket sock, Server server, Client client) {
@@ -46,9 +56,9 @@ public class ClientHandler implements Runnable{
     }
 
     public void receiveMessage(String message) {
-        String[] array = message.split(" ");
+        String[] array = message.split(ProtocolMessages.CS);
         if (array.length > 3 || array.length <= 0) {
-            sendMessage(ProtocolMessages.ERROR + ProtocolMessages.DELIMITER + "IllegalCommand" + ProtocolMessages.DELIMITER + ((HumanPlayer) client.getPlayer()).getName());
+            illegalCommandSender();
         }
         else {
             switch (array[0]) {
@@ -56,19 +66,38 @@ public class ClientHandler implements Runnable{
 
                     break;
                 case ProtocolMessages.START:
-
+                    if (this.client.getPlayer().getName().equals(this.server.getPlayerOne().getClient().getPlayer().getName())) {
+                       this.server.startGame();
+                    }
+                    else {
+                        sendMessage(ProtocolMessages.ERROR + ProtocolMessages.CS + ProtocolMessages.ACTION_NOT_PERMITTED + ProtocolMessages.CS + client.getPlayer().getName());
+                    }
                     break;
                 case ProtocolMessages.BOARD:
-
+                    if (array[1] != null && array[2] != null) {
+                        if (this.client.getPlayer().getName().equals(array[1])) {
+                            this.server.processBoardInput(client.getPlayer().getName(), new Board(array[2]));
+                        }
+                    }
+                    else {
+                        illegalCommandSender();
+                    }
                     break;
                 case ProtocolMessages.ATTACK:
-
+                    this.server.attackCommand(this.client.getPlayer().getName());
                     break;
                 case ProtocolMessages.MSGSEND:
-
+                    if (array[1] != null && array[2] != null) {
+                        if (this.client.getPlayer().getName().equals(array[1]) && !(array[2].length() > 50)) {
+                            this.server.processMessage(array[1], array[2]);
+                        }
+                    }
+                    else {
+                        illegalCommandSender();
+                    }
                     break;
                 default:
-                    sendMessage(ProtocolMessages.ERROR + ProtocolMessages.DELIMITER + "IllegalCommand" + ProtocolMessages.DELIMITER + ((HumanPlayer) client.getPlayer()).getName());
+                    illegalCommandSender();
                     break;
             }
         }
@@ -83,6 +112,10 @@ public class ClientHandler implements Runnable{
         } catch (IOException e) {
             System.out.println("Something went wrong!");
         }
+    }
+
+    public void illegalCommandSender() {
+        sendMessage(ProtocolMessages.ERROR + ProtocolMessages.CS + ProtocolMessages.ILLEGAL_COMMAND + ProtocolMessages.CS + client.getPlayer().getName());
     }
 
     public void exit() {

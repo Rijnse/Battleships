@@ -5,31 +5,26 @@ import model.ProtocolMessages;
 import java.util.Random;
 
 public class ComputerPlayer extends Player {
-    private String name;
     public static final int WIDTH = 15;
     public static final int HEIGHT = 10;
 
     public ComputerPlayer() {
-        super();
-        this.name = "AI player";
+        super("Admiral AI");
     }
 
-    public String getName() {
-        return this.name;
-    }
-
-    public int determineMove (Board board) {
+    @Override
+    public int determineMove () {
         for (int i = 0; i < (WIDTH * HEIGHT); i++) {
             int k = i;
             int p = i;
-            if (board.getField(i).getShip().getType() == ProtocolMessages.Ship.UNKNOWN) {
-                while ((board.getField(k).getShip().getType() == ProtocolMessages.Ship.UNKNOWN)) {
+            if (this.getBoard().getField(i).getShip().getType() == ProtocolMessages.Ship.UNKNOWN) {
+                while ((this.getBoard().getField(k).getShip().getType() == ProtocolMessages.Ship.UNKNOWN)) {
                     k++;
                 }
-                while ((board.getField(p).getShip().getType() == ProtocolMessages.Ship.UNKNOWN)) {
+                while ((this.getBoard().getField(p).getShip().getType() == ProtocolMessages.Ship.UNKNOWN)) {
                     p = p + WIDTH;
                 }
-                if (k >= p && !board.getField(k).isHit()) {
+                if (k >= p && !this.getBoard().getField(k).isHit()) {
                     if (!((k + 1) % WIDTH == 1)) {
                         return k;
                     }
@@ -49,7 +44,7 @@ public class ComputerPlayer extends Player {
         }
         int possible = randomMove();
         while (true) {
-            if (!board.getField(possible).isHit()) {
+            if (!this.getBoard().getField(possible).isHit()) {
                 return possible;
             }
             possible ++;
