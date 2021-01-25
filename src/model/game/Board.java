@@ -10,7 +10,7 @@ public class Board {
     public static final String COLUMNS = "ABCDEFGHIJKLMNO";
 
 
-    private static final Ship[] SHIPS = {
+    private final Ship[] SHIPS = {
             new Ship(0, ProtocolMessages.Ship.CARRIER),
             new Ship(1, ProtocolMessages.Ship.CARRIER),
 
@@ -441,6 +441,19 @@ public class Board {
             String first = String.valueOf(ProtocolMessages.COLUMNS[index % ProtocolMessages.BOARD_DIMENSIONS[1]]);
             String second = String.valueOf((index / ProtocolMessages.BOARD_DIMENSIONS[1]) + 1);
             return first + second;
+        }
+    }
+
+    public boolean checkValidBoard () {
+        for (Ship s : SHIPS) {
+            for (int i = 0; i < (WIDTH * HEIGHT) -1; i ++){
+                if (getField(i).getShip().equals(s)) {
+                    int k = i;
+                    while () {
+
+                    }
+                }
+            }
         }
     }
 
