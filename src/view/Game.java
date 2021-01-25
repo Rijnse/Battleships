@@ -100,7 +100,7 @@ public class Game {
 
     public void startTurnTimer() {
         Timer timer = new Timer();
-        final int[] time = {30};
+        final int[] time = {ProtocolMessages.TURN_TIME};
         moveTextField.setEditable(true);
         fireButton.setDisable(false);
         timer.schedule(new TimerTask() {

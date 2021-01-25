@@ -1594,18 +1594,18 @@
                   <Font size="25.0" />
                </font>
             </Text>
-            <Text layoutX="67.0" layoutY="16.0" strokeType="OUTSIDE" strokeWidth="0.0" text="-" textAlignment="CENTER" wrappingWidth="34.564453125">
+            <Text fx:id="scoreplayerone" layoutX="67.0" layoutY="16.0" strokeType="OUTSIDE" strokeWidth="0.0" text="-" textAlignment="CENTER" wrappingWidth="34.564453125">
                <font>
                   <Font size="25.0" />
                </font>
             </Text>
-            <Text layoutX="428.0" layoutY="16.0" strokeType="OUTSIDE" strokeWidth="0.0" text="-" textAlignment="CENTER" wrappingWidth="34.564453125">
+            <Text fx:id="scoreplayertwo" layoutX="428.0" layoutY="16.0" strokeType="OUTSIDE" strokeWidth="0.0" text="-" textAlignment="CENTER" wrappingWidth="34.564453125">
                <font>
                   <Font size="25.0" />
                </font>
             </Text>
-            <Text layoutX="187.0" layoutY="17.0" strokeType="OUTSIDE" strokeWidth="0.0" text="&quot;player 1&quot; ships" textAlignment="RIGHT" wrappingWidth="129.708984375" />
-            <Text layoutX="529.0" layoutY="17.0" strokeType="OUTSIDE" strokeWidth="0.0" text="&quot;player 2&quot; ships" textAlignment="RIGHT" wrappingWidth="149.0" />
+            <Text fx:id="nameplayerone" layoutX="187.0" layoutY="17.0" strokeType="OUTSIDE" strokeWidth="0.0" text="&quot;player 1&quot; ships" textAlignment="RIGHT" wrappingWidth="129.708984375" />
+            <Text fx:id="nameplayertwo" layoutX="529.0" layoutY="17.0" strokeType="OUTSIDE" strokeWidth="0.0" text="&quot;player 2&quot; ships" textAlignment="RIGHT" wrappingWidth="149.0" />
          </children>
       </AnchorPane>
       <AnchorPane layoutX="300.0" layoutY="396.0">
@@ -1638,5 +1638,19 @@
             <Font size="15.0" />
          </font>
       </Text>
+      <AnchorPane fx:id="popup" layoutX="233.0" layoutY="186.0" prefHeight="96.0" prefWidth="283.0" style="-fx-background-color: white; -fx-border-color: black; -fx-border-width: 2; -fx-border-radius: 3;" visible="false">
+         <children>
+            <Text fx:id="popuptitle" layoutX="84.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="HIT!" textAlignment="CENTER" wrappingWidth="114.044921875">
+               <font>
+                  <Font size="34.0" />
+               </font>
+            </Text>
+            <Text fx:id="popupdesc" layoutX="29.0" layoutY="64.0" strokeType="OUTSIDE" strokeWidth="0.0" text="*NAME* shot at *COORDINATES*" textAlignment="CENTER" wrappingWidth="224.044921875">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Text>
+         </children>
+      </AnchorPane>
     </children>
 </AnchorPane>

@@ -88,7 +88,8 @@ public class ViewController {
     public void joinGame(String ip, String port, String username) {
         Client client = new Client(ip, port, new HumanPlayer(username));
         this.client = client;
-
+        Thread clientthread = new Thread(this.client);
+        clientthread.start();
     }
 
     public void updateGameTime(int seconds) {
