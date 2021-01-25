@@ -8,6 +8,10 @@ public abstract class Player {
     private String name;
     private Game currentGame = null;
 
+    /**
+     *
+     * @param name
+     */
     public Player(String name) {
         this.score = 0;
         this.board = new Board();

@@ -9,7 +9,7 @@ public class Board {
     public static final int HEIGHT = 10;
     public static final String COLUMNS = "ABCDEFGHIJKLMNO";
 
-
+    private Field[] fields;
     private final Ship[] SHIPS = {
             new Ship(0, ProtocolMessages.Ship.CARRIER),
             new Ship(1, ProtocolMessages.Ship.CARRIER),
@@ -44,37 +44,31 @@ public class Board {
             new Ship(8, ProtocolMessages.Ship.PATROLBOAT),
             new Ship(9, ProtocolMessages.Ship.PATROLBOAT),
     };
-    private Field[] fields;
 
+    /**
+     * @ensures the creation of a board object with randomly placed ships, both vertical and horizontal.
+     * @requires the placeShip() method to be functional according to documentation for working correctly
+     */
     public Board() {
         Field[] array = new Field[HEIGHT*WIDTH];
         for (int i = 0; i < HEIGHT*WIDTH; i ++) {
             array[i] = new Field();
         }
-
         for (Ship s : SHIPS) {
-            switch (s.getType()) {
-                case CARRIER:
-                    array = placeShip(array, 5, s);
-                    break;
-                case BATTLESHIP:
-                    array = placeShip(array, 4, s);
-                    break;
-                case DESTROYER:
-                    array = placeShip(array, 3, s);
-                    break;
-                case SUPERPATROL:
-                    array = placeShip(array, 2, s);
-                    break;
-                case PATROLBOAT:
-                    array = placeShip(array, 1, s);
-                    break;
-            }
+            array = placeShip(array, s);
         }
         this.fields = array;
     }
 
-    public Field[] placeShip(Field[] array, int length, Ship ship) {
+    /**
+     * @ensures that the ship included in the parameters is placed on the array in a proper way according to game regulations
+     * @requires a proper field array (Meaning size should be WIDTH*HEIGHT) and a ship object as mentioned in the SHIPS array defined in the Board class
+     * @param array is the fields array of the board created using the method (see constructor above)
+     * @param ship is the ship object which needs to be placed in the array
+     * @return the array in the parameter including the newly placed ship.
+     */
+    public Field[] placeShip(Field[] array, Ship ship) {
+        int length = ship.getLength();
         boolean run = true;
         int index = -1;
         char orientation = 'N';
@@ -137,8 +131,14 @@ public class Board {
         return array;
     }
 
+    /**
+     * @ensures the returning of an index which is still free on the specified array (meaning that the type of the field should be ProtocolMessages.EMPTY)
+     * @requires a proper field array (Meaning size should be WIDTH*HEIGHT)
+     * @param array to be taken into account when looking for a free field
+     * @return int value between 0 and 149
+     */
     public static int randomIndexOnFreeField(Field[] array) {
-        int random = (int) (Math.random() * 150);
+        int random = (int) (Math.random() * (WIDTH*HEIGHT));
         if (array[random].getShip().getType() == ProtocolMessages.Ship.EMPTY) {
             return random;
         }
@@ -147,6 +147,10 @@ public class Board {
         }
     }
 
+    /**
+     * @ensures that an orientation is returned
+     * @return character 'S' or 'E' (50/50 chance)
+     */
     public static char randomOrientation() {
         int random = (int) (Math.random() * 2);
         if (random == 0) {
@@ -157,138 +161,11 @@ public class Board {
         }
     }
 
-    public static void main(String[] args) {
-        System.out.println(indexToCoordinates(82));
-        System.out.println(index("N9"));
-    }
-
-    /*public Board() {
-        Field[] array = new Field[WIDTH * HEIGHT];
-        for (int i = 0; i < WIDTH * HEIGHT; i ++) {
-            array[i] = new Field();
-        }
-        this.fields = array;
-
-        for (Ship s : SHIPS) {
-            switch (s.getType()) {
-                case CARRIER:
-                    checkPlacement(this.fields, 5, s);
-                    break;
-                case BATTLESHIP:
-                    checkPlacement(this.fields, 4, s);
-                    break;
-                case DESTROYER:
-                    checkPlacement(this.fields, 3, s);
-                    break;
-                case SUPERPATROL:
-                    checkPlacement(this.fields, 2, s);
-                    break;
-                case PATROLBOAT:
-                    checkPlacement(this.fields, 1, s);
-                    break;
-            }
-        }
-    }
-
-    public boolean checkIfNotFull (Field[] array, int i) {
-        return array[i].getShip().getType() == ProtocolMessages.Ship.EMPTY;
-    }
-
-    public boolean checkRight (Field[] array, int index, int length) {
-        int k = index;
-        while (checkIfNotFull(array, k) && (k - index) < (length - 1) && k < ((WIDTH * HEIGHT) - 1)) {
-            k++;
-        }
-        if ((k - index) < (length - 1)) {
-            return false;
-        }
-        else if ((k % WIDTH) > (length - 2)){
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
-
-    public boolean checkLeft (Field[] array, int index, int length) {
-        int k = index;
-        while (checkIfNotFull(array, k) && (index - k) < (length - 1) && k > 0) {
-            k--;
-        }
-        if ((index - k) < (length - 1)) {
-            return false;
-        }
-        else if ((k % WIDTH) < WIDTH - (length - 1)) {
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
-
-    public boolean checkTop (Field[] array, int index, int length) {
-        int k = index;
-        while (checkIfNotFull(array, k) && k > (index - (WIDTH * (length - 1))) && k >= WIDTH) {
-            k = k - WIDTH;
-        }
-        if (k == (index - (WIDTH * (length - 1)))){
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
-
-    public boolean checkBottom (Field[] array, int index, int length) {
-        int k = index;
-        while (checkIfNotFull(array, k) && k < (index + (WIDTH * (length - 1))) && k < (WIDTH * (HEIGHT - 1))) {
-            k = k + WIDTH;
-        }
-        if (k == (index + (WIDTH * (length - 1)))) {
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
-
-    public void checkPlacement (Field[] array, int length, Ship s) {
-        int randomOrientation = (int) (Math.random() * 2);
-        int randomIndex = (int) (Math.random() * (WIDTH * HEIGHT));
-        boolean run = true;
-        while (run) {
-            if (checkIfNotFull(array, randomIndex)) {
-                if (randomOrientation == 0) {
-                    if (checkRight(array, randomIndex, length)) {
-                        for (int i = randomIndex; i < (length + randomIndex); i++) {
-                            array[i] = new Field(s);
-                        }
-                    } else if (checkLeft(array, randomIndex, length)) {
-                        for (int i = randomIndex; i > (randomIndex - length); i--) {
-                            array[i] = new Field(s);
-                        }
-                    }
-                } else if (randomOrientation == 1) {
-                    if (checkTop(array, randomIndex, length)) {
-                        for (int i = randomIndex; i > (randomIndex - (WIDTH * length)); i = i - WIDTH) {
-                            array[i] = new Field(s);
-                        }
-                    } else if (checkBottom(array, randomIndex, length)) {
-                        for (int i = randomIndex; i < (randomIndex + (length * WIDTH)); i = i + WIDTH) {
-                            array[i] = new Field(s);
-                        }
-                    }
-                }
-            }
-            if (array[randomIndex].getShip().getType() == ProtocolMessages.Ship.EMPTY) {
-                randomIndex = (int) (Math.random() * (WIDTH * HEIGHT));
-            } else {
-                run = false;
-            }
-        }
-    }*/
-
-    //example of string 0,C1,C1,C1,C1,C1,0,P0,0 etc. Read left to right, top to bottom
+    /**
+     * @ensures that a board object is created with a filled fields array
+     * @requires a proper string with fields as specified in the protocol
+     * @param boardarray is a string containing a full board array, as specified in the protocol (example of string 0,C1,C1,C1,C1,C1,0,P0,0 etc. Read left to right, top to bottom)
+     */
     public Board(String boardarray) {
         Ship placeholder = null;
         Field[] array = new Field[WIDTH*HEIGHT];
@@ -350,10 +227,20 @@ public class Board {
         this.fields = array;
     }
 
+    /**
+     * @ensures that a board object is created with given fields array
+     * @requires a valid field array as specified under @param
+     * @param array is a Field[] array with size WIDTH*HEIGHT
+     */
     public Board(Field[] array) {
         this.fields = array;
     }
 
+    /**
+     * @ensures (see @return)
+     * @requires that the board object has a valid fields array of size WIDTH*HEIGHT
+     * @return a string representing the board object fields array as specified in the protocol
+     */
     public String boardToString() {
         String result = "";
         for (int i = 0; i < fields.length; i++) {
@@ -381,21 +268,24 @@ public class Board {
         return result;
     }
 
+    /**
+     * @return the fields array of the board object
+     */
     public Field[] getFieldsArray() {
         return fields;
     }
 
-    //used by ComputerPlayer for determining moves
-    public Board deepCopy() {
-        Field[] copy = new Field[WIDTH*HEIGHT];
-        for (int i = 0; i < fields.length; i++) {
-            copy[i] = new Field(fields[i].isHit(), fields[i].getShip());
-        }
-        return new Board(copy);
+    /**
+     * @ensures that field is returned on given index on board
+     * @param i is the index of requested field
+     * @return Field object on index
+     */
+    public Field getField(int i) {
+        return this.fields[i];
     }
 
     /**
-     * @requires valid input String object
+     * @requires valid input String object ("A6" for example is valid, "R16" is not)
      * @ensures returning of index
      * @param coordinates in form "letter (between A and O) + number (between 1 and 10) e.g. "A1", "G6" or "O10"
      * @return a number between 0 and 149, which resembles the index of the field in the board fields array
@@ -424,6 +314,12 @@ public class Board {
         return (row * WIDTH) + col;
     }
 
+    /**
+     * @ensures that valid coordinates are returned according to specification
+     * @requires an valid int
+     * @param index int between 0 and 149
+     * @return a coordinate string according to game regulations: (A-O)+(1-10)
+     */
     public static String indexToCoordinates(int index) {
         if (index < 0 || index > 149) {
             return "NO VALID INDEX";
@@ -435,6 +331,11 @@ public class Board {
         }
     }
 
+    /**
+     * @ensures that the board object it's fields array is validated to the specification of the game rules
+     * @requires a valid fields array (size WIDTH*HEIGHT)
+     * @return a boolean (true/false) regarding the validity of the board
+     */
     public boolean checkValidBoard () {
         int correctShipCount = 0;
         for (Ship s : SHIPS) {
@@ -463,29 +364,5 @@ public class Board {
         else {
             return false;
         }
-    }
-
-    public boolean isField(int index) {
-        return 0 <= index && index < WIDTH*HEIGHT;
-    }
-
-    public boolean isField(String coordinates) {
-        return 0 <= index(coordinates) && index(coordinates) < WIDTH*HEIGHT;
-    }
-
-    public Field getField(int i) {
-        return this.fields[i];
-    }
-
-    public Field getField(String coordinates) {
-        return this.fields[index(coordinates)];
-    }
-
-    public boolean isEmptyField(int i) {
-        return this.fields[i].getShip().getType() == ProtocolMessages.Ship.EMPTY;
-    }
-
-    public boolean isEmptyField(String coordinates) {
-        return this.fields[index(coordinates)].getShip().getType() == ProtocolMessages.Ship.EMPTY;
     }
 }
