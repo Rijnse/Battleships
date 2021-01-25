@@ -38,6 +38,19 @@ public class ClientHandler implements Runnable{
         }
     }
 
+    public ClientHandler(Socket sock, Server server) {
+        try {
+            in = new BufferedReader(
+                    new InputStreamReader(sock.getInputStream()));
+            out = new BufferedWriter(
+                    new OutputStreamWriter(sock.getOutputStream()));
+            this.sock = sock;
+            this.server = server;
+        } catch (IOException e) {
+            exit();
+        }
+    }
+
     @Override
     public void run() {
         String message;

@@ -171,6 +171,9 @@ public class Game {
     }
 
     public void test() {
-        showPopUp("test", "konkie");
+        Board board = new Board();
+        for (int i = 0; i < 150; i++) {
+            updatePlayerField(board.getField(i), i, playerField);
+        }
     }
 }

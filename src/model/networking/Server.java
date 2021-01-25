@@ -11,6 +11,7 @@ import model.game.Ship;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -42,6 +43,20 @@ public class Server implements Runnable {
                 System.out.println("Waiting for client to connect!");
                 Socket sock = ssock.accept();
                 System.out.println("client connected on port" + sock.getLocalPort());
+
+                BufferedReader reader = new BufferedReader(new InputStreamReader(sock.getInputStream()));
+                System.out.println(reader.ready());
+                    String hello = reader.readLine();
+                    System.out.println(hello);
+
+
+
+
+                ClientHandler newPlayer = new ClientHandler(sock, this);
+                //newPlayer.sendMessage(ProtocolMessages.HELLO + ProtocolMessages.C);
+                clientlist.add(newPlayer);
+                new Thread(newPlayer).start();
+
             } catch (IOException ioException) {
                 ioException.printStackTrace();
             }
@@ -86,6 +101,7 @@ public class Server implements Runnable {
 
     public boolean handleHello(String name, ClientHandler handler) {
         boolean test = false;
+        System.out.println("huts");
         for (ClientHandler k : clientlist) {
             if (k.getPlayer().getName().equals(name)) {
                 test = true;

@@ -72,12 +72,16 @@ public class ViewController {
     }
 
     public void hostGame(int port, String username) {
-
         Server server = new Server(port);
         server.setup(port);
 
         Thread srv = new Thread(server);
-        HumanPlayer playerOne = new HumanPlayer(username);
+        srv.start();
+
+        Client client = new Client("localhost", String.valueOf(port), new HumanPlayer(username));
+        this.client = client;
+        Thread clientthread = new Thread(client);
+        clientthread.start();
 
     }
 

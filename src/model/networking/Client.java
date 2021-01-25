@@ -20,23 +20,6 @@ public class Client implements Runnable{
     private BufferedReader in;
     private BufferedWriter out;
 
-
-
-    public Client(Player player, Socket sock) throws ExitProgram {
-        try {
-            in = new BufferedReader(
-                    new InputStreamReader(sock.getInputStream()));
-            out = new BufferedWriter(
-                    new OutputStreamWriter(sock.getOutputStream()));
-            this.sock = sock;
-            this.player = player;
-            }
-        catch (IOException e) {
-            exit();
-            throw new ExitProgram();
-        }
-    }
-
     public Client(String IP, String port, Player player) {
         this.player = player;
         try {
@@ -45,10 +28,13 @@ public class Client implements Runnable{
                     new InputStreamReader(sock.getInputStream()));
             out = new BufferedWriter(
                     new OutputStreamWriter(sock.getOutputStream()));
+            sendMessage(ProtocolMessages.HELLO + ProtocolMessages.CS + player.getName());
         } catch (UnknownHostException e) {
             System.out.println("Host could not be found!");
+            exit();
         } catch (IOException e) {
             System.out.println("Some I/O error has occurred. Try again!");
+            exit();
         }
     }
 
@@ -222,7 +208,12 @@ public class Client implements Runnable{
     }
 
     public static void main(String[] args) {
-        Thread a = new Thread(new Client("localhost", "69", new HumanPlayer("Rinse")));
+        Client client = new Client("localhost","69", new HumanPlayer("Rinse"));
+        Thread a = new Thread(client);
         a.start();
+        while (true) {
+            client.sendMessage("saus");
+            System.out.println("saus");
+        }
     }
 }
