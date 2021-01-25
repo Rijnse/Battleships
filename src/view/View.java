@@ -34,7 +34,7 @@ public class View extends Application {
         launch(args);
     }
 
-    public ViewDelegate getController() {
+    public ViewController getController() {
         return controller;
     }
 

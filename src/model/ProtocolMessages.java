@@ -103,7 +103,7 @@ public class ProtocolMessages {
 	/** When a player causes an error to occur in the server, this command is used. */
 	public static final String ERROR = "E";
 	
-	//Please check the protocol descriptor for specifications on every error, and when it should occura
+	//Please check the protocol descriptor for specifications on every error, and when it should occur
 	public static final String ACTION_NOT_PERMITTED = ERRORNAMES[0];
 	public static final String DUPLICATE_NAME = ERRORNAMES[1];
 	public static final String GAME_OVER = ERRORNAMES[2];

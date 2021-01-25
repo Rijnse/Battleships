@@ -1,5 +1,7 @@
 package model.game;
 
+import model.ProtocolMessages;
+
 public abstract class Player {
     private int score;
     private Board board;
@@ -9,6 +11,21 @@ public abstract class Player {
     public Player(String name) {
         this.score = 0;
         this.board = new Board();
+        this.name = name;
+    }
+
+    public Player(String name, boolean emptyFields) {
+        this.score = 0;
+        if (emptyFields) {
+            Field[] array = new Field[ProtocolMessages.BOARD_DIMENSIONS[0] * ProtocolMessages.BOARD_DIMENSIONS[1]];
+            for (int i = 0; i < ProtocolMessages.BOARD_DIMENSIONS[0] * ProtocolMessages.BOARD_DIMENSIONS[1]; i++) {
+                array[i] = new Field();
+            }
+            this.board = new Board(array);
+        }
+        else {
+            this.board = new Board();
+        }
         this.name = name;
     }
 

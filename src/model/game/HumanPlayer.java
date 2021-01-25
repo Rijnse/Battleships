@@ -2,6 +2,10 @@ package model.game;
 import model.exceptions.InvalidIndex;
 
 public class HumanPlayer extends Player{
+    public HumanPlayer(String name, boolean emptyFields) {
+        super(name, emptyFields);
+    }
+
     public HumanPlayer(String name) {
         super(name);
     }

@@ -3,6 +3,7 @@ package model.networking;
 import model.ProtocolMessages;
 import model.game.Board;
 import model.game.HumanPlayer;
+import model.game.Player;
 
 import java.io.*;
 import java.net.Socket;
@@ -10,21 +11,22 @@ import java.net.Socket;
 public class ClientHandler implements Runnable{
     private BufferedReader in;
     private BufferedWriter out;
+
+    public Socket getSock() {
+        return sock;
+    }
+
+    public void setSock(Socket sock) {
+        this.sock = sock;
+    }
+
     private Socket sock;
 
     private Server server;
 
-    public Client getClient() {
-        return client;
-    }
+    private Player player;
 
-    public void setClient(Client client) {
-        this.client = client;
-    }
-
-    private Client client;
-
-    public ClientHandler(Socket sock, Server server, Client client) {
+    public ClientHandler(Socket sock, Server server, Player player) {
         try {
             in = new BufferedReader(
                     new InputStreamReader(sock.getInputStream()));
@@ -32,7 +34,7 @@ public class ClientHandler implements Runnable{
                     new OutputStreamWriter(sock.getOutputStream()));
             this.sock = sock;
             this.server = server;
-            this.client = client;
+            this.player = player;
         } catch (IOException e) {
             exit();
         }
@@ -63,20 +65,27 @@ public class ClientHandler implements Runnable{
         else {
             switch (array[0]) {
                 case ProtocolMessages.HELLO:
-
+                    if (array[1] != null) {
+                        if (!(this.server.handleHello(array[1], this))) {
+                            sendMessage(ProtocolMessages.ERROR + ProtocolMessages.CS + ProtocolMessages.DUPLICATE_NAME);
+                        }
+                    }
+                    else {
+                        illegalCommandSender();
+                    }
                     break;
                 case ProtocolMessages.START:
-                    if (this.client.getPlayer().getName().equals(this.server.getPlayerOne().getClient().getPlayer().getName())) {
+                    if (this.player.getName().equals(this.server.getPlayerOne().getPlayer().getName())) {
                        this.server.startGame();
                     }
                     else {
-                        sendMessage(ProtocolMessages.ERROR + ProtocolMessages.CS + ProtocolMessages.ACTION_NOT_PERMITTED + ProtocolMessages.CS + client.getPlayer().getName());
+                        sendMessage(ProtocolMessages.ERROR + ProtocolMessages.CS + ProtocolMessages.ACTION_NOT_PERMITTED);
                     }
                     break;
                 case ProtocolMessages.BOARD:
                     if (array[1] != null && array[2] != null) {
-                        if (this.client.getPlayer().getName().equals(array[1])) {
-                            this.server.processBoardInput(client.getPlayer().getName(), new Board(array[2]));
+                        if (this.player.getName().equals(array[1])) {
+                            this.server.processBoardInput(this.player.getName(), new Board(array[2]));
                         }
                     }
                     else {
@@ -84,11 +93,11 @@ public class ClientHandler implements Runnable{
                     }
                     break;
                 case ProtocolMessages.ATTACK:
-                    this.server.attackCommand(this.client.getPlayer().getName());
+                    this.server.attackCommand(this.player.getName());
                     break;
                 case ProtocolMessages.MSGSEND:
                     if (array[1] != null && array[2] != null) {
-                        if (this.client.getPlayer().getName().equals(array[1]) && !(array[2].length() > 50)) {
+                        if (this.player.getName().equals(array[1]) && !(array[2].length() > 50)) {
                             this.server.processMessage(array[1], array[2]);
                         }
                     }
@@ -115,7 +124,7 @@ public class ClientHandler implements Runnable{
     }
 
     public void illegalCommandSender() {
-        sendMessage(ProtocolMessages.ERROR + ProtocolMessages.CS + ProtocolMessages.ILLEGAL_COMMAND + ProtocolMessages.CS + client.getPlayer().getName());
+        sendMessage(ProtocolMessages.ERROR + ProtocolMessages.CS + ProtocolMessages.ILLEGAL_COMMAND);
     }
 
     public void exit() {
@@ -128,4 +137,11 @@ public class ClientHandler implements Runnable{
         }
     }
 
+    public Player getPlayer() {
+        return player;
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
 }

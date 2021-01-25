@@ -1,12 +1,25 @@
 package controller;
+import model.ProtocolMessages;
+import model.game.Board;
+import model.game.Field;
 import model.game.HumanPlayer;
+import model.networking.Client;
 import model.networking.Server;
+import view.Game;
 import view.Lobby;
+import view.Start;
 import view.ViewDelegate;
 
-public class ViewController implements ViewDelegate {
+import java.io.IOException;
+
+public class ViewController {
     private static ViewController sharedInstance;
+
+    private Start startscreen;
     private Lobby lobby;
+    private Game game;
+
+    private Client client;
 
     private ViewController() {
 
@@ -20,12 +33,44 @@ public class ViewController implements ViewDelegate {
         return sharedInstance;
     }
 
-    @Override
     public void setLobby(Lobby lobby) {
         this.lobby = lobby;
     }
 
-    @Override
+    public void setGameView(Game game) {
+        this.game = game;
+    }
+
+    public void setStartScreen(Start start) {
+        this.startscreen = start;
+    }
+
+    public void updateLobbyInfo(String ip, int portint, String onename, String twoname) {
+        this.lobby.updateLobbyInfo(ip, portint, onename, twoname);
+    }
+
+    public void updateOwnField(Board board) {
+        Field[] array = board.getFieldsArray();
+        for (int i = 0; i < ProtocolMessages.BOARD_DIMENSIONS[0] * ProtocolMessages.BOARD_DIMENSIONS[1]; i++) {
+            game.updateOwnField(array[i], i);
+        }
+    }
+
+    public void updateEnemyField(Board board) {
+        Field[] array = board.getFieldsArray();
+        for (int i = 0; i < ProtocolMessages.BOARD_DIMENSIONS[0] * ProtocolMessages.BOARD_DIMENSIONS[1]; i++) {
+            game.updateEnemyField(array[i], i);
+        }
+    }
+
+    public void updateNames(String one, String two) {
+        this.game.updatePlayerNames(one, two);
+    }
+
+    public void updateScores(int one, int two) {
+        this.game.updatePlayerScores(one, two);
+    }
+
     public void hostGame(int port, String username) {
 
         Server server = new Server(port);
@@ -36,23 +81,37 @@ public class ViewController implements ViewDelegate {
 
     }
 
-    @Override
-    public void joinGame(String ip, int port, String username) {
+    public void pressStartButton() {
+        client.sendMessage(ProtocolMessages.START);
+    }
+
+    public void joinGame(String ip, String port, String username) {
+        Client client = new Client(ip, port, new HumanPlayer(username));
+        this.client = client;
 
     }
 
-    @Override
+    public void updateGameTime(int seconds) {
+        this.game.updateGeneralTime(seconds);
+    }
+
     public void botGame(String username) {
 
     }
 
-    @Override
     public void sendMove(String coordinates) {
 
     }
 
-    @Override
-    public void testMethod() {
-        lobby.updateLobbyInfo("Test", 123, "test", "whatever");
+    public void startTurn() {
+        game.startTurnTimer();
+    }
+
+    public void startGame() throws IOException {
+        this.lobby.switchToGameScreen();
+    }
+
+    public void showPopUp(String title, String desc) {
+        game.showPopUp(title, desc);
     }
 }

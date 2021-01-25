@@ -167,8 +167,8 @@ public class Board {
     }
 
     public static void main(String[] args) {
-        Board board = new Board();
-        System.out.println(board.boardToString());
+        System.out.println(indexToCoordinates(82));
+        System.out.println(index("N9"));
     }
 
     /*public Board() {
@@ -301,7 +301,7 @@ public class Board {
     public Board(String boardarray) {
         Ship placeholder = null;
         Field[] array = new Field[WIDTH*HEIGHT];
-        String[] strarray = boardarray.split(",");
+        String[] strarray = boardarray.split(ProtocolMessages.AS);
         for (int i = 0; i < strarray.length; i++) {
             if (strarray[i].equals("0")) {
                 array[i] = new Field();
@@ -368,22 +368,22 @@ public class Board {
         for (int i = 0; i < fields.length; i++) {
             switch (fields[i].getShip().getType()) {
                 case CARRIER:
-                    result = result + ("C" + fields[i].getShip().getIdentifier()) + ",";
+                    result = result + ("C" + fields[i].getShip().getIdentifier()) + ProtocolMessages.AS;
                     break;
                 case BATTLESHIP:
-                    result = result + ("B" + fields[i].getShip().getIdentifier()) + ",";
+                    result = result + ("B" + fields[i].getShip().getIdentifier()) + ProtocolMessages.AS;
                     break;
                 case DESTROYER:
-                    result = result + ("D" + fields[i].getShip().getIdentifier()) + ",";
+                    result = result + ("D" + fields[i].getShip().getIdentifier()) + ProtocolMessages.AS;
                     break;
                 case SUPERPATROL:
-                    result = result + ("S" + fields[i].getShip().getIdentifier()) + ",";
+                    result = result + ("S" + fields[i].getShip().getIdentifier()) + ProtocolMessages.AS;
                     break;
                 case PATROLBOAT:
-                    result = result + ("P" + fields[i].getShip().getIdentifier()) + ",";
+                    result = result + ("P" + fields[i].getShip().getIdentifier()) + ProtocolMessages.AS;
                     break;
                 default:
-                    result = result + 0 + ",";
+                    result = result + 0 + ProtocolMessages.AS;
                     break;
             }
         }
@@ -431,6 +431,17 @@ public class Board {
             }
         }
         return (row * WIDTH) + col;
+    }
+
+    public static String indexToCoordinates(int index) {
+        if (index < 0 || index > 149) {
+            return "NO VALID INDEX";
+        }
+        else {
+            String first = String.valueOf(ProtocolMessages.COLUMNS[index % ProtocolMessages.BOARD_DIMENSIONS[1]]);
+            String second = String.valueOf((index / ProtocolMessages.BOARD_DIMENSIONS[1]) + 1);
+            return first + second;
+        }
     }
 
     public boolean isField(int index) {

@@ -56,7 +56,7 @@ public class Lobby {
     }
 
     @FXML public void pressStartButton() {
-
+        ViewController.getInstance().pressStartButton();
     }
 
 
@@ -79,5 +79,17 @@ public class Lobby {
                 mediaPlayer.setMute(true);
             }
         }
+    }
+
+    @FXML
+    public void switchToGameScreen() throws IOException {
+        Stage stage;
+        Parent root;
+
+        stage = (Stage) leavebutton.getScene().getWindow();
+        root = FXMLLoader.load(getClass().getResource("../view/game.fxml"));
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
     }
 }

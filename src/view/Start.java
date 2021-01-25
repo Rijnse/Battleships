@@ -14,7 +14,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class Start {
-    private ViewDelegate controller = ViewController.getInstance();
+    private ViewController controller = ViewController.getInstance();
 
     @FXML private Button hostbig;
     @FXML private Button joinbig;
@@ -34,6 +34,11 @@ public class Start {
     @FXML private AnchorPane joinanchor;
     @FXML private AnchorPane anchorhost;
     @FXML private AnchorPane anchorcomputer;
+
+    @FXML
+    public void initialize() {
+        ViewController.getInstance().setStartScreen(this);
+    }
 
     public void bigHostButtonPress(ActionEvent e) {
         if (joinbig.isVisible()) {
@@ -135,12 +140,11 @@ public class Start {
      */
     public void joinGame() {
         try {
-            int port = Integer.parseInt(joinport.getText());
             if (joinname.getText().length() > 12 || joinname.getText().length() < 1) {
                 joinbutton.setText("Name too long/short!");
             }
             else {
-                controller.joinGame(joinip.getText(),port, joinname.getText());
+                controller.joinGame(joinip.getText(), joinport.getText(), joinname.getText());
                 switchToLobby();
             }
         }

@@ -3,6 +3,7 @@ package model.networking;
 import controller.ViewController;
 import model.exceptions.ExitProgram;
 import model.game.Board;
+import model.game.HumanPlayer;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -22,7 +23,9 @@ public class Server implements Runnable {
     private final ViewController controller = ViewController.getInstance();
 
     public Server(int port) {
-        this.port = port;
+            setup(port);
+            this.port = port;
+            this.ip = ssock.getInetAddress();
     }
 
     @Override
@@ -31,8 +34,6 @@ public class Server implements Runnable {
             System.out.println("Waiting for client to connect!");
             Socket sock = ssock.accept();
             System.out.println("client connected on port" + sock.getLocalPort());
-
-
         } catch (IOException ioException) {
             ioException.printStackTrace();
         }
@@ -77,6 +78,17 @@ public class Server implements Runnable {
         this.playerTwo = playerTwo;
     }
 
+    public boolean handleHello(String name, ClientHandler handler) {
+        if (playerOne.getPlayer().getName().equals(name) || playerTwo.getPlayer().getName().equals(name)) {
+            handler.exit();
+            return false;
+        }
+        else {
+            handler.setPlayer(new HumanPlayer(name));
+            return true;
+        }
+    }
+
     public void startGame() {
 
     }
@@ -91,5 +103,10 @@ public class Server implements Runnable {
 
     public void processBoardInput(String name, Board board) {
 
+    }
+
+    public static void main(String[] args) {
+        Thread a = new Thread(new Server(69));
+        a.start();
     }
 }

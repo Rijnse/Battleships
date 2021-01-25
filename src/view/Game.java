@@ -24,7 +24,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class Game {
-    private ViewDelegate controller = ViewController.getInstance();
+    private ViewController controller = ViewController.getInstance();
 
     @FXML private GridPane playerField;
     @FXML private GridPane enemyField;
@@ -32,6 +32,28 @@ public class Game {
     @FXML private Text turnTimer;
     @FXML private TextField moveTextField;
     @FXML private Button fireButton;
+
+    @FXML private AnchorPane popup;
+    @FXML private Text popuptitle;
+    @FXML private Text popupdesc;
+
+    @FXML private Text scoreplayerone;
+    @FXML private Text scoreplayertwo;
+    @FXML private Text nameplayerone;
+    @FXML private Text nameplayertwo;
+
+    @FXML
+    public void initialize() {
+        ViewController.getInstance().setGameView(this);
+    }
+
+    public void updateOwnField(Field field, int index) {
+        updatePlayerField(field, index, playerField);
+    }
+
+    public void updateEnemyField(Field field, int index) {
+        updatePlayerField(field, index, enemyField);
+    }
 
     public void updatePlayerField(Field field, int index, GridPane pane){
        Rectangle rect = (Rectangle) ((StackPane) pane.getChildren().get(index)).getChildren().get(0);
@@ -118,11 +140,37 @@ public class Game {
         return enemyField;
     }
 
+    public void showPopUp(String title, String desc) {
+        Timer timer = new Timer();
+        final int[] time = {3};
+        popuptitle.setText(title);
+        popupdesc.setText(desc);
+        popup.setVisible(true);
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                if (!(time[0] < 0)) {
+                    time[0]--;
+                }
+                else {
+                    timer.cancel();
+                    popup.setVisible(false);
+                }
+            }
+        }, 0, 1000);
+    }
+
+    public void updatePlayerNames(String one, String two) {
+        nameplayerone.setText(one);
+        nameplayertwo.setText(two);
+    }
+
+    public void updatePlayerScores(int one, int two) {
+        scoreplayerone.setText(String.valueOf(one));
+        scoreplayertwo.setText(String.valueOf(two));
+    }
 
     public void test() {
-        Board board = new Board();
-        for (int i = 0; i < 150; i++) {
-           updatePlayerField(board.getField(i), i, playerField);
-        }
+        showPopUp("test", "konkie");
     }
 }
