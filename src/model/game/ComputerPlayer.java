@@ -5,6 +5,7 @@ import model.ProtocolMessages;
 import java.util.Random;
 
 public class ComputerPlayer extends Player {
+    private String name;
     public static final int WIDTH = 15;
     public static final int HEIGHT = 10;
 
@@ -12,46 +13,65 @@ public class ComputerPlayer extends Player {
         super("Admiral AI");
     }
 
+    public String getName() {
+        return this.name;
+    }
+
     @Override
     public int determineMove () {
         for (int i = 0; i < (WIDTH * HEIGHT); i++) {
-            int k = i;
-            int p = i;
             if (this.getBoard().getField(i).getShip().getType() == ProtocolMessages.Ship.UNKNOWN) {
-                while ((this.getBoard().getField(k).getShip().getType() == ProtocolMessages.Ship.UNKNOWN)) {
+                int k = i;
+                int p = i;
+                while (this.getBoard().getField(k).getShip().getType() == ProtocolMessages.Ship.UNKNOWN && (k + 1) % WIDTH != 0 && (k - 1) < (WIDTH * HEIGHT)) {
                     k++;
                 }
-                while ((this.getBoard().getField(p).getShip().getType() == ProtocolMessages.Ship.UNKNOWN)) {
+                while (this.getBoard().getField(p).getShip().getType() == ProtocolMessages.Ship.UNKNOWN && p < (WIDTH * (HEIGHT - 1))) {
                     p = p + WIDTH;
                 }
-                if (k >= p && !this.getBoard().getField(k).isHit()) {
-                    if (!((k + 1) % WIDTH == 1)) {
-                        return k;
+                int kPlaces = k - i;
+                int pPlaces = (p - i) / WIDTH;
+
+                if (kPlaces != 0 || pPlaces != 0) {
+                    if (kPlaces >= pPlaces) {
+                        if ((k + 1) % WIDTH != 0) {
+                            return k;
+                        }
                     }
-                    else {
-                        return k + WIDTH - 1;
+                    if (pPlaces > kPlaces) {
+                        if (p < (WIDTH * (HEIGHT - 1))) {
+                            return p;
+                        }
                     }
-                }
-                else {
-                    if (135 < p && p < 149) {
-                        return p - WIDTH + 1;
+                    if (kPlaces != 0) {
+                        if ((k + 1) % WIDTH != 0) {
+                            return k;
+                        }
                     }
-                    else {
-                        return p;
+                    if (pPlaces != 0) {
+                        if (p < (WIDTH * (HEIGHT - 1))) {
+                            return p;
+                        }
                     }
                 }
             }
         }
         int possible = randomMove();
-        while (true) {
+        while (possible < (WIDTH * HEIGHT)) {
             if (!this.getBoard().getField(possible).isHit()) {
                 return possible;
             }
-            possible ++;
+            if (possible == (WIDTH * HEIGHT) - 1) {
+                possible = 0;
+            }
+            else {
+                possible++;
+            }
         }
+        return -1;
     }
 
-    public int randomMove () {
-        return (int) (Math.random() * 150);
+    public static int randomMove () {
+        return (int) (Math.random() * WIDTH * HEIGHT);
     }
 }
