@@ -21,9 +21,7 @@ public class ClientHandler implements Runnable{
     }
 
     private Socket sock;
-
     private Server server;
-
     private Player player;
 
     public ClientHandler(Socket sock, Server server, Player player) {
@@ -69,13 +67,20 @@ public class ClientHandler implements Runnable{
                         if (!(this.server.handleHello(array[1], this))) {
                             sendMessage(ProtocolMessages.ERROR + ProtocolMessages.CS + ProtocolMessages.DUPLICATE_NAME);
                         }
+                        else {
+                            String hellomsg = ProtocolMessages.HELLO + ProtocolMessages.CS;
+                            for (ClientHandler k : this.server.getClientList()) {
+                                hellomsg = hellomsg + k.getPlayer().getName() + ProtocolMessages.CS;
+                            }
+                            sendMessage(hellomsg);
+                        }
                     }
                     else {
                         illegalCommandSender();
                     }
                     break;
                 case ProtocolMessages.START:
-                    if (this.player.getName().equals(this.server.getPlayerOne().getPlayer().getName())) {
+                    if (this.player.getName().equals(this.server.getPlayer(0).getPlayer().getName())) {
                        this.server.startGame();
                     }
                     else {
@@ -93,7 +98,7 @@ public class ClientHandler implements Runnable{
                     }
                     break;
                 case ProtocolMessages.ATTACK:
-                    this.server.attackCommand(this.player.getName());
+                    this.server.attackCommand(this.player.getName(), array[1]);
                     break;
                 case ProtocolMessages.MSGSEND:
                     if (array[1] != null && array[2] != null) {

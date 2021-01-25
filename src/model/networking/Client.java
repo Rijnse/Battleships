@@ -141,31 +141,31 @@ public class Client implements Runnable{
                     }
                     break;
                 case ProtocolMessages.DESTROY:
-                    String ship = "";
+                    ProtocolMessages.Ship ship = ProtocolMessages.Ship.EMPTY;
                     int length = 0;
                     switch (array[1]) {
                         case "C":
-                            ship = "CARRIER";
+                            ship = ProtocolMessages.Ship.CARRIER;
                             length = 5;
                             break;
                         case "B":
-                            ship = "BATTLESHIP";
+                            ship = ProtocolMessages.Ship.BATTLESHIP;
                             length = 4;
                             break;
                         case "D":
-                            ship = "DESTROYER";
+                            ship = ProtocolMessages.Ship.DESTROYER;
                             length = 3;
                             break;
                         case "S":
-                            ship = "SUPER PATROL";
+                            ship = ProtocolMessages.Ship.SUPERPATROL;
                             length = 2;
                             break;
                         case "P":
-                            ship = "PATROLBOAT";
+                            ship = ProtocolMessages.Ship.PATROLBOAT;
                             length = 1;
                             break;
                     }
-                    ViewController.getInstance().showPopUp("DESTROYED!", array[4] + " has lost a " + ship);
+                    ViewController.getInstance().showPopUp("DESTROYED!", array[4] + " has lost a " + ship.toString());
                     if (array[4].equals(game.getPlayerOne().getName())) {
                         player.getBoard().getField(Integer.parseInt(array[1])).setHit(true);
                         ViewController.getInstance().updateOwnField(player.getBoard());
@@ -174,23 +174,29 @@ public class Client implements Runnable{
                     }
                     else {
                         if (array[3].equals("0")) {
-                            for (int i = Integer.parseInt(array[2]); i < length; i++) {
-                                game.getPlayerTwo().getBoard().getField(i).getShip().setType(ProtocolMessages.Ship.UNKNOWN);
+                            for (int i = Integer.parseInt(array[2]); i < length + Integer.parseInt(array[2]); i++) {
+                                game.getPlayerTwo().getBoard().getField(i).getShip().setType(ship);
                             }
                         }
-
+                        else {
+                            for (int i = Integer.parseInt(array[2]); i < (length*ProtocolMessages.BOARD_DIMENSIONS[15]) + Integer.parseInt(array[2]); i = i + ProtocolMessages.BOARD_DIMENSIONS[1]) {
+                                game.getPlayerTwo().getBoard().getField(i).getShip().setType(ship);
+                            }
+                        }
                         ViewController.getInstance().updateEnemyField(game.getPlayerTwo().getBoard());
                         game.getPlayerOne().incrementScore(1);
                         ViewController.getInstance().updateScores(player.getScore(), game.getPlayerTwo().getScore());
                     }
                     break;
                 case ProtocolMessages.WON:
-
+                    if (array.length == 2) {
+                        ViewController.getInstance().showPopUp("WON!", array[1] + " has won the game!");
+                    }
+                    else {
+                        ViewController.getInstance().showPopUp("WON!", "The game was a tie!");
+                    }
                     break;
                 case ProtocolMessages.MSGRECEIVED:
-
-                    break;
-                default:
 
                     break;
             }
