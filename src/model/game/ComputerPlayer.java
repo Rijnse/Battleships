@@ -13,24 +13,20 @@ public class ComputerPlayer extends Player {
         super("Admiral AI");
     }
 
-    @Override
-    public int determineMove() {
-        return 0;
-    }
-
     public String getName() {
         return this.name;
     }
 
-    public static int determineMove (Board board) {
+    @Override
+    public int determineMove () {
         for (int i = 0; i < (WIDTH * HEIGHT); i++) {
-            if (board.getField(i).getShip().getType() == ProtocolMessages.Ship.UNKNOWN) {
+            if (this.getBoard().getField(i).getShip().getType() == ProtocolMessages.Ship.UNKNOWN) {
                 int k = i;
                 int p = i;
-                while (board.getField(k).getShip().getType() == ProtocolMessages.Ship.UNKNOWN && (k + 1) % WIDTH != 0 && (k - 1) < (WIDTH * HEIGHT)) {
+                while (this.getBoard().getField(k).getShip().getType() == ProtocolMessages.Ship.UNKNOWN && (k + 1) % WIDTH != 0 && (k - 1) < (WIDTH * HEIGHT)) {
                     k++;
                 }
-                while (board.getField(p).getShip().getType() == ProtocolMessages.Ship.UNKNOWN && p < (WIDTH * (HEIGHT - 1))) {
+                while (this.getBoard().getField(p).getShip().getType() == ProtocolMessages.Ship.UNKNOWN && p < (WIDTH * (HEIGHT - 1))) {
                     p = p + WIDTH;
                 }
                 int kPlaces = k - i;
@@ -62,7 +58,7 @@ public class ComputerPlayer extends Player {
         }
         int possible = randomMove();
         while (possible < (WIDTH * HEIGHT)) {
-            if (!board.getField(possible).isHit()) {
+            if (!this.getBoard().getField(possible).isHit()) {
                 return possible;
             }
             if (possible == (WIDTH * HEIGHT) - 1) {
@@ -76,6 +72,6 @@ public class ComputerPlayer extends Player {
     }
 
     public static int randomMove () {
-        return (int) (Math.random() * 150);
+        return (int) (Math.random() * WIDTH * HEIGHT);
     }
 }

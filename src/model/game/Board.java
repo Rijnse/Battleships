@@ -120,7 +120,7 @@ public class Board {
                     while (array[i].getShip().getType() == ProtocolMessages.Ship.EMPTY && i < (index + ((length - 1) * WIDTH))) {
                         i = i + WIDTH;
                     }
-                    if (i == (index + ((length - 1) * 15))) {
+                    if (i == (index + ((length - 1) * WIDTH))) {
                         for (int z = index; z < (index + (length * WIDTH)); z = z + WIDTH) {
                             array[z] = new Field(ship);
                         }
@@ -133,7 +133,7 @@ public class Board {
                     while (array[i].getShip().getType() == ProtocolMessages.Ship.EMPTY && i > (index - ((length - 1) * WIDTH))) {
                         i = i - WIDTH;
                     }
-                    if (i == (index - ((length - 1) * 15))) {
+                    if (i == (index - ((length - 1) * WIDTH))) {
                         for (int z = index; z > (index - (length*WIDTH)); z = z - WIDTH) {
                             array[z] = new Field(ship);
                         }
