@@ -445,15 +445,32 @@ public class Board {
     }
 
     public boolean checkValidBoard () {
+        int correctShipCount = 0;
         for (Ship s : SHIPS) {
             for (int i = 0; i < (WIDTH * HEIGHT) -1; i ++){
                 if (getField(i).getShip().equals(s)) {
                     int k = i;
-                    while () {
-
+                    int p = i;
+                    while (getField(k).getShip().equals(s) && (k - i) < s.getLength() - 1) {
+                        k ++;
+                    }
+                    while (getField(p).getShip().equals(s) && ((p - i) / WIDTH) < s.getLength() - 1) {
+                        p = p + WIDTH;
+                    }
+                    if ((k - i) == s.getLength() - 1 || ((p - i) / WIDTH) < s.getLength() - 1) {
+                        correctShipCount ++;
+                    }
+                    else {
+                        return false;
                     }
                 }
             }
+        }
+        if (correctShipCount == SHIPS.length) {
+            return true;
+        }
+        else {
+            return false;
         }
     }
 
