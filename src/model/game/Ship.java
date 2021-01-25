@@ -63,6 +63,10 @@ public class Ship {
         this.sunk = sunk;
     }
 
+    public int getLength() {
+        return length;
+    }
+
     public boolean isSunk() {
         return this.sunk;
     }
