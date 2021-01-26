@@ -345,14 +345,31 @@ public class Board {
                 if (getField(i).getShip().equals(s)) {
                     int k = i;
                     int p = i;
-                    while (getField(k).getShip().equals(s) && (k - i) < s.getLength() - 1) {
+                    while (getField(k).getShip().equals(s) && k < (WIDTH * HEIGHT) - 1) {
                         k ++;
                     }
-                    while (getField(p).getShip().equals(s) && ((p - i) / WIDTH) < s.getLength() - 1) {
+                    while (getField(p).getShip().equals(s) && p < (WIDTH * (HEIGHT - 1))) {
                         p = p + WIDTH;
                     }
-                    if ((k - i) == s.getLength() - 1 || ((p - i) / WIDTH) < s.getLength() - 1) {
+                    System.out.println("I " + i);
+                    System.out.println("K " + k);
+                    System.out.println("P " + p);
+                    System.out.println("Length " + s.getLength());
+                    if ((k - i) == s.getLength() || ((p - i) / WIDTH) == s.getLength()) {
                         correctShipCount ++;
+                        break;
+                    }
+                    else if (k == (WIDTH * HEIGHT) - 1) {
+                        if (getField(k).getShip().equals(s)) {
+                            correctShipCount ++;
+                            break;
+                        }
+                    }
+                    else if (p >= (WIDTH * (HEIGHT - 1))) {
+                        if (getField(p).getShip().equals(s)){
+                          correctShipCount ++;
+                          break;
+                        }
                     }
                     else {
                         return false;
@@ -360,6 +377,7 @@ public class Board {
                 }
             }
         }
+        System.out.println(correctShipCount);
         if (correctShipCount == SHIPS.length) {
             return true;
         }
