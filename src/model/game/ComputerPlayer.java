@@ -9,24 +9,30 @@ public class ComputerPlayer extends Player {
     public static final int WIDTH = 15;
     public static final int HEIGHT = 10;
 
+    /**
+     * @ensures that a ComputerPlayer is constructed with the Player constructor and pre-defined name (We figured Admiral AI was funny)
+     * @requires the Player constructor to be fully functional
+     */
     public ComputerPlayer() {
         super("Admiral AI");
     }
 
-    public String getName() {
-        return this.name;
-    }
-
+    /**
+     * @ensures that an int is returned with an index which is the best move according to the AI
+     * @requires that the board object of the Player's opponent is properly defined
+     * @return an int between 0 and 149
+     */
     @Override
     public int determineMove () {
+        Board opponentBoard = this.getCurrentGame().getPlayerTwo().getBoard();
         for (int i = 0; i < (WIDTH * HEIGHT); i++) {
-            if (this.getBoard().getField(i).getShip().getType() == ProtocolMessages.Ship.UNKNOWN) {
+            if (opponentBoard.getField(i).getShip().getType() == ProtocolMessages.Ship.UNKNOWN) {
                 int k = i;
                 int p = i;
-                while (this.getBoard().getField(k).getShip().getType() == ProtocolMessages.Ship.UNKNOWN && (k + 1) % WIDTH != 0 && (k - 1) < (WIDTH * HEIGHT)) {
+                while (opponentBoard.getField(k).getShip().getType() == ProtocolMessages.Ship.UNKNOWN && (k + 1) % WIDTH != 0 && (k - 1) < (WIDTH * HEIGHT)) {
                     k++;
                 }
-                while (this.getBoard().getField(p).getShip().getType() == ProtocolMessages.Ship.UNKNOWN && p < (WIDTH * (HEIGHT - 1))) {
+                while (opponentBoard.getField(p).getShip().getType() == ProtocolMessages.Ship.UNKNOWN && p < (WIDTH * (HEIGHT - 1))) {
                     p = p + WIDTH;
                 }
                 int kPlaces = k - i;
@@ -58,7 +64,7 @@ public class ComputerPlayer extends Player {
         }
         int possible = randomMove();
         while (possible < (WIDTH * HEIGHT)) {
-            if (!this.getBoard().getField(possible).isHit()) {
+            if (!opponentBoard.getField(possible).isHit()) {
                 return possible;
             }
             if (possible == (WIDTH * HEIGHT) - 1) {
@@ -71,6 +77,10 @@ public class ComputerPlayer extends Player {
         return -1;
     }
 
+    /**
+     * @ensures that a random int between 0 and 149 is generated
+     * @return an int
+     */
     public static int randomMove () {
         return (int) (Math.random() * WIDTH * HEIGHT);
     }

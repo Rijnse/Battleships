@@ -1,8 +1,5 @@
 package model.game;
-
-import controller.ViewController;
 import model.ProtocolMessages;
-import view.ViewDelegate;
 
 public class Board {
     public static final int WIDTH = 15;
@@ -10,6 +7,8 @@ public class Board {
     public static final String COLUMNS = "ABCDEFGHIJKLMNO";
 
     private Field[] fields;
+
+    //All of the ships to be placed on the board are predefined. This way, we don't have to make 'duplicate' Ships with the same ID and Type
     private final Ship[] SHIPS = {
             new Ship(0, ProtocolMessages.Ship.CARRIER),
             new Ship(1, ProtocolMessages.Ship.CARRIER),
@@ -68,10 +67,13 @@ public class Board {
      * @return the array in the parameter including the newly placed ship.
      */
     public Field[] placeShip(Field[] array, Ship ship) {
+        //Initial & placeholder values
         int length = ship.getLength();
         boolean run = true;
         int index = -1;
         char orientation = 'N';
+
+
         while (run) {
             index = randomIndexOnFreeField(array);
             orientation = randomOrientation();
@@ -316,7 +318,7 @@ public class Board {
 
     /**
      * @ensures that valid coordinates are returned according to specification
-     * @requires an valid int
+     * @requires a valid int
      * @param index int between 0 and 149
      * @return a coordinate string according to game regulations: (A-O)+(1-10)
      */
