@@ -8,10 +8,7 @@ import model.game.Game;
 import model.game.HumanPlayer;
 import model.game.Ship;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -44,16 +41,7 @@ public class Server implements Runnable {
                 Socket sock = ssock.accept();
                 System.out.println("client connected on port" + sock.getLocalPort());
 
-                BufferedReader reader = new BufferedReader(new InputStreamReader(sock.getInputStream()));
-                System.out.println(reader.ready());
-                    String hello = reader.readLine();
-                    System.out.println(hello);
-
-
-
-
                 ClientHandler newPlayer = new ClientHandler(sock, this);
-                //newPlayer.sendMessage(ProtocolMessages.HELLO + ProtocolMessages.C);
                 clientlist.add(newPlayer);
                 new Thread(newPlayer).start();
 
@@ -67,13 +55,11 @@ public class Server implements Runnable {
         this.ssock = null;
         while (ssock == null) {
             try {
-                System.out.println("Attempting to open a socket at 127.0.0.1 "
-                        + "on port " + port + "...");
                 this.ssock = new ServerSocket(port, 0,
                         InetAddress.getByName("localhost"));
                 System.out.println("Server started at port " + port);
             } catch (IOException e) {
-                System.out.println("Something went wrong!");
+                System.out.println(".");
             }
         }
     }
@@ -98,23 +84,32 @@ public class Server implements Runnable {
         this.clientlist.set(index, player);
     }
 
-
     public boolean handleHello(String name, ClientHandler handler) {
-        boolean test = false;
-        System.out.println("huts");
+        int count = 0;
         for (ClientHandler k : clientlist) {
             if (k.getPlayer().getName().equals(name)) {
-                test = true;
+                count++;
             }
         }
-        if (test) {
+        if (count > 1) {
             handler.exit();
+            clientlist.remove(handler);
             return false;
         }
         else {
             handler.setPlayer(new HumanPlayer(name));
-            clientlist.add(handler);
+            sendHello();
             return true;
+        }
+    }
+
+    public void sendHello() {
+        String hellomsg = ProtocolMessages.HELLO + ProtocolMessages.CS;
+        for (ClientHandler k : this.getClientList()) {
+            hellomsg = hellomsg + k.getPlayer().getName() + ProtocolMessages.CS;
+        }
+        for (ClientHandler k : this.clientlist) {
+            k.sendMessage(hellomsg);
         }
     }
 
@@ -187,8 +182,10 @@ public class Server implements Runnable {
 
     }
 
-    public static void main(String[] args) {
-        Thread a = new Thread(new Server(69));
-        a.start();
+    public void closeServer() throws IOException {
+        for (ClientHandler k : clientlist) {
+            k.exit();
+        }
+        ssock.close();
     }
 }

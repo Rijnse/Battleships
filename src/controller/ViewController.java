@@ -85,6 +85,10 @@ public class ViewController {
 
     }
 
+    public void leaveGame() {
+
+    }
+
     public void pressStartButton() {
         client.sendMessage(ProtocolMessages.START);
     }

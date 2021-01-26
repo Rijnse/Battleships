@@ -53,8 +53,6 @@ public class Client implements Runnable{
             msg = in.readLine();
             while (msg != null) {
                 receiveMessage(msg);
-                out.newLine();
-                out.flush();
                 msg = in.readLine();
             }
             exit();
@@ -67,13 +65,20 @@ public class Client implements Runnable{
         String[] array = message.split(ProtocolMessages.CS);
             switch (array[0]) {
                 case ProtocolMessages.HELLO:
-                    if (array[2] != null) {
-                        this.game = new Game(this.player, new HumanPlayer(array[2], true));
+                    if (array.length > 2) {
+                        if (array[2] != null) {
+                            if (array[1].equals(getPlayer().getName())) {
+                                this.game = new Game(this.player, new HumanPlayer(array[2], true));
+                            }
+                            else {
+                                this.game = new Game(new HumanPlayer(array[1], true), this.player);
+                            }
+                        }
                     }
                     else {
                         this.game = new Game(this.player);
                     }
-                    ViewController.getInstance().updateLobbyInfo(sock.getInetAddress().toString(), sock.getPort(), array[1], array[2]);
+                    ViewController.getInstance().updateLobbyInfo(sock.getInetAddress().toString(), sock.getPort(), this.game.getPlayerOne().getName(), this.game.getPlayerTwo().getName());
                     break;
                 case ProtocolMessages.START:
                     sendMessage(ProtocolMessages.BOARD + ProtocolMessages.CS + player.getName() + ProtocolMessages.CS + player.getBoard().boardToString());
@@ -191,6 +196,7 @@ public class Client implements Runnable{
     public void sendMessage(String message) {
         try {
             out.write(message);
+            out.newLine();
             out.flush();
         } catch (IOException e) {
             System.out.println("Something went wrong!");
@@ -204,16 +210,6 @@ public class Client implements Runnable{
             sock.close();
         } catch (IOException e) {
             e.printStackTrace();
-        }
-    }
-
-    public static void main(String[] args) {
-        Client client = new Client("localhost","69", new HumanPlayer("Rinse"));
-        Thread a = new Thread(client);
-        a.start();
-        while (true) {
-            client.sendMessage("saus");
-            System.out.println("saus");
         }
     }
 }

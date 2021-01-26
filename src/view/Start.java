@@ -121,8 +121,8 @@ public class Start {
                 hostbutton.setText("Name too long/short!");
             }
             else {
-                controller.hostGame(port, hostname.getText());
                 switchToLobby();
+                controller.hostGame(port, hostname.getText());
             }
         }
         catch (NumberFormatException e) {
@@ -144,8 +144,8 @@ public class Start {
                 joinbutton.setText("Name too long/short!");
             }
             else {
-                controller.joinGame(joinip.getText(), joinport.getText(), joinname.getText());
                 switchToLobby();
+                controller.joinGame(joinip.getText(), joinport.getText(), joinname.getText());
             }
         }
         catch (NumberFormatException exception) {

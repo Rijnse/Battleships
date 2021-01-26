@@ -77,6 +77,7 @@ public class ClientHandler implements Runnable{
             switch (array[0]) {
                 case ProtocolMessages.HELLO:
                     if (array[1] != null) {
+                        this.player = new HumanPlayer(array[1]);
                         if (!(this.server.handleHello(array[1], this))) {
                             sendMessage(ProtocolMessages.ERROR + ProtocolMessages.CS + ProtocolMessages.DUPLICATE_NAME);
                         }
@@ -135,6 +136,7 @@ public class ClientHandler implements Runnable{
     public void sendMessage(String message) {
         try {
             out.write(message);
+            out.newLine();
             out.flush();
         } catch (IOException e) {
             System.out.println("Something went wrong!");

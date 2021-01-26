@@ -38,6 +38,8 @@ public class Lobby {
         Stage stage;
         Parent root;
 
+        ViewController.getInstance().leaveGame();
+
         if(e.getSource()==leavebutton){
             stage = (Stage) leavebutton.getScene().getWindow();
             root = FXMLLoader.load(getClass().getResource("../view/start.fxml"));
