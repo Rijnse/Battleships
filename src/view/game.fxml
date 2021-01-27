@@ -799,7 +799,7 @@
             </StackPane>
          </children>
       </GridPane>
-      <GridPane fx:id="enemyField" gridLinesVisible="true" layoutX="397.0" layoutY="150.0" prefHeight="226.0" prefWidth="321.0" style="-fx-background-color: red;">
+      <GridPane fx:id="enemyField" gridLinesVisible="true" layoutX="392.0" layoutY="150.0" prefHeight="226.0" prefWidth="321.0" style="-fx-background-color: red;">
          <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="100.0" />
             <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="100.0" />
@@ -1611,7 +1611,7 @@
       <AnchorPane layoutX="300.0" layoutY="396.0">
          <children>
             <TextField fx:id="moveTextField" promptText="please enter coordinates" />
-            <Button fx:id="fireButton" layoutY="32.0" mnemonicParsing="false" onAction="#test" prefHeight="47.0" prefWidth="149.0" style="-fx-background-color: #e02810;" text="Fire!" textFill="WHITE" wrapText="true">
+            <Button fx:id="fireButton" layoutY="32.0" mnemonicParsing="false" onAction="#pressFireButton" prefHeight="47.0" prefWidth="149.0" style="-fx-background-color: #e02810;" text="Fire!" textFill="WHITE" wrapText="true">
                <font>
                   <Font size="16.0" />
                </font>
@@ -1650,6 +1650,60 @@
                   <Font size="15.0" />
                </font>
             </Text>
+         </children>
+      </AnchorPane>
+      <Button layoutX="53.0" layoutY="423.0" mnemonicParsing="false" onAction="#startTurnTimer" text="Button" />
+      <AnchorPane prefHeight="200.0" prefWidth="200.0" />
+      <AnchorPane layoutX="357.0" layoutY="150.0" prefHeight="226.0" prefWidth="35.0">
+         <children>
+            <Text layoutX="14.0" layoutY="16.0" stroke="BLACK" strokeType="OUTSIDE" strokeWidth="0.5" text="1" textAlignment="CENTER" />
+            <Text layoutX="14.0" layoutY="37.0" stroke="BLACK" strokeType="OUTSIDE" strokeWidth="0.5" text="2" textAlignment="CENTER" />
+            <Text layoutX="14.0" layoutY="59.0" stroke="BLACK" strokeType="OUTSIDE" strokeWidth="0.5" text="3" textAlignment="CENTER" />
+            <Text layoutX="14.0" layoutY="80.0" stroke="BLACK" strokeType="OUTSIDE" strokeWidth="0.5" text="4" textAlignment="CENTER" />
+            <Text layoutX="14.0" layoutY="103.0" stroke="BLACK" strokeType="OUTSIDE" strokeWidth="0.5" text="5" textAlignment="CENTER" />
+            <Text layoutX="14.0" layoutY="127.0" stroke="BLACK" strokeType="OUTSIDE" strokeWidth="0.5" text="6" textAlignment="CENTER" />
+            <Text layoutX="14.0" layoutY="150.0" stroke="BLACK" strokeType="OUTSIDE" strokeWidth="0.5" text="7" textAlignment="CENTER" />
+            <Text layoutX="14.0" layoutY="173.0" stroke="BLACK" strokeType="OUTSIDE" strokeWidth="0.5" text="8" textAlignment="CENTER" />
+            <Text layoutX="14.0" layoutY="196.0" stroke="BLACK" strokeType="OUTSIDE" strokeWidth="0.5" text="9" textAlignment="CENTER" />
+            <Text layoutX="10.0" layoutY="219.0" stroke="BLACK" strokeType="OUTSIDE" strokeWidth="0.5" text="10" textAlignment="CENTER" />
+         </children>
+      </AnchorPane>
+      <AnchorPane layoutX="32.0" layoutY="376.0" prefHeight="20.0" prefWidth="328.0">
+         <children>
+            <Text layoutX="9.0" layoutY="15.0" strokeType="OUTSIDE" text="A" />
+            <Text layoutX="31.0" layoutY="15.0" strokeType="OUTSIDE" text="B" />
+            <Text layoutX="51.0" layoutY="15.0" strokeType="OUTSIDE" text="C" />
+            <Text layoutX="72.0" layoutY="15.0" strokeType="OUTSIDE" text="D" />
+            <Text layoutX="95.0" layoutY="15.0" strokeType="OUTSIDE" text="E" />
+            <Text layoutX="116.0" layoutY="15.0" strokeType="OUTSIDE" text="F" />
+            <Text layoutX="135.0" layoutY="15.0" strokeType="OUTSIDE" text="G" />
+            <Text layoutX="157.0" layoutY="15.0" strokeType="OUTSIDE" text="H" />
+            <Text layoutX="180.0" layoutY="15.0" strokeType="OUTSIDE" text="I" />
+            <Text layoutX="201.0" layoutY="15.0" strokeType="OUTSIDE" text="J" />
+            <Text layoutX="222.0" layoutY="15.0" strokeType="OUTSIDE" text="K" />
+            <Text layoutX="244.0" layoutY="15.0" strokeType="OUTSIDE" text="L" />
+            <Text layoutX="263.0" layoutY="15.0" strokeType="OUTSIDE" text="M" />
+            <Text layoutX="286.0" layoutY="15.0" strokeType="OUTSIDE" text="N" />
+            <Text layoutX="308.0" layoutY="15.0" strokeType="OUTSIDE" text="O" />
+         </children>
+      </AnchorPane>
+      <AnchorPane layoutX="390.0" layoutY="376.0" prefHeight="20.0" prefWidth="328.0">
+         <children>
+            <Text layoutX="9.0" layoutY="15.0" strokeType="OUTSIDE" text="A" />
+            <Text layoutX="31.0" layoutY="15.0" strokeType="OUTSIDE" text="B" />
+            <Text layoutX="51.0" layoutY="15.0" strokeType="OUTSIDE" text="C" />
+            <Text layoutX="72.0" layoutY="15.0" strokeType="OUTSIDE" text="D" />
+            <Text layoutX="95.0" layoutY="15.0" strokeType="OUTSIDE" text="E" />
+            <Text layoutX="116.0" layoutY="15.0" strokeType="OUTSIDE" text="F" />
+            <Text layoutX="135.0" layoutY="15.0" strokeType="OUTSIDE" text="G" />
+            <Text layoutX="157.0" layoutY="15.0" strokeType="OUTSIDE" text="H" />
+            <Text layoutX="180.0" layoutY="15.0" strokeType="OUTSIDE" text="I" />
+            <Text layoutX="201.0" layoutY="15.0" strokeType="OUTSIDE" text="J" />
+            <Text layoutX="222.0" layoutY="15.0" strokeType="OUTSIDE" text="K" />
+            <Text layoutX="244.0" layoutY="15.0" strokeType="OUTSIDE" text="L" />
+            <Text layoutX="263.0" layoutY="15.0" strokeType="OUTSIDE" text="M" />
+            <Text layoutX="286.0" layoutY="15.0" strokeType="OUTSIDE" text="N" />
+            <Text layoutX="308.0" layoutY="15.0" strokeType="OUTSIDE" text="O" />
          </children>
       </AnchorPane>
     </children>

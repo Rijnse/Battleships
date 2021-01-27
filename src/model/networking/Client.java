@@ -15,7 +15,6 @@ import java.net.UnknownHostException;
 
 public class Client implements Runnable{
     private Player player;
-    private Game game;
     private Socket sock;
     private BufferedReader in;
     private BufferedWriter out;
@@ -62,37 +61,40 @@ public class Client implements Runnable{
     }
 
     public void receiveMessage(String message) {
+        System.out.println("Client receives: " + message);
         String[] array = message.split(ProtocolMessages.CS);
             switch (array[0]) {
                 case ProtocolMessages.HELLO:
                     if (array.length > 2) {
                         if (array[2] != null) {
                             if (array[1].equals(getPlayer().getName())) {
-                                this.game = new Game(this.player, new HumanPlayer(array[2], true));
+                                this.player.setCurrentGame(new Game(this.player, new HumanPlayer(array[2], true)));
+                                ViewController.getInstance().updateLobbyInfo(sock.getInetAddress().toString(), sock.getPort(), this.player.getName(), this.player.getCurrentGame().getPlayerTwo().getName());
                             }
                             else {
-                                this.game = new Game(new HumanPlayer(array[1], true), this.player);
+                                this.player.setCurrentGame(new Game(this.player, new HumanPlayer(array[1], true)));
+                                ViewController.getInstance().updateLobbyInfo(sock.getInetAddress().toString(), sock.getPort(), this.player.getCurrentGame().getPlayerTwo().getName(), this.player.getName());
                             }
                         }
                     }
                     else {
-                        this.game = new Game(this.player);
+                        this.player.setCurrentGame(new Game(this.player));
+                        ViewController.getInstance().updateLobbyInfo(sock.getInetAddress().toString(), sock.getPort(), this.player.getName(), this.player.getCurrentGame().getPlayerTwo().getName());
                     }
-                    ViewController.getInstance().updateLobbyInfo(sock.getInetAddress().toString(), sock.getPort(), this.game.getPlayerOne().getName(), this.game.getPlayerTwo().getName());
                     break;
                 case ProtocolMessages.START:
                     sendMessage(ProtocolMessages.BOARD + ProtocolMessages.CS + player.getName() + ProtocolMessages.CS + player.getBoard().boardToString());
                     try {
                         ViewController.getInstance().startGame();
                         ViewController.getInstance().updateOwnField(player.getBoard());
-                        ViewController.getInstance().updateNames(player.getName(), game.getPlayerTwo().getName());
+                        ViewController.getInstance().updateNames(player.getName(), player.getCurrentGame().getPlayerTwo().getName());
                     } catch (IOException e) {
-                        e.printStackTrace();
+                        System.out.println("Something went wrong!");
                     }
                     break;
                 case ProtocolMessages.ERROR:
-                    switch (array[1]) {
-
+                    if (array[1] != null) {
+                        ViewController.getInstance().errorHandling(array[1]);
                     }
                     break;
                 case ProtocolMessages.TIME:
@@ -106,29 +108,29 @@ public class Client implements Runnable{
                     break;
                 case ProtocolMessages.HIT:
                     ViewController.getInstance().showPopUp("HIT!", array[2] + " has been hit on " + Board.indexToCoordinates(Integer.parseInt(array[1])));
-                    if (array[2].equals(game.getPlayerOne().getName())) {
+                    if (array[2].equals(player.getCurrentGame().getPlayerOne().getName())) {
                         player.getBoard().getField(Integer.parseInt(array[1])).setHit(true);
                         ViewController.getInstance().updateOwnField(player.getBoard());
-                        game.getPlayerTwo().incrementScore(1);
-                        ViewController.getInstance().updateScores(player.getScore(), game.getPlayerTwo().getScore());
+                        player.getCurrentGame().getPlayerTwo().incrementScore(1);
+                        ViewController.getInstance().updateScores(player.getScore(), player.getCurrentGame().getPlayerTwo().getScore());
                     }
                     else {
-                        game.getPlayerTwo().getBoard().getField(Integer.parseInt(array[1])).setHit(true);
-                        game.getPlayerTwo().getBoard().getField(Integer.parseInt(array[1])).getShip().setType(ProtocolMessages.Ship.UNKNOWN);
-                        ViewController.getInstance().updateEnemyField(game.getPlayerTwo().getBoard());
-                        game.getPlayerOne().incrementScore(1);
-                        ViewController.getInstance().updateScores(player.getScore(), game.getPlayerTwo().getScore());
+                        player.getCurrentGame().getPlayerTwo().getBoard().getField(Integer.parseInt(array[1])).setHit(true);
+                        player.getCurrentGame().getPlayerTwo().getBoard().getField(Integer.parseInt(array[1])).getShip().setType(ProtocolMessages.Ship.UNKNOWN);
+                        ViewController.getInstance().updateEnemyField(player.getCurrentGame().getPlayerTwo().getBoard());
+                        player.getCurrentGame().getPlayerOne().incrementScore(1);
+                        ViewController.getInstance().updateScores(player.getScore(), player.getCurrentGame().getPlayerTwo().getScore());
                     }
                     break;
                 case ProtocolMessages.MISS:
                     ViewController.getInstance().showPopUp("MISS!", array[2] + " does not have a ship at " + Board.indexToCoordinates(Integer.parseInt(array[1])));
-                    if (array[2].equals(game.getPlayerOne().getName())) {
+                    if (array[2].equals(player.getCurrentGame().getPlayerOne().getName())) {
                         player.getBoard().getField(Integer.parseInt(array[1])).setHit(true);
                         ViewController.getInstance().updateOwnField(player.getBoard());
                     }
                     else {
-                        game.getPlayerTwo().getBoard().getField(Integer.parseInt(array[1])).setHit(true);
-                        ViewController.getInstance().updateEnemyField(game.getPlayerTwo().getBoard());
+                        player.getCurrentGame().getPlayerTwo().getBoard().getField(Integer.parseInt(array[1])).setHit(true);
+                        ViewController.getInstance().updateEnemyField(player.getCurrentGame().getPlayerTwo().getBoard());
                     }
                     break;
                 case ProtocolMessages.DESTROY:
@@ -157,26 +159,26 @@ public class Client implements Runnable{
                             break;
                     }
                     ViewController.getInstance().showPopUp("DESTROYED!", array[4] + " has lost a " + ship.toString());
-                    if (array[4].equals(game.getPlayerOne().getName())) {
+                    if (array[4].equals(player.getCurrentGame().getPlayerOne().getName())) {
                         player.getBoard().getField(Integer.parseInt(array[1])).setHit(true);
                         ViewController.getInstance().updateOwnField(player.getBoard());
-                        game.getPlayerTwo().incrementScore(1);
-                        ViewController.getInstance().updateScores(player.getScore(), game.getPlayerTwo().getScore());
+                        player.getCurrentGame().getPlayerTwo().incrementScore(1);
+                        ViewController.getInstance().updateScores(player.getScore(), player.getCurrentGame().getPlayerTwo().getScore());
                     }
                     else {
                         if (array[3].equals("0")) {
                             for (int i = Integer.parseInt(array[2]); i < length + Integer.parseInt(array[2]); i++) {
-                                game.getPlayerTwo().getBoard().getField(i).getShip().setType(ship);
+                                player.getCurrentGame().getPlayerTwo().getBoard().getField(i).getShip().setType(ship);
                             }
                         }
                         else {
                             for (int i = Integer.parseInt(array[2]); i < (length*ProtocolMessages.BOARD_DIMENSIONS[15]) + Integer.parseInt(array[2]); i = i + ProtocolMessages.BOARD_DIMENSIONS[1]) {
-                                game.getPlayerTwo().getBoard().getField(i).getShip().setType(ship);
+                                player.getCurrentGame().getPlayerTwo().getBoard().getField(i).getShip().setType(ship);
                             }
                         }
-                        ViewController.getInstance().updateEnemyField(game.getPlayerTwo().getBoard());
-                        game.getPlayerOne().incrementScore(1);
-                        ViewController.getInstance().updateScores(player.getScore(), game.getPlayerTwo().getScore());
+                        ViewController.getInstance().updateEnemyField(player.getCurrentGame().getPlayerTwo().getBoard());
+                        player.getCurrentGame().getPlayerOne().incrementScore(1);
+                        ViewController.getInstance().updateScores(player.getScore(), player.getCurrentGame().getPlayerTwo().getScore());
                     }
                     break;
                 case ProtocolMessages.WON:
@@ -195,6 +197,7 @@ public class Client implements Runnable{
 
     public void sendMessage(String message) {
         try {
+            System.out.println("Client sends: " + message);
             out.write(message);
             out.newLine();
             out.flush();

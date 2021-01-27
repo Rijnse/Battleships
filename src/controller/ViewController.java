@@ -1,5 +1,7 @@
 package controller;
+import javafx.application.Platform;
 import model.ProtocolMessages;
+import model.exceptions.OutOfTurn;
 import model.game.Board;
 import model.game.Field;
 import model.game.HumanPlayer;
@@ -18,6 +20,10 @@ public class ViewController {
     private Start startscreen;
     private Lobby lobby;
     private Game game;
+
+    public Client getClient() {
+        return client;
+    }
 
     private Client client;
 
@@ -86,7 +92,7 @@ public class ViewController {
     }
 
     public void leaveGame() {
-
+        client.exit();
     }
 
     public void pressStartButton() {
@@ -109,7 +115,51 @@ public class ViewController {
     }
 
     public void sendMove(String coordinates) {
+       /* try {
+            this.client.sendMessage(ProtocolMessages.ATTACK + ProtocolMessages.CS + Board.index(coordinates));
+        }
+        catch (OutOfTurn e) {
 
+        }*/
+    }
+
+    public void errorHandling(String error) {
+        switch (error) {
+            case ProtocolMessages.ACTION_NOT_PERMITTED:
+                lobby.showPopUp("ERROR!", "Only first player (host) may start game!");
+                break;
+            case ProtocolMessages.DUPLICATE_NAME:
+                    Platform.runLater(new Runnable() {
+                        @Override public void run() {
+                            try {
+                                lobby.switchToStart();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            client.exit();
+                            startscreen.showPopUp("ERROR!", "This server already has a player with that name! Try again please...");
+                        }
+                    });
+                break;
+            case ProtocolMessages.GAME_OVER:
+                game.showPopUp("ERROR!", "The game has ended, so you can't do that right now!");
+                break;
+            case ProtocolMessages.ILLEGAL_COMMAND:
+                game.showPopUp("ERROR!", "That is an illegal command! Try again...");
+                break;
+            case ProtocolMessages.ILLEGAL_SHIP_PLACEMENT:
+                game.showPopUp("ERROR!", "You can't place your ships like that!");
+                break;
+            case ProtocolMessages.INVALID_INDEX:
+                game.showPopUp("ERROR!", "That is not a valid move (either because it's already been hit or is not on the board)");
+                break;
+            case ProtocolMessages.OUT_OF_TURN:
+                game.showPopUp("ERROR!", "It is not your turn!");
+                break;
+            case ProtocolMessages.TIME_OVER:
+
+                break;
+        }
     }
 
     public void startTurn() {
@@ -117,7 +167,15 @@ public class ViewController {
     }
 
     public void startGame() throws IOException {
-        this.lobby.switchToGameScreen();
+        Platform.runLater(new Runnable() {
+            @Override public void run() {
+                try {
+                    lobby.switchToGameScreen();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     public void showPopUp(String title, String desc) {

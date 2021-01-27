@@ -9,9 +9,12 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Start {
     private ViewController controller = ViewController.getInstance();
@@ -34,6 +37,11 @@ public class Start {
     @FXML private AnchorPane joinanchor;
     @FXML private AnchorPane anchorhost;
     @FXML private AnchorPane anchorcomputer;
+
+    @FXML private AnchorPane popup;
+    @FXML private Text popuptitle;
+    @FXML private Text popupdesc;
+
 
     @FXML
     public void initialize() {
@@ -107,6 +115,27 @@ public class Start {
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
+    }
+
+    @FXML
+    public void showPopUp(String title, String desc) {
+        Timer timer = new Timer();
+        final int[] time = {3};
+        popuptitle.setText(title);
+        popupdesc.setText(desc);
+        popup.setVisible(true);
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                if (!(time[0] < 0)) {
+                    time[0]--;
+                }
+                else {
+                    timer.cancel();
+                    popup.setVisible(false);
+                }
+            }
+        }, 0, 1000);
     }
 
     /**

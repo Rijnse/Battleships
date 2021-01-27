@@ -104,14 +104,14 @@ public class ProtocolMessages {
 	public static final String ERROR = "E";
 	
 	//Please check the protocol descriptor for specifications on every error, and when it should occur
-	public static final String ACTION_NOT_PERMITTED = ERRORNAMES[0];
-	public static final String DUPLICATE_NAME = ERRORNAMES[1];
-	public static final String GAME_OVER = ERRORNAMES[2];
-	public static final String ILLEGAL_COMMAND = ERRORNAMES[3];
-	public static final String ILLGAL_SHIP_PLACEMENT = ERRORNAMES[4];
-	public static final String INVALID_INDEX = ERRORNAMES[5];
-	public static final String OUT_OF_TURN = ERRORNAMES[6];
-	public static final String TIME_OVER = ERRORNAMES[7];
+	public static final String ACTION_NOT_PERMITTED = "ActionNotPermitted";
+	public static final String DUPLICATE_NAME = "DuplicateName";
+	public static final String GAME_OVER = "GameOver";
+	public static final String ILLEGAL_COMMAND = "IllegalCommand";
+	public static final String ILLEGAL_SHIP_PLACEMENT = "IllegalShipPlacement";
+	public static final String INVALID_INDEX = "InvalidIndex";
+	public static final String OUT_OF_TURN = "OutOfTurn";
+	public static final String TIME_OVER = "TimeOver";
 	//--------------------------------------------------//
 
 	public enum Ship {

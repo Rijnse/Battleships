@@ -8,6 +8,7 @@ public abstract class Player {
     private String name;
     private Game currentGame = null;
 
+    public boolean newBoardSet = false; //only needed for serverside operations
     /**
      * @ensures that a Player object (either computer or human) is created with score 0, a random board and the player name
      * @requires the Board() constructor to be fully functional
@@ -62,6 +63,15 @@ public abstract class Player {
      */
     public Board getBoard() {
         return this.board;
+    }
+
+
+    /**
+     * @ensures that board property of player is set to given Board object. Used by server to append boards to serverside player objects.
+     * @param board is a Board object
+     */
+    public void setBoard(Board board) {
+        this.board = board;
     }
 
     /**

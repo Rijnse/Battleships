@@ -16,8 +16,10 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import model.ProtocolMessages;
+import model.exceptions.InvalidIndex;
 import model.game.Board;
 import model.game.Field;
+import model.game.HumanPlayer;
 import model.game.Ship;
 
 import java.util.Timer;
@@ -41,6 +43,8 @@ public class Game {
     @FXML private Text scoreplayertwo;
     @FXML private Text nameplayerone;
     @FXML private Text nameplayertwo;
+
+    private Timer timer;
 
     @FXML
     public void initialize() {
@@ -99,7 +103,7 @@ public class Game {
     }
 
     public void startTurnTimer() {
-        Timer timer = new Timer();
+        timer = new Timer();
         final int[] time = {ProtocolMessages.TURN_TIME};
         moveTextField.setEditable(true);
         fireButton.setDisable(false);
@@ -129,7 +133,19 @@ public class Game {
     }
 
     public void pressFireButton() {
-        controller.sendMove(moveTextField.getText());
+        HumanPlayer player = (HumanPlayer) ViewController.getInstance().getClient().getPlayer();
+        try {
+            int index = player.determineMove(moveTextField.getText());
+            if (!ViewController.getInstance().getClient().getPlayer().getCurrentGame().getPlayerTwo().getBoard().getFieldsArray()[index].isHit()) {
+                controller.sendMove(moveTextField.getText());
+                stopTurnTimer(timer);
+            }
+            else {
+                showPopUp("ERROR!", "This field was already hit!");
+            }
+        } catch (InvalidIndex invalidIndex) {
+            showPopUp("ERROR!", "This is not a field on the board!");
+        }
     }
 
     public GridPane getPlayerField() {
@@ -168,12 +184,5 @@ public class Game {
     public void updatePlayerScores(int one, int two) {
         scoreplayerone.setText(String.valueOf(one));
         scoreplayertwo.setText(String.valueOf(two));
-    }
-
-    public void test() {
-        Board board = new Board();
-        for (int i = 0; i < 150; i++) {
-            updatePlayerField(board.getField(i), i, playerField);
-        }
     }
 }

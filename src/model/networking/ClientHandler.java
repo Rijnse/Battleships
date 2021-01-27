@@ -7,6 +7,7 @@ import model.game.Player;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.List;
 
 public class ClientHandler implements Runnable{
     private BufferedReader in;
@@ -22,21 +23,17 @@ public class ClientHandler implements Runnable{
 
     private Socket sock;
     private Server server;
-    private Player player;
 
-    public ClientHandler(Socket sock, Server server, Player player) {
-        try {
-            in = new BufferedReader(
-                    new InputStreamReader(sock.getInputStream()));
-            out = new BufferedWriter(
-                    new OutputStreamWriter(sock.getOutputStream()));
-            this.sock = sock;
-            this.server = server;
-            this.player = player;
-        } catch (IOException e) {
-            exit();
-        }
+    public List<ClientHandler> getGamePlayers() {
+        return gamePlayers;
     }
+
+    public void setGamePlayers(List<ClientHandler> gamePlayers) {
+        this.gamePlayers = gamePlayers;
+    }
+
+    private List<ClientHandler> gamePlayers;
+    private Player player;
 
     public ClientHandler(Socket sock, Server server) {
         try {
@@ -58,8 +55,6 @@ public class ClientHandler implements Runnable{
             message = in.readLine();
             while (message != null) {
                 receiveMessage(message);
-                out.newLine();
-                out.flush();
                 message = in.readLine();
             }
             exit();
@@ -69,6 +64,7 @@ public class ClientHandler implements Runnable{
     }
 
     public void receiveMessage(String message) {
+        System.out.println("Clienthandler receives: " + message);
         String[] array = message.split(ProtocolMessages.CS);
         if (array.length > 3 || array.length <= 0) {
             illegalCommandSender();
@@ -78,34 +74,32 @@ public class ClientHandler implements Runnable{
                 case ProtocolMessages.HELLO:
                     if (array[1] != null) {
                         this.player = new HumanPlayer(array[1]);
-                        if (!(this.server.handleHello(array[1], this))) {
-                            sendMessage(ProtocolMessages.ERROR + ProtocolMessages.CS + ProtocolMessages.DUPLICATE_NAME);
-                        }
-                        else {
-                            String hellomsg = ProtocolMessages.HELLO + ProtocolMessages.CS;
-                            for (ClientHandler k : this.server.getClientList()) {
-                                hellomsg = hellomsg + k.getPlayer().getName() + ProtocolMessages.CS;
-                            }
-                            sendMessage(hellomsg);
-                        }
+                        this.server.handleHello(array[1], this);
                     }
                     else {
                         illegalCommandSender();
                     }
                     break;
                 case ProtocolMessages.START:
-                    if (this.player.getName().equals(this.server.getPlayer(0).getPlayer().getName())) {
-                       this.server.startGame();
+                    int index = this.gamePlayers.indexOf(this);
+                    if (index == 0) {
+                        if (this.gamePlayers.size() == 2) {
+                            server.startGame(this);
+                        }
                     }
                     else {
                         sendMessage(ProtocolMessages.ERROR + ProtocolMessages.CS + ProtocolMessages.ACTION_NOT_PERMITTED);
                     }
                     break;
                 case ProtocolMessages.BOARD:
-                    if (array[1] != null && array[2] != null) {
-                        if (this.player.getName().equals(array[1])) {
-                            this.server.processBoardInput(this.player.getName(), new Board(array[2]));
-                        }
+                    if (array[1] != null && array[2] != null && this.player.getName().equals(array[1])) {
+                       Board board = new Board(array[2]);
+                       if (board.checkValidBoard()) {
+                            this.server.receiveBoards(board, this);
+                       }
+                       else {
+                           sendMessage(ProtocolMessages.ERROR + ProtocolMessages.CS + ProtocolMessages.ILLEGAL_SHIP_PLACEMENT);
+                       }
                     }
                     else {
                         illegalCommandSender();
@@ -135,6 +129,7 @@ public class ClientHandler implements Runnable{
 
     public void sendMessage(String message) {
         try {
+            System.out.println("Clienthandler sends: " + message);
             out.write(message);
             out.newLine();
             out.flush();

@@ -21,7 +21,7 @@ public class Server implements Runnable {
     private InetAddress ip;
 
     private List<ClientHandler> clientlist = new ArrayList<ClientHandler>();
-    private List<Game> gameslist = new ArrayList<Game>();
+    private List<List<ClientHandler>> gameslist = new ArrayList<List<ClientHandler>>();
     private ClientHandler playerOne;
     private ClientHandler playerTwo;
 
@@ -64,6 +64,12 @@ public class Server implements Runnable {
         }
     }
 
+    public void startGame(ClientHandler handler) {
+        for (ClientHandler k : handler.getGamePlayers()) {
+            k.sendMessage(ProtocolMessages.START + ProtocolMessages.CS + "0");
+        }
+    }
+
     public int getPort() {
       return this.port;
     }
@@ -92,30 +98,59 @@ public class Server implements Runnable {
             }
         }
         if (count > 1) {
+            handler.sendMessage(ProtocolMessages.ERROR + ProtocolMessages.CS + ProtocolMessages.DUPLICATE_NAME);
             handler.exit();
             clientlist.remove(handler);
             return false;
         }
         else {
-            handler.setPlayer(new HumanPlayer(name));
-            sendHello();
+            if (gameslist.size() == 0) {
+                ArrayList<ClientHandler> game = new ArrayList<ClientHandler>();
+                game.add(clientlist.get(clientlist.size() - 1));
+                gameslist.add(game);
+                handler.setGamePlayers(game);
+            }
+            else {
+                if (gameslist.get(gameslist.size() - 1).size() == 1) {
+                    gameslist.get(gameslist.size() - 1).add(clientlist.get(clientlist.size() - 1));
+                    handler.setGamePlayers(gameslist.get(gameslist.size() - 1));
+                }
+                else {
+                    ArrayList<ClientHandler> game = new ArrayList<ClientHandler>();
+                    game.add(clientlist.get(clientlist.size() - 1));
+                    gameslist.add(game);
+                    handler.setGamePlayers(game);
+                }
+            }
+
+            sendHello(handler);
             return true;
         }
     }
 
-    public void sendHello() {
+    public void sendHello(ClientHandler handler) {
         String hellomsg = ProtocolMessages.HELLO + ProtocolMessages.CS;
-        for (ClientHandler k : this.getClientList()) {
+
+        for (ClientHandler k : handler.getGamePlayers()) {
             hellomsg = hellomsg + k.getPlayer().getName() + ProtocolMessages.CS;
         }
-        for (ClientHandler k : this.clientlist) {
+        for (ClientHandler k : handler.getGamePlayers()) {
             k.sendMessage(hellomsg);
         }
     }
 
-    public void startGame() {
-        for (ClientHandler k : clientlist) {
-            k.sendMessage(ProtocolMessages.START + ProtocolMessages.CS + 0);
+    public void receiveBoards(Board board, ClientHandler handler) {
+        handler.getPlayer().setBoard(board);
+        handler.getPlayer().newBoardSet = true;
+
+        boolean allBoardSentByPlayers = true;
+        for (ClientHandler k: handler.getGamePlayers()) {
+            if (!k.getPlayer().newBoardSet) {
+                allBoardSentByPlayers = false;
+            }
+        }
+        if (allBoardSentByPlayers) {
+            System.out.println("hutssss");
         }
     }
 
@@ -175,10 +210,6 @@ public class Server implements Runnable {
     }
 
     public void processMessage(String name, String message) {
-
-    }
-
-    public void processBoardInput(String name, Board board) {
 
     }
 
