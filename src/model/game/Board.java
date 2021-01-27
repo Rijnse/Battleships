@@ -50,9 +50,11 @@ public class Board {
      */
     public Board() {
         Field[] array = new Field[HEIGHT*WIDTH];
+        // fill the board with empty fields
         for (int i = 0; i < HEIGHT*WIDTH; i ++) {
             array[i] = new Field();
         }
+        // fill the board with ships
         for (Ship s : SHIPS) {
             array = placeShip(array, s);
         }
@@ -80,9 +82,11 @@ public class Board {
             if (orientation == 'E') {
                 if ((index % WIDTH) + (length - 1) < WIDTH) {
                     int i = index;
+                    // look if there are enough empty places to the right of the index.
                     while (array[i].getShip().getType() == ProtocolMessages.Ship.EMPTY && i < (index + (length - 1))) {
                         i++;
                     }
+                    // if there are enough empty places, place a ship beginning at index i and continuing to the right.
                     if (i == (index + (length - 1)) && array[i].getShip().getType() == ProtocolMessages.Ship.EMPTY) {
                         for (int z = index; z < (index + length); z++) {
                             array[z] = new Field(ship);
@@ -92,9 +96,11 @@ public class Board {
                 }
                 else if ((index % WIDTH) - (length - 1) >= 0) {
                     int i = index;
+                    // look if there are enough empty places to the left of the index
                     while (array[i].getShip().getType() == ProtocolMessages.Ship.EMPTY && i > (index - (length - 1))) {
                         i--;
                     }
+                    // if there are enough empty places, place a ship beginning at index i and continuing to the left.
                     if (i == (index - (length - 1)) && array[i].getShip().getType() == ProtocolMessages.Ship.EMPTY) {
                         for (int z = index; z > (index - length); z--) {
                             array[z] = new Field(ship);
@@ -106,9 +112,11 @@ public class Board {
             else if (orientation == 'S') {
                 if (((index / WIDTH)) + length < (HEIGHT + 1)) {
                     int i = index;
+                    // look if there are enough empty places on the bottom of the index.
                     while (array[i].getShip().getType() == ProtocolMessages.Ship.EMPTY && i < (index + ((length - 1) * WIDTH))) {
                         i = i + WIDTH;
                     }
+                    // if there are enough empty places, place a ship beginning at index i and continuing to the bottom.
                     if (i == (index + ((length - 1) * WIDTH)) && array[i].getShip().getType() == ProtocolMessages.Ship.EMPTY) {
                         for (int z = index; z < (index + (length * WIDTH)); z = z + WIDTH) {
                             array[z] = new Field(ship);
@@ -118,9 +126,11 @@ public class Board {
                 }
                 else if (((index / WIDTH)) - (length - 1) >= 0) {
                     int i = index;
+                    // look if there are enough empty places on the top of the index
                     while (array[i].getShip().getType() == ProtocolMessages.Ship.EMPTY && i > (index - ((length - 1) * WIDTH))) {
                         i = i - WIDTH;
                     }
+                    // if there are enough empty places, place a ship beginning at index i and continuing to the top.
                     if (i == (index - ((length - 1) * WIDTH)) && array[i].getShip().getType() == ProtocolMessages.Ship.EMPTY) {
                         for (int z = index; z > (index - (length*WIDTH)); z = z - WIDTH) {
                             array[z] = new Field(ship);
@@ -342,17 +352,40 @@ public class Board {
         int correctShipCount = 0;
         for (Ship s : SHIPS) {
             for (int i = 0; i < (WIDTH * HEIGHT) -1; i ++){
+                // When the ship is find in the board.
                 if (getField(i).getShip().equals(s)) {
                     int k = i;
                     int p = i;
-                    while (getField(k).getShip().equals(s) && (k - i) < s.getLength() - 1) {
+                    // look if the ship is placed in horizontal position.
+                    while (getField(k).getShip().equals(s) && k < (WIDTH * HEIGHT) - 1) {
                         k ++;
                     }
-                    while (getField(p).getShip().equals(s) && ((p - i) / WIDTH) < s.getLength() - 1) {
+                    // look if the ship is placed in vertical position.
+                    while (getField(p).getShip().equals(s) && p < (WIDTH * (HEIGHT - 1))) {
                         p = p + WIDTH;
                     }
-                    if ((k - i) == s.getLength() - 1 || ((p - i) / WIDTH) < s.getLength() - 1) {
+                    System.out.println("I " + i);
+                    System.out.println("K " + k);
+                    System.out.println("P " + p);
+                    System.out.println("Length " + s.getLength());
+                    // if the ship is placed in horizontal or vertical position, add one to correctShipCount and break.
+                    if ((k - i) == s.getLength() || ((p - i) / WIDTH) == s.getLength()) {
                         correctShipCount ++;
+                        break;
+                    }
+                    // if the ship is at index 149 add one to correctShipCount and break.
+                    else if (k == (WIDTH * HEIGHT) - 1) {
+                        if (getField(k).getShip().equals(s)) {
+                            correctShipCount ++;
+                            break;
+                        }
+                    }
+                    // if the the ship is at the bottom row, add one to correctShipCount and break.
+                    else if (p >= (WIDTH * (HEIGHT - 1))) {
+                        if (getField(p).getShip().equals(s)){
+                          correctShipCount ++;
+                          break;
+                        }
                     }
                     else {
                         return false;
@@ -360,6 +393,7 @@ public class Board {
                 }
             }
         }
+        // if the correctShipCount is equal to the number of ships, every ship is correctly placed so the board is valid.
         if (correctShipCount == SHIPS.length) {
             return true;
         }
