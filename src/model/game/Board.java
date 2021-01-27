@@ -381,7 +381,7 @@ public class Board {
                         }
                     }
                     // if the the ship is at the bottom row, add one to correctShipCount and break.
-                    else if (p >= (WIDTH * (HEIGHT - 1))) {
+                    else if (p >= (WIDTH * (HEIGHT - 1)) && p < (WIDTH * HEIGHT)) {
                         if (getField(p).getShip().equals(s)){
                           correctShipCount ++;
                           break;
