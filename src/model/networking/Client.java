@@ -86,8 +86,14 @@ public class Client implements Runnable{
                     sendMessage(ProtocolMessages.BOARD + ProtocolMessages.CS + player.getName() + ProtocolMessages.CS + player.getBoard().boardToString());
                     try {
                         ViewController.getInstance().startGame();
-                        ViewController.getInstance().updateOwnField(player.getBoard());
-                        ViewController.getInstance().updateNames(player.getName(), player.getCurrentGame().getPlayerTwo().getName());
+                        while (true) {
+                            if (ViewController.getInstance().gameIni) {
+                                ViewController.getInstance().updateOwnField(player.getBoard());
+                                ViewController.getInstance().updateNames(player.getName(), player.getCurrentGame().getPlayerTwo().getName());
+                                ViewController.getInstance().gameIni = false;
+                                break;
+                            }
+                        }
                     } catch (IOException e) {
                         System.out.println("Something went wrong!");
                     }

@@ -106,7 +106,7 @@ public class ClientHandler implements Runnable{
                     }
                     break;
                 case ProtocolMessages.ATTACK:
-                    this.server.attackCommand(this.player.getName(), array[1]);
+                    this.server.attackCommand(this, array[1]);
                     break;
                 case ProtocolMessages.MSGSEND:
                     if (array[1] != null && array[2] != null) {

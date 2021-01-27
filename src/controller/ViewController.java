@@ -19,7 +19,9 @@ public class ViewController {
 
     private Start startscreen;
     private Lobby lobby;
+
     private Game game;
+    public boolean gameIni = false;
 
     public Client getClient() {
         return client;
@@ -115,12 +117,7 @@ public class ViewController {
     }
 
     public void sendMove(String coordinates) {
-       /* try {
-            this.client.sendMessage(ProtocolMessages.ATTACK + ProtocolMessages.CS + Board.index(coordinates));
-        }
-        catch (OutOfTurn e) {
-
-        }*/
+       this.client.sendMessage(ProtocolMessages.ATTACK + ProtocolMessages.CS + Board.index(coordinates));
     }
 
     public void errorHandling(String error) {

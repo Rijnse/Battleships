@@ -49,6 +49,7 @@ public class Game {
     @FXML
     public void initialize() {
         ViewController.getInstance().setGameView(this);
+        ViewController.getInstance().gameIni = true;
     }
 
     public void updateOwnField(Field field, int index) {
