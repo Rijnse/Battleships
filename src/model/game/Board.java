@@ -364,10 +364,6 @@ public class Board {
                     while (getField(p).getShip().equals(s) && p < (WIDTH * (HEIGHT - 1))) {
                         p = p + WIDTH;
                     }
-                    System.out.println("I " + i);
-                    System.out.println("K " + k);
-                    System.out.println("P " + p);
-                    System.out.println("Length " + s.getLength());
                     // if the ship is placed in horizontal or vertical position, add one to correctShipCount and break.
                     if ((k - i) == s.getLength() || ((p - i) / WIDTH) == s.getLength()) {
                         correctShipCount ++;
