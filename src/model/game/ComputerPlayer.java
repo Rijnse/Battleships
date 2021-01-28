@@ -29,53 +29,50 @@ public class ComputerPlayer extends Player {
             // search for a ship that has not been destroyed yet.
             if (opponentBoard.getField(i).getShip().getType() == ProtocolMessages.Ship.UNKNOWN) {
                 int k = i;
+                int l = i;
                 int p = i;
+                int m = i;
                 // look if there are more unknown ships to the right.
                 while (opponentBoard.getField(k).getShip().getType() == ProtocolMessages.Ship.UNKNOWN && (k + 1) % WIDTH != 0 && (k - 1) < (WIDTH * HEIGHT)) {
                     k++;
                 }
                 // look if there are more unknown ships to the left.
+                while (opponentBoard.getField(l).getShip().getType() == ProtocolMessages.Ship.UNKNOWN && (l - 1) % WIDTH != (WIDTH - 1) && l > 0) {
+                    l--;
+                }
+                // look if there are more unknown ships on the bottom.
                 while (opponentBoard.getField(p).getShip().getType() == ProtocolMessages.Ship.UNKNOWN && p < (WIDTH * (HEIGHT - 1))) {
                     p = p + WIDTH;
                 }
-                int kPlaces = (k - i) - 1;
-                int pPlaces = ((p - i) / WIDTH) - 1;
+                // look if there are more unknown ships on the top.
+                while (opponentBoard.getField(m).getShip().getType() == ProtocolMessages.Ship.UNKNOWN && m < (WIDTH - 1)) {
+                    m = m - WIDTH;
+                }
+                int rPlaces = (k - i) - 1;
+                int lPlaces = (i - l) - 1;
+                int bPlaces = ((p - i) / WIDTH) - 1;
+                int tPlaces = ((i - m) / WIDTH) - 1;
 
                 // check if there is an other unknown ship next to the unknown ship at index i.
-                if (kPlaces != 0 || pPlaces != 0) {
-                    // return index k if there are more unknown ships to the right than on the bottom and if k is not on the first column of the board.
-                    if (kPlaces >= pPlaces) {
-                        if ((k + 1) % WIDTH != 0) {
-                            return k;
-                        }
+                if (rPlaces != 0 || lPlaces != 0 || bPlaces != 0 || tPlaces != 0) {
+                    if (rPlaces >= lPlaces && rPlaces >= bPlaces && rPlaces >= tPlaces) {
+                        return k;
                     }
-                    // return index p if there are more unknown ships on the bottom than to the right and if p is not in the last row of the board.
-                    if (pPlaces > kPlaces) {
-                        if (p < (WIDTH * (HEIGHT - 1))) {
-                            return p;
-                        }
+                    else if (lPlaces >= rPlaces && lPlaces >= bPlaces && lPlaces >= tPlaces) {
+                        return l;
                     }
-                    // if there is at least one unknown ship to the right of i and k is not on the first column of the board, return k.
-                    if (kPlaces != 0) {
-                        if ((k + 1) % WIDTH != 0) {
-                            return k;
-                        }
+                    else if (bPlaces >= rPlaces && bPlaces >= lPlaces && bPlaces >= tPlaces) {
+                        return p;
                     }
-                    // if there is at least one unknown ship on the bottom of i and p is not in the last row of the board, return p.
-                    if (pPlaces != 0) {
-                        if (p < (WIDTH * (HEIGHT - 1))) {
-                            return p;
-                        }
-                    }
-                    else {
-                       return k;
+                    else if (tPlaces >= rPlaces && tPlaces >= lPlaces && tPlaces >= bPlaces) {
+                        return m;
                     }
                 }
             }
         }
         // if there are no unknown ships return a random index
         return randomMove(opponentBoard);
-        }
+    }
 
 
     /**
