@@ -10,7 +10,7 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-public class Client implements Runnable{
+public class Client implements Runnable, ClientInterface{
     private Player player;
     private Socket sock;
     private BufferedReader in;
@@ -34,10 +34,12 @@ public class Client implements Runnable{
         }
     }
 
+    @Override
     public Player getPlayer() {
         return this.player;
     }
 
+    @Override
     public Socket getSock() {
         return this.sock;
     }
@@ -57,6 +59,7 @@ public class Client implements Runnable{
         }
     }
 
+    @Override
     public void receiveMessage(String message) {
         System.out.println("Client receives: " + message);
         String[] array = message.split(ProtocolMessages.CS);
@@ -146,34 +149,34 @@ public class Client implements Runnable{
                         player.getCurrentGame().getPlayerOne().incrementScore(1);
                     }
 
-                    Ship ship = null;
-                    switch (array[1]) {
-                        case "C":
-                            ship = new Ship(-1, ProtocolMessages.Ship.CARRIER);
-                            break;
-                        case "B":
-                            ship = new Ship(-1, ProtocolMessages.Ship.BATTLESHIP);
-                            break;
-                        case "D":
-                            ship = new Ship(-1, ProtocolMessages.Ship.DESTROYER);
-                            break;
-                        case "S":
-                            ship = new Ship(-1, ProtocolMessages.Ship.SUPERPATROL);
-                            break;
-                        case "P":
-                            ship = new Ship(-1, ProtocolMessages.Ship.PATROLBOAT);
-                            break;
-                    }
-                    ship.setSunk(true);
-                    if (array[3].equals("0")) {
-                        for (int i = Integer.parseInt(array[2]); i < ship.getLength(); i++) {
-                            playerDestroyed.getBoard().getFieldsArray()[i] = new Field(ship);
-                            System.out.println("suas");
+                    if (!player.getName().equals(playerDestroyed.getName())) {
+                        Ship ship = null;
+                        switch (array[1]) {
+                            case "C":
+                                ship = new Ship(-1, ProtocolMessages.Ship.CARRIER);
+                                break;
+                            case "B":
+                                ship = new Ship(-1, ProtocolMessages.Ship.BATTLESHIP);
+                                break;
+                            case "D":
+                                ship = new Ship(-1, ProtocolMessages.Ship.DESTROYER);
+                                break;
+                            case "S":
+                                ship = new Ship(-1, ProtocolMessages.Ship.SUPERPATROL);
+                                break;
+                            case "P":
+                                ship = new Ship(-1, ProtocolMessages.Ship.PATROLBOAT);
+                                break;
                         }
-                    }
-                    else {
-                        for (int i = Integer.parseInt(array[2]); i < ship.getLength(); i = i + 15) {
-                            playerDestroyed.getBoard().getFieldsArray()[i] = new Field(ship);
+                        ship.setSunk(true);
+                        if (array[3].contains("0")) {
+                            for (int i = Integer.parseInt(array[2]); i < ship.getLength(); i++) {
+                                playerDestroyed.getBoard().getFieldsArray()[i] = new Field(ship);
+                            }
+                        } else {
+                            for (int i = Integer.parseInt(array[2]); i < (ship.getLength()*15); i = i + 15) {
+                                playerDestroyed.getBoard().getFieldsArray()[i] = new Field(ship);
+                            }
                         }
                     }
                     ViewController.getInstance().showPopUp("DESTROYED!", array[4] + " had a " + array[1] + " sunk!");
@@ -195,6 +198,7 @@ public class Client implements Runnable{
             }
     }
 
+    @Override
     public void sendMessage(String message) {
         try {
             System.out.println("Client sends: " + message);
@@ -206,6 +210,7 @@ public class Client implements Runnable{
         }
     }
 
+    @Override
     public void exit() {
         try {
             in.close();

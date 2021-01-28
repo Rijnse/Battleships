@@ -14,7 +14,7 @@ public class ComputerPlayer extends Player {
      * @requires the Player constructor to be fully functional
      */
     public ComputerPlayer() {
-        super("Admiral AI");
+        super("AdmiralAI");
     }
 
     /**

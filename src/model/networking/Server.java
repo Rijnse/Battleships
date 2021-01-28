@@ -8,6 +8,7 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class Server implements Runnable {
@@ -121,13 +122,15 @@ public class Server implements Runnable {
     }
 
     public void sendHello(ClientHandler handler) {
-        String hellomsg = ProtocolMessages.HELLO + ProtocolMessages.CS;
+        StringBuilder hellomsg = new StringBuilder(ProtocolMessages.HELLO + ProtocolMessages.CS);
+        Iterator<ClientHandler> iterator = handler.getGamePlayers().iterator();
+
+        while (iterator.hasNext()) {
+            hellomsg.append(iterator.next().getPlayer().getName()).append(ProtocolMessages.CS);
+        }
 
         for (ClientHandler k : handler.getGamePlayers()) {
-            hellomsg = hellomsg + k.getPlayer().getName() + ProtocolMessages.CS;
-        }
-        for (ClientHandler k : handler.getGamePlayers()) {
-            k.sendMessage(hellomsg);
+            k.sendMessage(hellomsg.toString());
         }
     }
 
@@ -159,10 +162,9 @@ public class Server implements Runnable {
                 }
             }
         }
-        System.out.println("dit is een dikke vette hutstest");
-        synchronized (result) {
-            result.notify();
-        }
+        System.out.println("Move reached server");
+        result.turnFound = true;
+        result.turnIndex = Integer.parseInt(index);
     }
 
     public void processMessage(String name, String message) {

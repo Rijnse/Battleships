@@ -6,6 +6,7 @@ import model.game.Board;
 import model.game.Field;
 import model.game.HumanPlayer;
 import model.networking.Client;
+import model.networking.ComputerClient;
 import model.networking.Server;
 import view.Game;
 import view.Lobby;
@@ -54,7 +55,11 @@ public class ViewController {
     }
 
     public void updateLobbyInfo(String ip, int portint, String onename, String twoname) {
-        this.lobby.updateLobbyInfo(ip, portint, onename, twoname);
+        Platform.runLater(new Runnable() {
+            @Override public void run() {
+                lobby.updateLobbyInfo(ip, portint, onename, twoname);
+            }
+        });
     }
 
     public void updateOwnField(Board board) {
@@ -88,7 +93,6 @@ public class ViewController {
         this.client = client;
         Thread clientthread = new Thread(client);
         clientthread.start();
-
     }
 
     public void leaveGame() {
@@ -111,7 +115,18 @@ public class ViewController {
     }
 
     public void botGame(String username) {
+        Server server = new Server(1337);
+        Thread srv = new Thread(server);
+        srv.start();
 
+        Client client = new Client("localhost", String.valueOf(1337), new HumanPlayer(username));
+        this.client = client;
+        Thread clientthread = new Thread(client);
+        clientthread.start();
+
+        ComputerClient bot = new ComputerClient("localhost", String.valueOf(1337));
+        Thread botthread = new Thread(bot);
+        botthread.start();
     }
 
     public void sendMove(String coordinates) {

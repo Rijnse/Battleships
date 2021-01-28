@@ -2,6 +2,7 @@ package model.networking;
 
 import model.ProtocolMessages;
 import model.game.Board;
+import model.game.Field;
 import model.game.Ship;
 import model.networking.ClientHandler;
 
@@ -12,47 +13,61 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import static model.ProtocolMessages.*;
+
 public class GameHandler implements Runnable{
 
     private List<ClientHandler> players;
     private boolean gameOver;
     private int turnCount = 0;
 
-    private Lock lock = new ReentrantLock();
-    private Condition cond = lock.newCondition();
-
+    public boolean turnFound;
+    public int turnIndex;
 
     public GameHandler(List<ClientHandler> players) {
         this.players = players;
+        turnFound = false;
     }
 
     public List<ClientHandler> getPlayers() {
         return players;
     }
 
-
     @Override
     public void run() {
         ClientHandler name;
         Thread timer = new Thread(new GameTimer());
         timer.start();
-        for (ClientHandler k : players) {
-            k.sendMessage(ProtocolMessages.DESTROY + ProtocolMessages.CS + "C" + ProtocolMessages.CS + "5" + ProtocolMessages.CS + "0" + ProtocolMessages.CS + "Rinse");
-        }
-       /* while (!gameOver) {
+        while (!gameOver) {
             name = players.get(turnCount % 2);
             for (ClientHandler k : players) {
-                k.sendMessage(ProtocolMessages.TURN + ProtocolMessages.CS + name.getPlayer().getName());
+                k.sendMessage(ProtocolMessages.TURN + CS + name.getPlayer().getName());
             }
 
-            //wait for turn input of player
+            int i = 30;
+            while (i > 0 && !turnFound) {
 
-            //attackHandler(name, );
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                i--;
+            }
+
+            if (turnFound) {
+                attackHandler(name, turnIndex);
+            }
+            else {
+                name.sendMessage(ProtocolMessages.ERROR + CS + ProtocolMessages.TIME_OVER);
+            }
 
 
 
+            //check if game over
+            turnFound = false;
             turnCount++;
-        }*/
+        }
     }
 
     public class GameTimer implements Runnable{
@@ -65,7 +80,7 @@ public class GameHandler implements Runnable{
                 public void run() {
                     if (!(time[0] < 0)) {
                         for (ClientHandler k : players) {
-                            k.sendMessage(ProtocolMessages.TIME + ProtocolMessages.CS + time[0]);
+                            k.sendMessage(ProtocolMessages.TIME + CS + time[0]);
                         }
                         time[0]--;
                     }
@@ -95,12 +110,12 @@ public class GameHandler implements Runnable{
 
         if (opponent.getField(index).getShip().getType() == ProtocolMessages.Ship.EMPTY || opponent.getField(index).isHit()) {
             for (ClientHandler k : players) {
-                k.sendMessage(ProtocolMessages.MISS + ProtocolMessages.CS + index + ProtocolMessages.CS + enemy.getPlayer().getName());
+                k.sendMessage(ProtocolMessages.MISS + CS + index + CS + enemy.getPlayer().getName());
             }
         }
         else {
             for (ClientHandler k : players) {
-                k.sendMessage(ProtocolMessages.HIT + ProtocolMessages.CS + index + ProtocolMessages.CS + enemy.getPlayer().getName());
+                k.sendMessage(ProtocolMessages.HIT + CS + index + CS + enemy.getPlayer().getName());
             }
             handler.getPlayer().incrementScore(1);
             if (destroyHandler(index, opponent, enemy)) {
@@ -138,7 +153,7 @@ public class GameHandler implements Runnable{
            }
 
            for (ClientHandler k : players) {
-               k.sendMessage(ProtocolMessages.DESTROY + ProtocolMessages.CS + ship.getType().toString().charAt(0) + ProtocolMessages.CS + firstSquare + ProtocolMessages.CS + orientation + ProtocolMessages.CS + enemy.getPlayer().getName());
+               k.sendMessage(ProtocolMessages.DESTROY + CS + ship.getType().toString().charAt(0) + CS + firstSquare + CS + orientation + CS + enemy.getPlayer().getName());
            }
            return true;
        }
@@ -146,4 +161,21 @@ public class GameHandler implements Runnable{
           return false;
        }
    }
+
+   public ClientHandler checkShipsSunk() {
+        for (ClientHandler k : players) {
+            int count = 0;
+            Board playerBoard = k.getPlayer().getBoard();
+            for (Field f : playerBoard.getFieldsArray()) {
+                if (f.getShip().getType() != ProtocolMessages.Ship.EMPTY && !f.isHit()) {
+                    count++;
+                }
+            }
+            if (count == 0) {
+                return k;
+            }
+        }
+        return null;
+   }
+
 }

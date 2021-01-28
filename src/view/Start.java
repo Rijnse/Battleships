@@ -190,9 +190,9 @@ public class Start {
             computerbutton.setText("Name too long/short!");
         }
         else {
-            controller.botGame(computername.getText());
             try {
-                switchToGameScreen();
+                switchToLobby();
+                controller.botGame(computername.getText());
             } catch (IOException e) {
                 computerbutton.setText("Something went wrong!");
             }
