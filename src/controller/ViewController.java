@@ -81,8 +81,6 @@ public class ViewController {
 
     public void hostGame(int port, String username) {
         Server server = new Server(port);
-        server.setup(port);
-
         Thread srv = new Thread(server);
         srv.start();
 

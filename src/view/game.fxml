@@ -1604,8 +1604,8 @@
                   <Font size="25.0" />
                </font>
             </Text>
-            <Text fx:id="nameplayerone" layoutX="187.0" layoutY="17.0" strokeType="OUTSIDE" strokeWidth="0.0" text="&quot;player 1&quot; ships" textAlignment="RIGHT" wrappingWidth="129.708984375" />
-            <Text fx:id="nameplayertwo" layoutX="529.0" layoutY="17.0" strokeType="OUTSIDE" strokeWidth="0.0" text="&quot;player 2&quot; ships" textAlignment="RIGHT" wrappingWidth="149.0" />
+            <Text fx:id="nameplayerone" layoutX="182.0" layoutY="17.0" strokeType="OUTSIDE" strokeWidth="0.0" text="&quot;player 1&quot; ships" textAlignment="RIGHT" wrappingWidth="129.708984375" />
+            <Text fx:id="nameplayertwo" layoutX="530.0" layoutY="17.0" strokeType="OUTSIDE" strokeWidth="0.0" text="&quot;player 2&quot; ships" textAlignment="RIGHT" wrappingWidth="140.0" />
          </children>
       </AnchorPane>
       <AnchorPane layoutX="300.0" layoutY="396.0">
@@ -1638,22 +1638,7 @@
             <Font size="15.0" />
          </font>
       </Text>
-      <AnchorPane fx:id="popup" layoutX="233.0" layoutY="186.0" prefHeight="96.0" prefWidth="283.0" style="-fx-background-color: white; -fx-border-color: black; -fx-border-width: 2; -fx-border-radius: 3;" visible="false">
-         <children>
-            <Text fx:id="popuptitle" layoutX="84.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="HIT!" textAlignment="CENTER" wrappingWidth="114.044921875">
-               <font>
-                  <Font size="34.0" />
-               </font>
-            </Text>
-            <Text fx:id="popupdesc" layoutX="29.0" layoutY="64.0" strokeType="OUTSIDE" strokeWidth="0.0" text="*NAME* shot at *COORDINATES*" textAlignment="CENTER" wrappingWidth="224.044921875">
-               <font>
-                  <Font size="15.0" />
-               </font>
-            </Text>
-         </children>
-      </AnchorPane>
       <Button layoutX="53.0" layoutY="423.0" mnemonicParsing="false" onAction="#startTurnTimer" text="Button" />
-      <AnchorPane prefHeight="200.0" prefWidth="200.0" />
       <AnchorPane layoutX="357.0" layoutY="150.0" prefHeight="226.0" prefWidth="35.0">
          <children>
             <Text layoutX="14.0" layoutY="16.0" stroke="BLACK" strokeType="OUTSIDE" strokeWidth="0.5" text="1" textAlignment="CENTER" />
@@ -1704,6 +1689,20 @@
             <Text layoutX="263.0" layoutY="15.0" strokeType="OUTSIDE" text="M" />
             <Text layoutX="286.0" layoutY="15.0" strokeType="OUTSIDE" text="N" />
             <Text layoutX="308.0" layoutY="15.0" strokeType="OUTSIDE" text="O" />
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="popup" layoutX="233.0" layoutY="186.0" prefHeight="96.0" prefWidth="283.0" style="-fx-background-color: white; -fx-border-color: black; -fx-border-width: 2; -fx-border-radius: 3;" visible="false">
+         <children>
+            <Text fx:id="popuptitle" layoutX="84.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="HIT!" textAlignment="CENTER" wrappingWidth="114.044921875">
+               <font>
+                  <Font size="34.0" />
+               </font>
+            </Text>
+            <Text fx:id="popupdesc" layoutX="29.0" layoutY="64.0" strokeType="OUTSIDE" strokeWidth="0.0" text="*NAME* shot at *COORDINATES*" textAlignment="CENTER" wrappingWidth="224.044921875">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Text>
          </children>
       </AnchorPane>
     </children>

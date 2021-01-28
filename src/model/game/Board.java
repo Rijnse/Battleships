@@ -290,10 +290,15 @@ public class Board {
     /**
      * @ensures that field is returned on given index on board
      * @param i is the index of requested field
-     * @return Field object on index
+     * @return Field object on index, null if index is invalid
      */
     public Field getField(int i) {
-        return this.fields[i];
+        if (i >= 0 && i < WIDTH*HEIGHT) {
+            return this.fields[i];
+        }
+        else {
+            return null;
+        }
     }
 
     /**

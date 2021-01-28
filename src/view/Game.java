@@ -50,6 +50,9 @@ public class Game {
     public void initialize() {
         ViewController.getInstance().setGameView(this);
         ViewController.getInstance().gameIni = true;
+
+        fireButton.setDisable(true);
+        moveTextField.setEditable(false);
     }
 
     public void updateOwnField(Field field, int index) {
@@ -122,6 +125,7 @@ public class Game {
                 }
                 else {
                     stopTurnTimer(timer);
+                    controller.sendMove(String.valueOf(ViewController.getInstance().getClient().getPlayer().determineMove()));
                 }
             }
         }, 0, 1000);

@@ -1,8 +1,6 @@
 package model.networking;
 
-import controller.ViewController;
 import model.ProtocolMessages;
-import model.exceptions.ExitProgram;
 import model.game.*;
 
 import java.io.*;
@@ -176,5 +174,13 @@ public class Server implements Runnable {
             k.exit();
         }
         ssock.close();
+    }
+
+    public static void main(String[] args) {
+        int standardPort = 1337;
+        Server server = new Server(standardPort);
+
+        Thread srv = new Thread(server);
+        srv.start();
     }
 }

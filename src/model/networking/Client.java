@@ -3,10 +3,7 @@ package model.networking;
 import controller.ViewController;
 import model.ProtocolMessages;
 import model.exceptions.ExitProgram;
-import model.game.Board;
-import model.game.Game;
-import model.game.HumanPlayer;
-import model.game.Player;
+import model.game.*;
 
 import java.io.*;
 import java.net.InetAddress;
@@ -118,15 +115,14 @@ public class Client implements Runnable{
                         player.getBoard().getField(Integer.parseInt(array[1])).setHit(true);
                         ViewController.getInstance().updateOwnField(player.getBoard());
                         player.getCurrentGame().getPlayerTwo().incrementScore(1);
-                        ViewController.getInstance().updateScores(player.getScore(), player.getCurrentGame().getPlayerTwo().getScore());
                     }
                     else {
                         player.getCurrentGame().getPlayerTwo().getBoard().getField(Integer.parseInt(array[1])).setHit(true);
                         player.getCurrentGame().getPlayerTwo().getBoard().getField(Integer.parseInt(array[1])).getShip().setType(ProtocolMessages.Ship.UNKNOWN);
                         ViewController.getInstance().updateEnemyField(player.getCurrentGame().getPlayerTwo().getBoard());
                         player.getCurrentGame().getPlayerOne().incrementScore(1);
-                        ViewController.getInstance().updateScores(player.getScore(), player.getCurrentGame().getPlayerTwo().getScore());
                     }
+                    ViewController.getInstance().updateScores(player.getScore(), player.getCurrentGame().getPlayerTwo().getScore());
                     break;
                 case ProtocolMessages.MISS:
                     ViewController.getInstance().showPopUp("MISS!", array[2] + " does not have a ship at " + Board.indexToCoordinates(Integer.parseInt(array[1])));
@@ -140,52 +136,50 @@ public class Client implements Runnable{
                     }
                     break;
                 case ProtocolMessages.DESTROY:
-                    ProtocolMessages.Ship ship = ProtocolMessages.Ship.EMPTY;
-                    int length = 0;
-                    switch (array[1]) {
-                        case "C":
-                            ship = ProtocolMessages.Ship.CARRIER;
-                            length = 5;
-                            break;
-                        case "B":
-                            ship = ProtocolMessages.Ship.BATTLESHIP;
-                            length = 4;
-                            break;
-                        case "D":
-                            ship = ProtocolMessages.Ship.DESTROYER;
-                            length = 3;
-                            break;
-                        case "S":
-                            ship = ProtocolMessages.Ship.SUPERPATROL;
-                            length = 2;
-                            break;
-                        case "P":
-                            ship = ProtocolMessages.Ship.PATROLBOAT;
-                            length = 1;
-                            break;
-                    }
-                    ViewController.getInstance().showPopUp("DESTROYED!", array[4] + " has lost a " + ship.toString());
+                    Player playerDestroyed = null;
                     if (array[4].equals(player.getCurrentGame().getPlayerOne().getName())) {
-                        player.getBoard().getField(Integer.parseInt(array[1])).setHit(true);
-                        ViewController.getInstance().updateOwnField(player.getBoard());
+                        playerDestroyed = player.getCurrentGame().getPlayerOne();
                         player.getCurrentGame().getPlayerTwo().incrementScore(1);
-                        ViewController.getInstance().updateScores(player.getScore(), player.getCurrentGame().getPlayerTwo().getScore());
                     }
                     else {
-                        if (array[3].equals("0")) {
-                            for (int i = Integer.parseInt(array[2]); i < length + Integer.parseInt(array[2]); i++) {
-                                player.getCurrentGame().getPlayerTwo().getBoard().getField(i).getShip().setType(ship);
-                            }
-                        }
-                        else {
-                            for (int i = Integer.parseInt(array[2]); i < (length*ProtocolMessages.BOARD_DIMENSIONS[15]) + Integer.parseInt(array[2]); i = i + ProtocolMessages.BOARD_DIMENSIONS[1]) {
-                                player.getCurrentGame().getPlayerTwo().getBoard().getField(i).getShip().setType(ship);
-                            }
-                        }
-                        ViewController.getInstance().updateEnemyField(player.getCurrentGame().getPlayerTwo().getBoard());
+                        playerDestroyed = player.getCurrentGame().getPlayerTwo();
                         player.getCurrentGame().getPlayerOne().incrementScore(1);
-                        ViewController.getInstance().updateScores(player.getScore(), player.getCurrentGame().getPlayerTwo().getScore());
                     }
+
+                    Ship ship = null;
+                    switch (array[1]) {
+                        case "C":
+                            ship = new Ship(-1, ProtocolMessages.Ship.CARRIER);
+                            break;
+                        case "B":
+                            ship = new Ship(-1, ProtocolMessages.Ship.BATTLESHIP);
+                            break;
+                        case "D":
+                            ship = new Ship(-1, ProtocolMessages.Ship.DESTROYER);
+                            break;
+                        case "S":
+                            ship = new Ship(-1, ProtocolMessages.Ship.SUPERPATROL);
+                            break;
+                        case "P":
+                            ship = new Ship(-1, ProtocolMessages.Ship.PATROLBOAT);
+                            break;
+                    }
+                    ship.setSunk(true);
+                    if (array[3].equals("0")) {
+                        for (int i = Integer.parseInt(array[2]); i < ship.getLength(); i++) {
+                            playerDestroyed.getBoard().getFieldsArray()[i] = new Field(ship);
+                            System.out.println("suas");
+                        }
+                    }
+                    else {
+                        for (int i = Integer.parseInt(array[2]); i < ship.getLength(); i = i + 15) {
+                            playerDestroyed.getBoard().getFieldsArray()[i] = new Field(ship);
+                        }
+                    }
+                    ViewController.getInstance().showPopUp("DESTROYED!", array[4] + " had a " + array[1] + " sunk!");
+                    ViewController.getInstance().updateScores(player.getScore(), player.getCurrentGame().getPlayerTwo().getScore());
+                    ViewController.getInstance().updateOwnField(player.getBoard());
+                    ViewController.getInstance().updateEnemyField(player.getCurrentGame().getPlayerTwo().getBoard());
                     break;
                 case ProtocolMessages.WON:
                     if (array.length == 2) {
@@ -216,6 +210,7 @@ public class Client implements Runnable{
         try {
             in.close();
             out.close();
+            sock.shutdownInput();
             sock.close();
         } catch (IOException e) {
             e.printStackTrace();
