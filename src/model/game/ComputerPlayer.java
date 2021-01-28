@@ -33,7 +33,7 @@ public class ComputerPlayer extends Player {
                 int p = i;
                 int m = i;
                 // look if there are more unknown ships to the right.
-                while (opponentBoard.getField(k).getShip().getType() == ProtocolMessages.Ship.UNKNOWN && (k + 1) % WIDTH != 0 && (k - 1) < (WIDTH * HEIGHT)) {
+                while (opponentBoard.getField(k).getShip().getType() == ProtocolMessages.Ship.UNKNOWN && (k + 1) % WIDTH != 0 && k < (WIDTH * HEIGHT) - 1) {
                     k++;
                 }
                 // look if there are more unknown ships to the left.
@@ -45,28 +45,49 @@ public class ComputerPlayer extends Player {
                     p = p + WIDTH;
                 }
                 // look if there are more unknown ships on the top.
-                while (opponentBoard.getField(m).getShip().getType() == ProtocolMessages.Ship.UNKNOWN && m < (WIDTH - 1)) {
+                while (opponentBoard.getField(m).getShip().getType() == ProtocolMessages.Ship.UNKNOWN && m > (WIDTH - 1)) {
                     m = m - WIDTH;
                 }
-                int rPlaces = (k - i) - 1;
-                int lPlaces = (i - l) - 1;
+                int rPlaces = k - i - 1;
+                int lPlaces = i - l - 1;
                 int bPlaces = ((p - i) / WIDTH) - 1;
                 int tPlaces = ((i - m) / WIDTH) - 1;
 
                 // check if there is an other unknown ship next to the unknown ship at index i.
                 if (rPlaces != 0 || lPlaces != 0 || bPlaces != 0 || tPlaces != 0) {
-                    if (rPlaces >= lPlaces && rPlaces >= bPlaces && rPlaces >= tPlaces) {
+                    if (rPlaces >= lPlaces && rPlaces >= bPlaces && rPlaces >= tPlaces && (k + 1) % WIDTH != 0 && k < (WIDTH * HEIGHT) - 1) {
                         return k;
                     }
-                    else if (lPlaces >= rPlaces && lPlaces >= bPlaces && lPlaces >= tPlaces) {
+                    else if (lPlaces > rPlaces && lPlaces >= bPlaces && lPlaces >= tPlaces && (l - 1) % WIDTH != (WIDTH - 1) && l > 0) {
                         return l;
                     }
-                    else if (bPlaces >= rPlaces && bPlaces >= lPlaces && bPlaces >= tPlaces) {
+                    else if (bPlaces > rPlaces && bPlaces > lPlaces && bPlaces >= tPlaces && p < (WIDTH * (HEIGHT - 1))) {
                         return p;
                     }
-                    else if (tPlaces >= rPlaces && tPlaces >= lPlaces && tPlaces >= bPlaces) {
+                    else if (tPlaces > rPlaces && tPlaces > lPlaces && tPlaces > bPlaces && m < (WIDTH - 1)) {
                         return m;
                     }
+                    else {
+                        if (k == (WIDTH * HEIGHT) - 1) {
+                            return k;
+                        }
+                        else if ((k + 1) % WIDTH != 0 && k < (WIDTH * HEIGHT) - 1) {
+                            return k;
+                        }
+                        else if ((l - 1) % WIDTH != (WIDTH - 1) && l > 0) {
+                            return l;
+                        }
+                        else if (p < (WIDTH * (HEIGHT - 1))) {
+                            return p;
+                        }
+                        else if (m < (WIDTH - 1)) {
+                            return m;
+                        }
+                    }
+
+                }
+                else {
+                    return i + 1;
                 }
             }
         }
