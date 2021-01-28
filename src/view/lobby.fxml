@@ -68,14 +68,14 @@
       <Button fx:id="leavebutton" layoutX="21.0" layoutY="24.0" mnemonicParsing="false" onAction="#leaveGame" prefHeight="42.0" prefWidth="90.0" text="Leave game" />
       <Button fx:id="balenciaga" layoutX="781.0" layoutY="24.0" mnemonicParsing="false" onAction="#audioPlayerButton" prefHeight="25.0" prefWidth="82.0" text="Start music" />
       <Button fx:id="mutebutton" layoutX="782.0" layoutY="54.0" mnemonicParsing="false" onAction="#muteMusic" prefHeight="25.0" prefWidth="82.0" text="Mute music" />
-        <AnchorPane fx:id="popup" layoutX="333.0" layoutY="475.0" prefHeight="80.0" prefWidth="321.0" style="-fx-background-color: white; -fx-border-color: black; -fx-border-width: 2; -fx-border-radius: 3;" visible="false">
+        <AnchorPane fx:id="popup" layoutX="333.0" layoutY="469.0" prefHeight="96.0" prefWidth="321.0" style="-fx-background-color: white; -fx-border-color: black; -fx-border-width: 2; -fx-border-radius: 3;" visible="false">
             <children>
-                <Text fx:id="popuptitle" layoutX="103.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="HIT!" textAlignment="CENTER" wrappingWidth="114.044921875">
+                <Text fx:id="popuptitle" layoutX="38.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="HIT!" textAlignment="CENTER" wrappingWidth="244.998046875">
                     <font>
                         <Font size="34.0" />
                     </font>
                 </Text>
-                <Text fx:id="popupdesc" layoutX="48.0" layoutY="62.0" strokeType="OUTSIDE" strokeWidth="0.0" text="*NAME* shot at *COORDINATES*" textAlignment="CENTER" wrappingWidth="224.044921875">
+                <Text fx:id="popupdesc" layoutX="9.0" layoutY="62.0" strokeType="OUTSIDE" strokeWidth="0.0" text="*NAME* shot at *COORDINATES*" textAlignment="CENTER" wrappingWidth="304.0">
                     <font>
                         <Font size="15.0" />
                     </font>

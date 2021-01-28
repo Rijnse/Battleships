@@ -103,7 +103,12 @@ public class Game {
     public void updateGeneralTime(int time) {
         int minutes = time / 60;
         int seconds = time % 60;
-        gameTimer.setText(minutes + ":" + seconds);
+        if (seconds < 10) {
+            gameTimer.setText(minutes + ":0" + seconds);
+        }
+        else {
+            gameTimer.setText(minutes + ":" + seconds);
+        }
     }
 
     public void startTurnTimer() {
@@ -146,10 +151,10 @@ public class Game {
                 stopTurnTimer(timer);
             }
             else {
-                showPopUp("ERROR!", "This field was already hit!");
+                showPopUp("ERROR!", "This field was already hit!", 3);
             }
         } catch (InvalidIndex invalidIndex) {
-            showPopUp("ERROR!", "This is not a field on the board!");
+            showPopUp("ERROR!", "This is not a field on the board!", 3);
         }
     }
 
@@ -161,9 +166,9 @@ public class Game {
         return enemyField;
     }
 
-    public void showPopUp(String title, String desc) {
+    public void showPopUp(String title, String desc, int popuptime) {
         Timer timer = new Timer();
-        final int[] time = {3};
+        final int[] time = {popuptime};
         popuptitle.setText(title);
         popupdesc.setText(desc);
         popup.setVisible(true);

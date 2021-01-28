@@ -15,8 +15,13 @@ import static model.ProtocolMessages.*;
 public class GameHandler implements Runnable{
 
     private List<ClientHandler> players;
-    private boolean gameOver;
     private int turnCount = 0;
+
+    private static final int[] scoreSheet = {2,4,6,8,10};
+
+    private int tieScorePlayerOne;
+    private int tieScorePlayerTwo;
+
 
     public boolean turnFound;
     private boolean hitAgain;
@@ -26,6 +31,8 @@ public class GameHandler implements Runnable{
         this.players = players;
         hitAgain = true;
         turnFound = false;
+        tieScorePlayerOne = 0;
+        tieScorePlayerTwo = 0;
     }
 
     public List<ClientHandler> getPlayers() {
@@ -37,9 +44,9 @@ public class GameHandler implements Runnable{
         ClientHandler name;
         Thread timer = new Thread(new GameTimer());
         timer.start();
-        while (!gameOver) {
+        while (gameOver(timer) == null) {
             name = players.get(turnCount % 2);
-            while (hitAgain) {
+            while (hitAgain && timer.isAlive()) {
                 for (ClientHandler k : players) {
                     k.sendMessage(ProtocolMessages.TURN + CS + name.getPlayer().getName());
                 }
@@ -68,36 +75,44 @@ public class GameHandler implements Runnable{
                 turnFound = false;
                 turnIndex = -1;
             }
-
-            //check if game over
             hitAgain = true;
             turnCount++;
+        }
+
+        ClientHandler[] array = gameOver(timer);
+        for (ClientHandler k : players) {
+            if (array.length > 1) {
+                k.sendMessage(WON + CS + array[0].getPlayer().getName()+ CS + array[1].getPlayer().getName());
+            }
+            else {
+                k.sendMessage(WON + CS + array[0].getPlayer().getName());
+            }
         }
     }
 
     public class GameTimer implements Runnable{
-        private Timer timer = new Timer();
-        @Override
-        public void run() {
-            final int[] time = {ProtocolMessages.GAME_TIME};
-            timer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    if (!(time[0] < 0)) {
-                        for (ClientHandler k : players) {
-                            k.sendMessage(ProtocolMessages.TIME + CS + time[0]);
-                        }
-                        time[0]--;
-                    }
-                    else {
-                        stopTurnTimer(timer);
-                    }
-                }
-            }, 0, 1000);
+        private boolean stopClock = false;
+        private boolean isActive = true;
+
+        public boolean isActive() {
+            return isActive;
         }
 
-        public void stopTurnTimer(Timer timer) {
-            timer.cancel();
+        @Override
+        public void run() {
+            int time = GAME_TIME;
+            while (time > 0 && !stopClock) {
+                try {
+                    for (ClientHandler k : getPlayers()) {
+                        k.sendMessage(ProtocolMessages.TIME + CS + time);
+                    }
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                time--;
+            }
+            isActive = false;
         }
     }
 
@@ -139,6 +154,12 @@ public class GameHandler implements Runnable{
 
             if (destroyHandler(index, opponent, enemy)) {
                 handler.getPlayer().incrementScore(1);
+                if (handler.getPlayer().getName().equals(getPlayers().get(0).getPlayer().getName())) {
+                    tieScorePlayerOne = tieScorePlayerOne + (1 / (opponent.getField(index).getShip().getLength() / 5));
+                }
+                else {
+                    tieScorePlayerTwo = tieScorePlayerTwo + (1 / (opponent.getField(index).getShip().getLength() / 5));
+                }
             }
         }
    }
@@ -180,7 +201,7 @@ public class GameHandler implements Runnable{
        }
    }
 
-   public ClientHandler checkShipsSunk() {
+   private ClientHandler checkShipsSunk() {
         for (ClientHandler k : players) {
             int count = 0;
             Board playerBoard = k.getPlayer().getBoard();
@@ -196,4 +217,41 @@ public class GameHandler implements Runnable{
         return null;
    }
 
+   private ClientHandler[] gameOver(Thread timer) {
+        if (checkShipsSunk() != null) {
+            return new ClientHandler[] {checkShipsSunk()};
+        }
+        else if (!timer.isAlive()) {
+            ClientHandler winner = null;
+            if (getPlayers().get(0).getPlayer().getScore() != getPlayers().get(1).getPlayer().getScore()) {
+                for (ClientHandler k : getPlayers()) {
+                    if (winner != null) {
+                        if (k.getPlayer().getScore() > winner.getPlayer().getScore()) {
+                            winner = k;
+                        }
+                    }
+                    else {
+                        winner = k;
+                    }
+                }
+                return new ClientHandler[]{winner};
+            }
+            else {
+                if (tieScorePlayerOne != tieScorePlayerTwo) {
+                    if (tieScorePlayerOne > tieScorePlayerTwo) {
+                        return new ClientHandler[]{getPlayers().get(0)};
+                    }
+                    else {
+                        return new ClientHandler[]{getPlayers().get(1)};
+                    }
+                }
+                else {
+                    return new ClientHandler[]{getPlayers().get(0), getPlayers().get(1)};
+                }
+            }
+        }
+        else {
+            return null;
+        }
+   }
 }

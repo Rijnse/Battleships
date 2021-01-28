@@ -112,7 +112,7 @@ public class Client implements Runnable, ClientInterface{
                     }
                     break;
                 case ProtocolMessages.HIT:
-                    ViewController.getInstance().showPopUp("HIT!", array[2] + " has been hit on " + Board.indexToCoordinates(Integer.parseInt(array[1])));
+                    ViewController.getInstance().showPopUp("HIT!", array[2] + " has been hit on " + Board.indexToCoordinates(Integer.parseInt(array[1])), 3);
                     if (array[2].equals(player.getCurrentGame().getPlayerOne().getName())) {
                         player.getBoard().getField(Integer.parseInt(array[1])).setHit(true);
                         ViewController.getInstance().updateOwnField(player.getBoard());
@@ -127,7 +127,7 @@ public class Client implements Runnable, ClientInterface{
                     ViewController.getInstance().updateScores(player.getScore(), player.getCurrentGame().getPlayerTwo().getScore());
                     break;
                 case ProtocolMessages.MISS:
-                    ViewController.getInstance().showPopUp("MISS!", array[2] + " does not have a ship at " + Board.indexToCoordinates(Integer.parseInt(array[1])));
+                    ViewController.getInstance().showPopUp("MISS!", array[2] + " does not have a ship at " + Board.indexToCoordinates(Integer.parseInt(array[1])), 3);
                     if (array[2].equals(player.getCurrentGame().getPlayerOne().getName())) {
                         player.getBoard().getField(Integer.parseInt(array[1])).setHit(true);
                         ViewController.getInstance().updateOwnField(player.getBoard());
@@ -182,7 +182,7 @@ public class Client implements Runnable, ClientInterface{
                             }
                         }
                     }
-                    ViewController.getInstance().showPopUp("DESTROYED!", array[4] + " had a ship taken down!");
+                    ViewController.getInstance().showPopUp("DESTROYED!", array[4] + " had a ship taken down!", 3);
                     ViewController.getInstance().updateScores(player.getScore(), player.getCurrentGame().getPlayerTwo().getScore());
                     if (updateBoard == 1) {
                         ViewController.getInstance().updateEnemyField(player.getCurrentGame().getPlayerTwo().getBoard());
@@ -190,10 +190,10 @@ public class Client implements Runnable, ClientInterface{
                     break;
                 case ProtocolMessages.WON:
                     if (array.length == 2) {
-                        ViewController.getInstance().showPopUp("WON!", array[1] + " has won the game!");
+                        ViewController.getInstance().showPopUp("WON!", array[1] + " has won the game!", 15);
                     }
                     else {
-                        ViewController.getInstance().showPopUp("WON!", "The game was a tie!");
+                        ViewController.getInstance().showPopUp("WON!", "The game was a tie!", 15);
                     }
                     break;
                 case ProtocolMessages.MSGRECEIVED:

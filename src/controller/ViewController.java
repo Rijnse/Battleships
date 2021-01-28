@@ -152,19 +152,19 @@ public class ViewController {
                     });
                 break;
             case ProtocolMessages.GAME_OVER:
-                game.showPopUp("ERROR!", "The game has ended, so you can't do that right now!");
+                game.showPopUp("ERROR!", "The game has ended, so you can't do that right now!", 3);
                 break;
             case ProtocolMessages.ILLEGAL_COMMAND:
-                game.showPopUp("ERROR!", "That is an illegal command! Try again...");
+                game.showPopUp("ERROR!", "That is an illegal command! Try again...", 3);
                 break;
             case ProtocolMessages.ILLEGAL_SHIP_PLACEMENT:
-                game.showPopUp("ERROR!", "You can't place your ships like that!");
+                game.showPopUp("ERROR!", "You can't place your ships like that!", 3);
                 break;
             case ProtocolMessages.INVALID_INDEX:
-                game.showPopUp("ERROR!", "That is not a valid move (either because it's already been hit or is not on the board)");
+                game.showPopUp("ERROR!", "That is not a valid move (either because it's already been hit or is not on the board)", 3);
                 break;
             case ProtocolMessages.OUT_OF_TURN:
-                game.showPopUp("ERROR!", "It is not your turn!");
+                game.showPopUp("ERROR!", "It is not your turn!", 3);
                 break;
             case ProtocolMessages.TIME_OVER:
 
@@ -188,7 +188,7 @@ public class ViewController {
         });
     }
 
-    public void showPopUp(String title, String desc) {
-        game.showPopUp(title, desc);
+    public void showPopUp(String title, String desc, int popuptime) {
+        game.showPopUp(title, desc, popuptime);
     }
 }
