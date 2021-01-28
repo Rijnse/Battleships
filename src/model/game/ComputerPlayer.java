@@ -68,12 +68,7 @@ public class ComputerPlayer extends Player {
                         }
                     }
                     else {
-                        if ((i + 1) % WIDTH != 0 && !opponentBoard.getField(i + 1).isHit()) {
-                            return i + 1;
-                        }
-                        else if (i < (WIDTH * (HEIGHT - 1)) && !opponentBoard.getField(i + WIDTH).isHit()) {
-                            return i + WIDTH;
-                        }
+                       return k + 1;
                     }
                 }
             }
