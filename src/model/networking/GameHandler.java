@@ -46,7 +46,6 @@ public class GameHandler implements Runnable{
                 hitAgain = false;
                 int i = 30;
                 while (i > 0 && !turnFound) {
-
                     try {
                         Thread.sleep(1000);
                     } catch (InterruptedException e) {
@@ -127,6 +126,17 @@ public class GameHandler implements Runnable{
             opponent.getField(index).setHit(true);
             handler.getPlayer().incrementScore(1);
             this.hitAgain = true;
+
+            int z = 2;
+            while (z > 0) {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                z--;
+            }
+
             if (destroyHandler(index, opponent, enemy)) {
                 handler.getPlayer().incrementScore(1);
             }

@@ -139,6 +139,7 @@ public class Client implements Runnable, ClientInterface{
                     break;
                 case ProtocolMessages.DESTROY:
                     Player playerDestroyed = null;
+                    int updateBoard = 0;
                     if (array[4].equals(player.getCurrentGame().getPlayerOne().getName())) {
                         playerDestroyed = player.getCurrentGame().getPlayerOne();
                         player.getCurrentGame().getPlayerTwo().incrementScore(1);
@@ -146,6 +147,7 @@ public class Client implements Runnable, ClientInterface{
                     else {
                         playerDestroyed = player.getCurrentGame().getPlayerTwo();
                         player.getCurrentGame().getPlayerOne().incrementScore(1);
+                        updateBoard = 1;
                     }
 
                     if (!player.getName().equals(playerDestroyed.getName())) {
@@ -169,19 +171,22 @@ public class Client implements Runnable, ClientInterface{
                         }
                         ship.setSunk(true);
                         if (array[3].contains("0")) {
-                            for (int i = Integer.parseInt(array[2]); i < ship.getLength(); i++) {
-                                playerDestroyed.getBoard().getFieldsArray()[i] = new Field(ship);
+                            for (int i = 0; i < ship.getLength(); i++) {
+                                playerDestroyed.getBoard().getFieldsArray()[Integer.parseInt(array[2]) + i] = new Field(ship);
+                                playerDestroyed.getBoard().getFieldsArray()[Integer.parseInt(array[2]) + i].setHit(true);
                             }
                         } else {
-                            for (int i = Integer.parseInt(array[2]); i < (ship.getLength()*15); i = i + 15) {
-                                playerDestroyed.getBoard().getFieldsArray()[i] = new Field(ship);
+                            for (int i = 0; i < (ship.getLength()*15); i = i + 15) {
+                                playerDestroyed.getBoard().getFieldsArray()[Integer.parseInt(array[2]) + i] = new Field(ship);
+                                playerDestroyed.getBoard().getFieldsArray()[Integer.parseInt(array[2]) + i].setHit(true);
                             }
                         }
                     }
-                    ViewController.getInstance().showPopUp("DESTROYED!", array[4] + " had a " + array[1] + " sunk!");
+                    ViewController.getInstance().showPopUp("DESTROYED!", array[4] + " had a ship taken down!");
                     ViewController.getInstance().updateScores(player.getScore(), player.getCurrentGame().getPlayerTwo().getScore());
-                    ViewController.getInstance().updateOwnField(player.getBoard());
-                    ViewController.getInstance().updateEnemyField(player.getCurrentGame().getPlayerTwo().getBoard());
+                    if (updateBoard == 1) {
+                        ViewController.getInstance().updateEnemyField(player.getCurrentGame().getPlayerTwo().getBoard());
+                    }
                     break;
                 case ProtocolMessages.WON:
                     if (array.length == 2) {
