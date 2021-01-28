@@ -68,32 +68,27 @@ public class ComputerPlayer extends Player {
                         }
                     }
                     else {
-                       return k + 1;
+                       return k;
                     }
                 }
             }
         }
         // if there are no unknown ships return a random index
-        int possible = randomMove();
-        while (possible < (WIDTH * HEIGHT)) {
-            if (!opponentBoard.getField(possible).isHit()) {
-                return possible;
-            }
-            if (possible == (WIDTH * HEIGHT) - 1) {
-                possible = 0;
-            }
-            else {
-                possible++;
-            }
+        return randomMove(opponentBoard);
         }
-        return -1;
-    }
+
 
     /**
      * @ensures that a random int between 0 and 149 is generated
      * @return an int
      */
-    public static int randomMove () {
-        return (int) (Math.random() * WIDTH * HEIGHT);
+    public static int randomMove (Board board) {
+        int number = (int) (Math.random() * WIDTH * HEIGHT);
+        if (board.getField(number).isHit()) {
+            return number;
+        }
+        else {
+            return randomMove(board);
+        }
     }
 }
