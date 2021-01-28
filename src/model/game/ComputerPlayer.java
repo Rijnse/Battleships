@@ -92,7 +92,7 @@ public class ComputerPlayer extends Player {
             }
         }
         // if there are no unknown ships return a random index
-        return randomMove(opponentBoard);
+        return randomMove(opponentBoard.getFieldsArray());
     }
 
 
@@ -100,13 +100,13 @@ public class ComputerPlayer extends Player {
      * @ensures that a random int between 0 and 149 is generated
      * @return an int
      */
-    public static int randomMove (Board board) {
+    public static int randomMove (Field[] array) {
         int number = (int) (Math.random() * WIDTH * HEIGHT);
-        if (board.getField(number).isHit()) {
+        if (!array[number].isHit()) {
             return number;
         }
         else {
-            return randomMove(board);
+            return randomMove(array);
         }
     }
 }

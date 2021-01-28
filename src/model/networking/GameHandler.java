@@ -9,9 +9,6 @@ import model.networking.ClientHandler;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 import static model.ProtocolMessages.*;
 
@@ -22,10 +19,12 @@ public class GameHandler implements Runnable{
     private int turnCount = 0;
 
     public boolean turnFound;
+    private boolean hitAgain;
     public int turnIndex;
 
     public GameHandler(List<ClientHandler> players) {
         this.players = players;
+        hitAgain = true;
         turnFound = false;
     }
 
@@ -40,32 +39,39 @@ public class GameHandler implements Runnable{
         timer.start();
         while (!gameOver) {
             name = players.get(turnCount % 2);
-            for (ClientHandler k : players) {
-                k.sendMessage(ProtocolMessages.TURN + CS + name.getPlayer().getName());
-            }
-
-            int i = 30;
-            while (i > 0 && !turnFound) {
-
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+            while (hitAgain) {
+                for (ClientHandler k : players) {
+                    k.sendMessage(ProtocolMessages.TURN + CS + name.getPlayer().getName());
                 }
-                i--;
-            }
+                hitAgain = false;
+                int i = 30;
+                while (i > 0 && !turnFound) {
 
-            if (turnFound) {
-                attackHandler(name, turnIndex);
-            }
-            else {
-                name.sendMessage(ProtocolMessages.ERROR + CS + ProtocolMessages.TIME_OVER);
-            }
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    i--;
+                }
 
+                if (turnFound) {
+                    if (turnIndex < 0 || turnIndex > 149) {
+                        name.sendMessage(ERROR + CS + INVALID_INDEX);
+                    }
+                    else {
+                        attackHandler(name, turnIndex);
+                    }
+                } else {
+                    name.sendMessage(ProtocolMessages.ERROR + CS + ProtocolMessages.TIME_OVER);
+                }
 
+                turnFound = false;
+                turnIndex = -1;
+            }
 
             //check if game over
-            turnFound = false;
+            hitAgain = true;
             turnCount++;
         }
     }
@@ -112,12 +118,15 @@ public class GameHandler implements Runnable{
             for (ClientHandler k : players) {
                 k.sendMessage(ProtocolMessages.MISS + CS + index + CS + enemy.getPlayer().getName());
             }
+            opponent.getField(index).setHit(true);
         }
         else {
             for (ClientHandler k : players) {
                 k.sendMessage(ProtocolMessages.HIT + CS + index + CS + enemy.getPlayer().getName());
             }
+            opponent.getField(index).setHit(true);
             handler.getPlayer().incrementScore(1);
+            this.hitAgain = true;
             if (destroyHandler(index, opponent, enemy)) {
                 handler.getPlayer().incrementScore(1);
             }
@@ -135,7 +144,6 @@ public class GameHandler implements Runnable{
 
        if (count == ship.getLength()) {
            ship.setSunk(true);
-
            int firstSquare = -1;
            for (int i = 0; i < ProtocolMessages.BOARD_DIMENSIONS[0]*ProtocolMessages.BOARD_DIMENSIONS[1]; i++) {
                if (opponent.getField(i).getShip().toString().equals(ship.toString())) {
@@ -144,12 +152,12 @@ public class GameHandler implements Runnable{
                }
            }
 
-           String orientation = "";
+           int orientation;
            if (opponent.getField(firstSquare + 1).getShip().toString().equals(ship.toString())) {
-               orientation = "0";
+               orientation = 0;
            }
            else {
-               orientation = "1";
+               orientation = 1;
            }
 
            for (ClientHandler k : players) {

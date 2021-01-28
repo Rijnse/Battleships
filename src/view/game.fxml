@@ -1691,14 +1691,14 @@
             <Text layoutX="308.0" layoutY="15.0" strokeType="OUTSIDE" text="O" />
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="popup" layoutX="233.0" layoutY="186.0" prefHeight="96.0" prefWidth="283.0" style="-fx-background-color: white; -fx-border-color: black; -fx-border-width: 2; -fx-border-radius: 3;" visible="false">
+      <AnchorPane fx:id="popup" layoutX="178.0" layoutY="196.0" prefHeight="140.0" prefWidth="392.0" style="-fx-background-color: white; -fx-border-color: black; -fx-border-width: 2; -fx-border-radius: 3;" visible="false">
          <children>
-            <Text fx:id="popuptitle" layoutX="84.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="HIT!" textAlignment="CENTER" wrappingWidth="114.044921875">
+            <Text fx:id="popuptitle" layoutX="32.0" layoutY="61.0" strokeType="OUTSIDE" strokeWidth="0.0" text="HIT!" textAlignment="CENTER" wrappingWidth="328.0">
                <font>
                   <Font size="34.0" />
                </font>
             </Text>
-            <Text fx:id="popupdesc" layoutX="29.0" layoutY="64.0" strokeType="OUTSIDE" strokeWidth="0.0" text="*NAME* shot at *COORDINATES*" textAlignment="CENTER" wrappingWidth="224.044921875">
+            <Text fx:id="popupdesc" layoutX="13.0" layoutY="100.0" strokeType="OUTSIDE" strokeWidth="0.0" text="*NAME* shot at *COORDINATES*" textAlignment="CENTER" wrappingWidth="366.044921875">
                <font>
                   <Font size="15.0" />
                </font>

@@ -107,7 +107,6 @@ public class Client implements Runnable, ClientInterface{
                     ViewController.getInstance().updateGameTime(Integer.parseInt(array[1]));
                     break;
                 case ProtocolMessages.TURN:
-                    ViewController.getInstance().showPopUp("NEW TURN!", array[1] + " may now take a shot");
                     if (array[1].equals(player.getName())) {
                         ViewController.getInstance().startTurn();
                     }
