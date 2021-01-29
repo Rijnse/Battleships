@@ -1,6 +1,7 @@
 package model.networking;
 
 import controller.ViewController;
+import javafx.application.Platform;
 import model.ProtocolMessages;
 import model.exceptions.ExitProgram;
 import model.game.*;
@@ -16,22 +17,14 @@ public class Client implements Runnable, ClientInterface{
     private BufferedReader in;
     private BufferedWriter out;
 
-    public Client(String IP, String port, Player player) {
+    public Client(String IP, String port, Player player) throws IOException {
         this.player = player;
-        try {
             this.sock = new Socket(InetAddress.getByName(IP), Integer.parseInt(port));
             in = new BufferedReader(
                     new InputStreamReader(sock.getInputStream()));
             out = new BufferedWriter(
                     new OutputStreamWriter(sock.getOutputStream()));
             sendMessage(ProtocolMessages.HELLO + ProtocolMessages.CS + player.getName());
-        } catch (UnknownHostException e) {
-            System.out.println("Host could not be found!");
-            exit();
-        } catch (IOException e) {
-            System.out.println("Some I/O error has occurred. Try again!");
-            exit();
-        }
     }
 
     @Override
@@ -195,9 +188,20 @@ public class Client implements Runnable, ClientInterface{
                     else {
                         ViewController.getInstance().showPopUp("WON!", "The game was a tie!", 15);
                     }
-                    break;
-                case ProtocolMessages.MSGRECEIVED:
 
+                    int z = 15;
+                    while (z > 0) {
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        z--;
+                    }
+
+                    System.out.println("Closing program...");
+                    Platform.exit();
+                    System.exit(0);
                     break;
             }
     }
@@ -219,8 +223,6 @@ public class Client implements Runnable, ClientInterface{
         try {
             in.close();
             out.close();
-            sock.shutdownInput();
-            sock.close();
         } catch (IOException e) {
             e.printStackTrace();
         }

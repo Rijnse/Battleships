@@ -1,5 +1,7 @@
 package model.networking;
 
+import static model.ProtocolMessages.*;
+
 import model.ProtocolMessages;
 import model.game.Board;
 import model.game.HumanPlayer;
@@ -65,13 +67,13 @@ public class ClientHandler implements Runnable{
 
     public void receiveMessage(String message) {
         System.out.println("Clienthandler receives: " + message);
-        String[] array = message.split(ProtocolMessages.CS);
+        String[] array = message.split(CS);
         if (array.length > 3 || array.length <= 0) {
             illegalCommandSender();
         }
         else {
             switch (array[0]) {
-                case ProtocolMessages.HELLO:
+                case HELLO:
                     if (array[1] != null) {
                         this.player = new HumanPlayer(array[1]);
                         this.server.handleHello(array[1], this);
@@ -80,7 +82,7 @@ public class ClientHandler implements Runnable{
                         illegalCommandSender();
                     }
                     break;
-                case ProtocolMessages.START:
+                case START:
                     int index = this.gamePlayers.indexOf(this);
                     if (index == 0) {
                         if (this.gamePlayers.size() == 2) {
@@ -88,35 +90,37 @@ public class ClientHandler implements Runnable{
                         }
                     }
                     else {
-                        sendMessage(ProtocolMessages.ERROR + ProtocolMessages.CS + ProtocolMessages.ACTION_NOT_PERMITTED);
+                        sendMessage(ERROR + CS + ACTION_NOT_PERMITTED);
                     }
                     break;
-                case ProtocolMessages.BOARD:
+                case BOARD:
                     if (array[1] != null && array[2] != null && this.player.getName().equals(array[1])) {
                        Board board = new Board(array[2]);
                        if (board.checkValidBoard()) {
                             this.server.receiveBoards(board, this);
                        }
                        else {
-                           sendMessage(ProtocolMessages.ERROR + ProtocolMessages.CS + ProtocolMessages.ILLEGAL_SHIP_PLACEMENT);
+                           sendMessage(ERROR + CS + ILLEGAL_SHIP_PLACEMENT);
                        }
                     }
                     else {
                         illegalCommandSender();
                     }
                     break;
-                case ProtocolMessages.ATTACK:
+                case ATTACK:
                     this.server.attackCommand(this, array[1]);
                     break;
-                case ProtocolMessages.MSGSEND:
+                case MSGSEND:
                     if (array[1] != null && array[2] != null) {
-                        if (this.player.getName().equals(array[1]) && !(array[2].length() > 50)) {
-                            this.server.processMessage(array[1], array[2]);
-                        }
+                        this.server.processMessage();
                     }
                     else {
                         illegalCommandSender();
                     }
+                    break;
+                case EXIT:
+                    this.server.clientLeft(this);
+                    this.exit();
                     break;
                 default:
                     illegalCommandSender();
@@ -139,7 +143,7 @@ public class ClientHandler implements Runnable{
     }
 
     public void illegalCommandSender() {
-        sendMessage(ProtocolMessages.ERROR + ProtocolMessages.CS + ProtocolMessages.ILLEGAL_COMMAND);
+        sendMessage(ERROR + CS + ILLEGAL_COMMAND);
     }
 
     public void exit() {

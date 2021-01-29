@@ -1610,8 +1610,8 @@
       </AnchorPane>
       <AnchorPane layoutX="300.0" layoutY="396.0">
          <children>
-            <TextField fx:id="moveTextField" promptText="please enter coordinates" />
-            <Button fx:id="fireButton" layoutY="32.0" mnemonicParsing="false" onAction="#pressFireButton" prefHeight="47.0" prefWidth="149.0" style="-fx-background-color: #e02810;" text="Fire!" textFill="WHITE" wrapText="true">
+            <TextField fx:id="moveTextField" editable="false" promptText="please enter coordinates" />
+            <Button fx:id="fireButton" disable="true" layoutY="32.0" mnemonicParsing="false" onAction="#pressFireButton" prefHeight="47.0" prefWidth="149.0" style="-fx-background-color: #e02810;" text="Fire!" textFill="WHITE" wrapText="true">
                <font>
                   <Font size="16.0" />
                </font>

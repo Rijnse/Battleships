@@ -67,7 +67,7 @@
                   <Font name="Alien Encounters" size="87.0" />
                </font>
             </Text>
-            <Text layoutX="13.0" layoutY="128.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="undertitle" text="DEVELOPED BY STIJN ODINK AND RINSE DIJKSTRA">
+            <Text layoutX="13.0" layoutY="131.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="undertitle" text="DEVELOPED BY STIJN ODINK AND RINSE DIJKSTRA">
                <font>
                   <Font name="Alien Encounters" size="24.0" />
                </font>

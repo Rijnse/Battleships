@@ -1,33 +1,28 @@
 package view;
 
 import controller.ViewController;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Background;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
-import model.ProtocolMessages;
+import static model.ProtocolMessages.*;
 import model.exceptions.InvalidIndex;
-import model.game.Board;
 import model.game.Field;
 import model.game.HumanPlayer;
-import model.game.Ship;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class Game {
+    //instance of controller is called for and set
     private ViewController controller = ViewController.getInstance();
 
+    //Attributes of the Game View, conveniently named after their function
     @FXML private GridPane playerField;
     @FXML private GridPane enemyField;
     @FXML private Text gameTimer;
@@ -44,25 +39,42 @@ public class Game {
     @FXML private Text nameplayerone;
     @FXML private Text nameplayertwo;
 
+    //Turn timer used in method
     private Timer timer;
 
-    @FXML
-    public void initialize() {
+    /**
+     * @ensures that important attributes in ViewController are set on opening the game view
+     */
+    @FXML public void initialize() {
         ViewController.getInstance().setGameView(this);
         ViewController.getInstance().gameIni = true;
-
-        fireButton.setDisable(true);
-        moveTextField.setEditable(false);
+        ViewController.getInstance().currentScreen = "game";
     }
 
+    /**
+     * @ensures that given index on the player field in the GameView is updated according to the info in the given Field
+     * @param field is the Field object which needs to be represented on the board
+     * @param index is the index of the given Field
+     */
     public void updateOwnField(Field field, int index) {
         updatePlayerField(field, index, playerField);
     }
 
+    /**
+     * @ensures that given index on the enemy field in the GameView is updated according to the info in the given Field
+     * @param field is the Field object which needs to be represented on the board
+     * @param index is the index of the given Field
+     */
     public void updateEnemyField(Field field, int index) {
         updatePlayerField(field, index, enemyField);
     }
 
+    /**
+     * @ensures *SEE UPDATEOWNFIELD & UPDATEENEMYFIELD*
+     * @param field ^
+     * @param index ^
+     * @param pane is the field to be updated (either Player or Enemy)
+     */
     public void updatePlayerField(Field field, int index, GridPane pane){
        Rectangle rect = (Rectangle) ((StackPane) pane.getChildren().get(index)).getChildren().get(0);
 
@@ -99,7 +111,10 @@ public class Game {
        }
     }
 
-    //time in seconds
+    /**
+     * @ensures that remaining game time is displayed in game view
+     * @param time in seconds as an int
+     */
     public void updateGeneralTime(int time) {
         int minutes = time / 60;
         int seconds = time % 60;
@@ -111,9 +126,12 @@ public class Game {
         }
     }
 
+    /**
+     * @ensures that turn of player is started. This means that TextField and Fire button become available and the turn timer starts running.
+     */
     public void startTurnTimer() {
         timer = new Timer();
-        final int[] time = {ProtocolMessages.TURN_TIME};
+        final int[] time = {TURN_TIME};
         moveTextField.setEditable(true);
         fireButton.setDisable(false);
         timer.schedule(new TimerTask() {
@@ -136,12 +154,20 @@ public class Game {
         }, 0, 1000);
     }
 
+    /**
+     * @ensures that timer is stopped and move fields become unavailable again.
+     * @param timer is the Timer object which needs to be canceled.
+     */
     public void stopTurnTimer(Timer timer) {
         timer.cancel();
         fireButton.setDisable(true);
         moveTextField.setEditable(false);
     }
 
+    /**
+     * @ensures that index is retrieved from textfield and sent to the server by the controller. If index is invalid, an ERROR is shown and the user may try again.
+     * @requires the fire button to be pressed.
+     */
     public void pressFireButton() {
         HumanPlayer player = (HumanPlayer) ViewController.getInstance().getClient().getPlayer();
         try {
@@ -159,14 +185,12 @@ public class Game {
         }
     }
 
-    public GridPane getPlayerField() {
-        return playerField;
-    }
-
-    public GridPane getEnemyField() {
-        return enemyField;
-    }
-
+    /**
+     * @ensures that popup is shown in game view
+     * @param title is the title of the popup
+     * @param desc is the description of the popup
+     * @param popuptime is the duration in seconds for which the popup should remain on the screen
+     */
     public void showPopUp(String title, String desc, int popuptime) {
         Timer timer = new Timer();
         final int[] time = {popuptime};
@@ -187,11 +211,21 @@ public class Game {
         }, 0, 1000);
     }
 
+    /**
+     * @ensures that names of players are updated in Game View
+     * @param one != null
+     * @param two != null
+     */
     public void updatePlayerNames(String one, String two) {
         nameplayerone.setText(one);
         nameplayertwo.setText(two);
     }
 
+    /**
+     * @ensures that scores of players are updated in Game View
+     * @param one != null
+     * @param two != null
+     */
     public void updatePlayerScores(int one, int two) {
         scoreplayerone.setText(String.valueOf(one));
         scoreplayertwo.setText(String.valueOf(two));

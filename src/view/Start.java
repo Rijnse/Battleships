@@ -13,13 +13,14 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.net.InetAddress;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class Start {
+    //instance of controller is called for and set
     private ViewController controller = ViewController.getInstance();
 
+    //Attributes of JavaFX on the start screen
     @FXML private Button hostbig;
     @FXML private Button joinbig;
     @FXML private Button computerbig;
@@ -44,10 +45,12 @@ public class Start {
     @FXML private Text popuptitle;
     @FXML private Text popupdesc;
 
-
-    @FXML
-    public void initialize() {
+    /**
+     * @ensures that important attributes in ViewController are set on opening the game view
+     */
+    @FXML public void initialize() {
         ViewController.getInstance().setStartScreen(this);
+        ViewController.getInstance().currentScreen = "start";
     }
 
     public void bigHostButtonPress(ActionEvent e) {
@@ -95,8 +98,11 @@ public class Start {
         }
     }
 
-    @FXML
-    public void switchToLobby() throws IOException {
+    /**
+     * @ensures that view is switched to lobby screen
+     * @throws IOException if right FXML file can't be found
+     */
+    @FXML public void switchToLobby() throws IOException {
         Stage stage;
         Parent root;
 
@@ -107,20 +113,12 @@ public class Start {
             stage.show();
     }
 
-    @FXML
-    public void switchToGameScreen() throws IOException {
-        Stage stage;
-        Parent root;
-
-        stage = (Stage) joinbutton.getScene().getWindow();
-        root = FXMLLoader.load(getClass().getResource("../view/game.fxml"));
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
-    }
-
-    @FXML
-    public void showPopUp(String title, String desc) {
+    /**
+     * @ensures that popup is displayed in Start View. The duration is capped at 3 seconds.
+     * @param title is the title of the popup
+     * @param desc is the description of the popup
+     */
+    @FXML public void showPopUp(String title, String desc) {
         Timer timer = new Timer();
         final int[] time = {3};
         popuptitle.setText(title);
@@ -148,23 +146,22 @@ public class Start {
     public void hostGame() {
         try {
             int port = Integer.parseInt(hostport.getText());
-
             if (hostname.getText().length() > 12 || hostname.getText().length() < 1) {
                 hostbutton.setText("Name too long/short!");
             }
             else {
-                switchToLobby();
-                controller.hostGame(hostip.getText(), port, hostname.getText());
+                try {
+                    controller.hostGame(hostip.getText(), port, hostname.getText());
+                }
+                catch (IOException e) {
+                    hostbutton.setText("An error has occurred!");
+                }
             }
         }
         catch (NumberFormatException e) {
             hostbutton.setText("Invalid port!");
         }
-        catch (IOException e) {
-            hostbutton.setText("Something went wrong!");
-        }
     }
-
 
     /**
      * @requires a valid input of the port and name fields, meaning that these values must != null
@@ -176,7 +173,6 @@ public class Start {
                 joinbutton.setText("Name too long/short!");
             }
             else {
-                switchToLobby();
                 controller.joinGame(joinip.getText(), joinport.getText(), joinname.getText());
             }
         }
@@ -184,23 +180,24 @@ public class Start {
             joinbutton.setText("Invalid port!");
         }
         catch (IOException e) {
-            joinbutton.setText("Something went wrong!");
+            joinbutton.setText("Could not connect!");
         }
     }
 
+    /**
+     * @requires a valid name put in in the textfield
+     * @ensures that the botGame method in the controller is called
+     */
     public void computerGame() {
         if (computername.getText().length() > 12 || computername.getText().length() < 1) {
             computerbutton.setText("Name too long/short!");
         }
         else {
             try {
-                switchToLobby();
                 controller.botGame(computername.getText());
             } catch (IOException e) {
                 computerbutton.setText("Something went wrong!");
             }
         }
     }
-
-
 }

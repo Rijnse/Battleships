@@ -4,9 +4,7 @@ import model.ProtocolMessages;
 import model.game.*;
 
 import java.io.*;
-import java.net.InetAddress;
-import java.net.ServerSocket;
-import java.net.Socket;
+import java.net.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -16,19 +14,22 @@ public class Server implements Runnable {
     private int port;
     private InetAddress ip;
 
+    private boolean stopped;
+
     private List<ClientHandler> clientlist = new ArrayList<ClientHandler>();
     private List<List<ClientHandler>> gameslist = new ArrayList<List<ClientHandler>>();
     private List<GameHandler> gameHandlers = new ArrayList<GameHandler>();
 
-    public Server(String ip, int port) {
+    public Server(String ip, int port) throws IOException {
             setup(ip, port);
             this.port = port;
             this.ip = ssock.getInetAddress();
+            stopped = false;
     }
 
     @Override
     public void run() {
-        while (true) {
+        while (!stopped) {
             try {
                 System.out.println("Waiting for client to connect!");
                 Socket sock = ssock.accept();
@@ -39,21 +40,18 @@ public class Server implements Runnable {
                 new Thread(newPlayer).start();
 
             } catch (IOException ioException) {
-                ioException.printStackTrace();
+                System.out.println("Socket was closed!");
             }
         }
+        System.out.println("Goodbye!");
     }
 
-    public void setup(String ip, int port) {
+    public void setup(String ip, int port) throws IOException {
         this.ssock = null;
         while (ssock == null) {
-            try {
                 this.ssock = new ServerSocket(port, 0,
                         InetAddress.getByName(ip));
                 System.out.println("Server started at port " + port);
-            } catch (IOException e) {
-                System.out.println(".");
-            }
         }
     }
 
@@ -134,6 +132,45 @@ public class Server implements Runnable {
         }
     }
 
+    public void clientLeft(ClientHandler handler) {
+        clientlist.remove(handler);
+        boolean inGame = false;
+
+        for (GameHandler g : gameHandlers) {
+            if (g.getPlayers().contains(handler)) {
+                g.playerLeft(handler);
+                inGame = true;
+                break;
+            }
+        }
+
+        if (!inGame) {
+            List<ClientHandler> game = null;
+            for (List<ClientHandler> g : gameslist) {
+                if (g.contains(handler)) {
+                    game = g;
+                }
+            }
+
+            game.remove(handler);
+            handler.getGamePlayers().remove(handler);
+            if (game.size() == 0) {
+                gameslist.remove(game);
+            }
+            else {
+                sendHello(handler);
+            }
+        }
+
+        if (clientlist.size() == 0) {
+            try {
+                this.closeServer();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     public void receiveBoards(Board board, ClientHandler handler) {
         handler.getPlayer().setBoard(board);
         handler.getPlayer().newBoardSet = true;
@@ -166,20 +203,25 @@ public class Server implements Runnable {
         result.turnIndex = Integer.parseInt(index);
     }
 
-    public void processMessage(String name, String message) {
-
+    public void processMessage() {
+        for (ClientHandler k : clientlist) {
+            k.sendMessage(ProtocolMessages.MSGRECEIVED + ProtocolMessages.CS + "Server" + ProtocolMessages.CS + "This server does not support chatting");
+        }
     }
 
     public void closeServer() throws IOException {
-        for (ClientHandler k : clientlist) {
-            k.exit();
-        }
         ssock.close();
+        this.stopped = true;
     }
 
     public static void main(String[] args) {
         int standardPort = 1337;
-        Server server = new Server("localhost",standardPort);
+        Server server = null;
+        try {
+            server = new Server("localhost",standardPort);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         Thread srv = new Thread(server);
         srv.start();

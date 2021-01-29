@@ -75,7 +75,7 @@ public class ComputerClient implements Runnable, ClientInterface{
                     }
                 }
                 else {
-                    this.player.setCurrentGame(new Game(this.player));
+                    sendMessage(ProtocolMessages.EXIT + ProtocolMessages.CS + player.getName());
                 }
                 break;
             case ProtocolMessages.START:
@@ -173,8 +173,6 @@ public class ComputerClient implements Runnable, ClientInterface{
         try {
             in.close();
             out.close();
-            sock.shutdownInput();
-            sock.close();
         } catch (IOException e) {
             e.printStackTrace();
         }

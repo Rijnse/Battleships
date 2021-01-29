@@ -87,6 +87,8 @@ public class ProtocolMessages {
 	
 	/** The server sends this message to all players after a winner is identified, or after the game time is over. */
 	public static final String WON = "W";
+
+	public static final String EXIT = "EXIT";
 	//--------------------------------------------------//
 
 

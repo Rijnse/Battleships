@@ -22,7 +22,7 @@ public class GameHandler implements Runnable{
     private int tieScorePlayerOne;
     private int tieScorePlayerTwo;
 
-
+    private boolean playerLeft;
     public boolean turnFound;
     private boolean hitAgain;
     public int turnIndex;
@@ -31,6 +31,7 @@ public class GameHandler implements Runnable{
         this.players = players;
         hitAgain = true;
         turnFound = false;
+        playerLeft = false;
         tieScorePlayerOne = 0;
         tieScorePlayerTwo = 0;
     }
@@ -44,7 +45,7 @@ public class GameHandler implements Runnable{
         ClientHandler name;
         Thread timer = new Thread(new GameTimer());
         timer.start();
-        while (gameOver(timer) == null) {
+        while (gameOver(timer) == null && !playerLeft) {
             name = players.get(turnCount % 2);
             while (hitAgain && timer.isAlive()) {
                 for (ClientHandler k : players) {
@@ -215,6 +216,12 @@ public class GameHandler implements Runnable{
             }
         }
         return null;
+   }
+
+   public void playerLeft(ClientHandler handler) {
+        playerLeft = true;
+        getPlayers().remove(handler);
+        getPlayers().get(0).sendMessage(WON + CS + getPlayers().get(0).getPlayer().getName());
    }
 
    private ClientHandler[] gameOver(Thread timer) {

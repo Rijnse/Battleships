@@ -61,12 +61,8 @@
             <Font size="30.0" />
          </font>
       </Button>
-      <Button layoutX="88.0" layoutY="495.0" mnemonicParsing="false" prefHeight="52.0" prefWidth="57.0">
-         <graphic>
-            <AnchorPane id="chatbutton" prefHeight="43.0" prefWidth="42.0" stylesheets="@../resources/buttonpicture.css" />
-         </graphic></Button>
       <Button fx:id="leavebutton" layoutX="21.0" layoutY="24.0" mnemonicParsing="false" onAction="#leaveGame" prefHeight="42.0" prefWidth="90.0" text="Leave game" />
-      <Button fx:id="balenciaga" layoutX="781.0" layoutY="24.0" mnemonicParsing="false" onAction="#audioPlayerButton" prefHeight="25.0" prefWidth="82.0" text="Start music" />
+      <Button fx:id="startmusic" layoutX="781.0" layoutY="24.0" mnemonicParsing="false" onAction="#audioPlayerButton" prefHeight="25.0" prefWidth="82.0" text="Start music" />
       <Button fx:id="mutebutton" layoutX="782.0" layoutY="54.0" mnemonicParsing="false" onAction="#muteMusic" prefHeight="25.0" prefWidth="82.0" text="Mute music" />
         <AnchorPane fx:id="popup" layoutX="333.0" layoutY="469.0" prefHeight="96.0" prefWidth="321.0" style="-fx-background-color: white; -fx-border-color: black; -fx-border-width: 2; -fx-border-radius: 3;" visible="false">
             <children>
