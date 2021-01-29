@@ -1,0 +1,15 @@
+@font-face {
+    src: url('../resources/titlefont.ttf');
+}
+
+.title, .undertitle {
+    -fx-font-family: "Alien Encounters";
+}
+
+.title {
+    -fx-font-size: 87px;
+}
+
+.undertitle {
+    -fx-font-size: 24px;
+}

@@ -61,7 +61,7 @@ public class GameHandler implements Runnable{
                     i--;
                 }
 
-                if (turnFound) {
+                if (turnFound && turnIndex != -1) {
                     if (turnIndex < 0 || turnIndex > 149) {
                         name.sendMessage(ERROR + CS + INVALID_INDEX);
                     }

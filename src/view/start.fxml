@@ -6,15 +6,6 @@
 
 <AnchorPane prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.Start">
    <children>
-      <Text layoutX="154.0" layoutY="235.0" strokeType="OUTSIDE" strokeWidth="0.0" text="BATTLESHIPS">
-         <font>
-            <Font name="Alien Encounters" size="87.0" />
-         </font></Text>
-      <Text layoutX="158.0" layoutY="266.0" strokeType="OUTSIDE" strokeWidth="0.0" text="DEVELOPED BY STIJN ODINK AND RINSE DIJKSTRA">
-         <font>
-            <Font name="Alien Encounters" size="24.0" />
-         </font>
-      </Text>
       <VBox layoutX="293.0" layoutY="286.0" prefHeight="297.0" prefWidth="314.0">
          <children>
             <StackPane prefHeight="150.0" prefWidth="200.0">
@@ -69,5 +60,19 @@
                </Text>
            </children>
        </AnchorPane>
+      <AnchorPane layoutX="148.0" layoutY="135.0" prefHeight="151.0" prefWidth="598.0" stylesheets="@../resources/titlefont.css">
+         <children>
+            <Text layoutX="12.0" layoutY="110.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="title" text="BATTLESHIPS" textAlignment="CENTER">
+               <font>
+                  <Font name="Alien Encounters" size="87.0" />
+               </font>
+            </Text>
+            <Text layoutX="13.0" layoutY="128.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="undertitle" text="DEVELOPED BY STIJN ODINK AND RINSE DIJKSTRA">
+               <font>
+                  <Font name="Alien Encounters" size="24.0" />
+               </font>
+            </Text>
+         </children>
+      </AnchorPane>
    </children>
 </AnchorPane>
