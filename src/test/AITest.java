@@ -60,8 +60,10 @@ public class AITest {
     @Test
     public void overEdge() {
         array[29] = new Field(new Ship(-1, ProtocolMessages.Ship.UNKNOWN));
-        array[30] = new Field(new Ship(-1, ProtocolMessages.Ship.UNKNOWN));
-        Assertions.assertEquals(28, this.player.determineMove());
+        array[28] = new Field(new Ship(-1, ProtocolMessages.Ship.UNKNOWN));
+        board.getField(29).setHit(hit);
+        board.getField(28).setHit(hit);
+        Assertions.assertEquals(27, this.player.determineMove());
     }
 
     @Test
