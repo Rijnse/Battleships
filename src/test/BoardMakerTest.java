@@ -36,4 +36,9 @@ public class BoardMakerTest {
             }
         }
     }
+
+    @Test
+    public void checkValidBoard() {
+        Assertions.assertTrue(board.checkValidBoard());
+    }
 }
