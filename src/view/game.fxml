@@ -1638,7 +1638,6 @@
             <Font size="15.0" />
          </font>
       </Text>
-      <Button layoutX="53.0" layoutY="423.0" mnemonicParsing="false" onAction="#startTurnTimer" text="Button" />
       <AnchorPane layoutX="357.0" layoutY="150.0" prefHeight="226.0" prefWidth="35.0">
          <children>
             <Text layoutX="14.0" layoutY="16.0" stroke="BLACK" strokeType="OUTSIDE" strokeWidth="0.5" text="1" textAlignment="CENTER" />
