@@ -9,7 +9,7 @@ public class Board {
     private Field[] fields;
 
     //All of the ships to be placed on the board are predefined. This way, we don't have to make 'duplicate' Ships with the same ID and Type
-    private final Ship[] SHIPS = {
+    public final Ship[] SHIPS = {
             new Ship(0, ProtocolMessages.Ship.CARRIER),
             new Ship(1, ProtocolMessages.Ship.CARRIER),
 

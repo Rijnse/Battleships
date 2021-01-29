@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class BoardTest {
+public class BoardCheckerTest {
     private Board board;
     @BeforeEach
     public void setup () {
@@ -54,18 +54,4 @@ public class BoardTest {
         }
         Assertions.assertFalse(board4.checkValidBoard());
     }
-
-    @Test
-    public void checkBoardMaker () {
-        Board board1 = new Board();
-        Assertions.assertTrue(board1.checkValidBoard());
-        for (int i = 14; i < 135; i = i + 15) {
-            if (!board1.getField(i).getShip().getType().equals(ProtocolMessages.Ship.EMPTY) && !board1.getField(i + 1).getShip().getType().equals(ProtocolMessages.Ship.EMPTY)) {
-                Assertions.assertNotEquals(board1.getField(i).getShip(), board1.getField(i + 1).getShip());
-            }
-        }
-    }
-
-
-
 }

@@ -55,39 +55,32 @@ public class ComputerPlayer extends Player {
 
                 // check if there is an other unknown ship next to the unknown ship at index i.
                 if (rPlaces != 0 || lPlaces != 0 || bPlaces != 0 || tPlaces != 0) {
-                    if (rPlaces >= lPlaces && rPlaces >= bPlaces && rPlaces >= tPlaces && (k + 1) % WIDTH != 0 && k < (WIDTH * HEIGHT) - 1 && !opponentBoard.getField(k).isHit()) {
+                    if (rPlaces >= lPlaces && rPlaces >= bPlaces && rPlaces >= tPlaces && !opponentBoard.getField(k).isHit()) {
                         return k;
                     }
-                    else if (lPlaces > rPlaces && lPlaces >= bPlaces && lPlaces >= tPlaces && (l - 1) % WIDTH != (WIDTH - 1) && l > 0 && !opponentBoard.getField(l).isHit()) {
+                    else if (lPlaces > rPlaces && lPlaces >= bPlaces && lPlaces >= tPlaces && !opponentBoard.getField(l).isHit()) {
                         return l;
                     }
-                    else if (bPlaces > rPlaces && bPlaces > lPlaces && bPlaces >= tPlaces && p < (WIDTH * (HEIGHT - 1)) && !opponentBoard.getField(p).isHit()) {
+                    else if (bPlaces > rPlaces && bPlaces > lPlaces && bPlaces >= tPlaces  && !opponentBoard.getField(p).isHit()) {
                         return p;
                     }
-                    else if (tPlaces > rPlaces && tPlaces > lPlaces && tPlaces > bPlaces && m < (WIDTH - 1)&& !opponentBoard.getField(m).isHit()) {
+                    else if (tPlaces > rPlaces && tPlaces > lPlaces && tPlaces > bPlaces && !opponentBoard.getField(m).isHit()) {
                         return m;
                     }
-                    else {
-                        if (k == (WIDTH * HEIGHT) - 1 && !opponentBoard.getField(k).isHit()) {
-                            return k;
-                        }
-                        else if ((k + 1) % WIDTH != 0 && k < (WIDTH * HEIGHT) - 1 && !opponentBoard.getField(k).isHit()) {
-                            return k;
-                        }
-                        else if ((l - 1) % WIDTH != (WIDTH - 1) && l > 0 && !opponentBoard.getField(l).isHit()) {
-                            return l;
-                        }
-                        else if (p < (WIDTH * (HEIGHT - 1))&& !opponentBoard.getField(p).isHit()) {
-                            return p;
-                        }
-                        else if (m < (WIDTH - 1)&& !opponentBoard.getField(m).isHit()) {
-                            return m;
-                        }
-                    }
-
                 }
                 else {
-                    return i + 1;
+                    if (!opponentBoard.getField(k).isHit()) {
+                        return k;
+                    }
+                    else if (!opponentBoard.getField(l).isHit()) {
+                        return l;
+                    }
+                    else if (!opponentBoard.getField(p).isHit()) {
+                        return p;
+                    }
+                    else if (!opponentBoard.getField(m).isHit()) {
+                        return m;
+                    }
                 }
             }
         }
