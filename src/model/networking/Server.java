@@ -20,8 +20,8 @@ public class Server implements Runnable {
     private List<List<ClientHandler>> gameslist = new ArrayList<List<ClientHandler>>();
     private List<GameHandler> gameHandlers = new ArrayList<GameHandler>();
 
-    public Server(int port) {
-            setup(port);
+    public Server(String ip, int port) {
+            setup(ip, port);
             this.port = port;
             this.ip = ssock.getInetAddress();
     }
@@ -44,12 +44,12 @@ public class Server implements Runnable {
         }
     }
 
-    public void setup(int port) {
+    public void setup(String ip, int port) {
         this.ssock = null;
         while (ssock == null) {
             try {
                 this.ssock = new ServerSocket(port, 0,
-                        InetAddress.getByName("localhost"));
+                        InetAddress.getByName(ip));
                 System.out.println("Server started at port " + port);
             } catch (IOException e) {
                 System.out.println(".");
@@ -179,7 +179,7 @@ public class Server implements Runnable {
 
     public static void main(String[] args) {
         int standardPort = 1337;
-        Server server = new Server(standardPort);
+        Server server = new Server("localhost",standardPort);
 
         Thread srv = new Thread(server);
         srv.start();

@@ -84,12 +84,12 @@ public class ViewController {
         this.game.updatePlayerScores(one, two);
     }
 
-    public void hostGame(int port, String username) {
-        Server server = new Server(port);
+    public void hostGame(String ip, int port, String username) {
+        Server server = new Server(ip, port);
         Thread srv = new Thread(server);
         srv.start();
 
-        Client client = new Client("localhost", String.valueOf(port), new HumanPlayer(username));
+        Client client = new Client(ip, String.valueOf(port), new HumanPlayer(username));
         this.client = client;
         Thread clientthread = new Thread(client);
         clientthread.start();
@@ -115,7 +115,7 @@ public class ViewController {
     }
 
     public void botGame(String username) {
-        Server server = new Server(1337);
+        Server server = new Server("localhost", 1337);
         Thread srv = new Thread(server);
         srv.start();
 

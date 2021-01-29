@@ -13,6 +13,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -29,6 +30,7 @@ public class Start {
 
     @FXML private TextField hostport;
     @FXML private TextField hostname;
+    @FXML private TextField hostip;
     @FXML private TextField joinip;
     @FXML private TextField joinport;
     @FXML private TextField joinname;
@@ -146,12 +148,13 @@ public class Start {
     public void hostGame() {
         try {
             int port = Integer.parseInt(hostport.getText());
+
             if (hostname.getText().length() > 12 || hostname.getText().length() < 1) {
                 hostbutton.setText("Name too long/short!");
             }
             else {
                 switchToLobby();
-                controller.hostGame(port, hostname.getText());
+                controller.hostGame(hostip.getText(), port, hostname.getText());
             }
         }
         catch (NumberFormatException e) {
