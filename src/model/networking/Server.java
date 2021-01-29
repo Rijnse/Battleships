@@ -162,7 +162,6 @@ public class Server implements Runnable {
                 }
             }
         }
-        System.out.println("Move reached server");
         result.turnFound = true;
         result.turnIndex = Integer.parseInt(index);
     }

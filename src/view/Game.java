@@ -145,9 +145,10 @@ public class Game {
     public void pressFireButton() {
         HumanPlayer player = (HumanPlayer) ViewController.getInstance().getClient().getPlayer();
         try {
-            int index = player.determineMove(moveTextField.getText());
+            String input = moveTextField.getText().replaceAll(" ", "");
+            int index = player.determineMove(input);
             if (!ViewController.getInstance().getClient().getPlayer().getCurrentGame().getPlayerTwo().getBoard().getFieldsArray()[index].isHit()) {
-                controller.sendMove(moveTextField.getText());
+                controller.sendMove(input);
                 stopTurnTimer(timer);
             }
             else {
