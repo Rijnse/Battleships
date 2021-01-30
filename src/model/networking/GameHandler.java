@@ -155,12 +155,12 @@ public class GameHandler implements Runnable{
 
             if (destroyHandler(index, opponent, enemy)) {
                 handler.getPlayer().incrementScore(1);
-               /* if (handler.getPlayer().getName().equals(getPlayers().get(0).getPlayer().getName())) {
-                    tieScorePlayerOne = tieScorePlayerOne + (1 / (opponent.getField(index).getShip().getLength() / 5));
+                if (handler.getPlayer().getName().equals(getPlayers().get(0).getPlayer().getName())) {
+                    tieScorePlayerOne = tieScorePlayerOne + (int) (1 / (double) (opponent.getField(index).getShip().getLength() / 5));
                 }
                 else {
-                    tieScorePlayerTwo = tieScorePlayerTwo + (1 / (opponent.getField(index).getShip().getLength() / 5));
-                }*/
+                    tieScorePlayerTwo = tieScorePlayerTwo + (int) (1 / (double) (opponent.getField(index).getShip().getLength() / 5));
+                }
             }
         }
    }

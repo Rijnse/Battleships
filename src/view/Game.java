@@ -78,6 +78,7 @@ public class Game {
     public void updatePlayerField(Field field, int index, GridPane pane){
        Rectangle rect = (Rectangle) ((StackPane) pane.getChildren().get(index)).getChildren().get(0);
 
+       //Colors: CARRIER = GREEN, BATTLESHIP = BLUE, DESTROYER = YELLOW, SUPERPATROL = ORANGE, PATROLBOAT = RED, UNKNOWN SHIP = GREY and EMPTY = WHITE;
        switch (field.getShip().getType()) {
            case CARRIER:
                rect.setFill(Color.web("#b6d7a8"));
@@ -177,11 +178,8 @@ public class Game {
                 controller.sendMove(input);
                 stopTurnTimer(timer);
             }
-            else {
-                showPopUp("ERROR!", "This field was already hit!", 3);
-            }
         } catch (InvalidIndex invalidIndex) {
-            showPopUp("ERROR!", "This is not a field on the board!", 3);
+            showPopUp("ERROR!", invalidIndex.getMessage(), 3);
         }
     }
 

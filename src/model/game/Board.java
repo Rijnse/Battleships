@@ -1,9 +1,10 @@
 package model.game;
 import model.ProtocolMessages;
+import static model.ProtocolMessages.*;
 
 public class Board {
-    public static final int WIDTH = 15;
-    public static final int HEIGHT = 10;
+    public static final int WIDTH = BOARD_DIMENSIONS[1];
+    public static final int HEIGHT = BOARD_DIMENSIONS[0];
     public static final String COLUMNS = "ABCDEFGHIJKLMNO";
 
     private Field[] fields;
@@ -176,7 +177,7 @@ public class Board {
     public Board(String boardarray) {
         Ship placeholder = null;
         Field[] array = new Field[WIDTH * HEIGHT];
-        String[] strarray = boardarray.split(ProtocolMessages.AS);
+        String[] strarray = boardarray.split(AS);
         for (int i = 0; i < strarray.length; i++) {
             if (strarray[i].equals("0")) {
                 array[i] = new Field();
@@ -252,22 +253,22 @@ public class Board {
         for (int i = 0; i < fields.length; i++) {
             switch (fields[i].getShip().getType()) {
                 case CARRIER:
-                    result = result + ("C" + fields[i].getShip().getIdentifier()) + ProtocolMessages.AS;
+                    result = result + ("C" + fields[i].getShip().getIdentifier()) + AS;
                     break;
                 case BATTLESHIP:
-                    result = result + ("B" + fields[i].getShip().getIdentifier()) + ProtocolMessages.AS;
+                    result = result + ("B" + fields[i].getShip().getIdentifier()) + AS;
                     break;
                 case DESTROYER:
-                    result = result + ("D" + fields[i].getShip().getIdentifier()) + ProtocolMessages.AS;
+                    result = result + ("D" + fields[i].getShip().getIdentifier()) + AS;
                     break;
                 case SUPERPATROL:
-                    result = result + ("S" + fields[i].getShip().getIdentifier()) + ProtocolMessages.AS;
+                    result = result + ("S" + fields[i].getShip().getIdentifier()) + AS;
                     break;
                 case PATROLBOAT:
-                    result = result + ("P" + fields[i].getShip().getIdentifier()) + ProtocolMessages.AS;
+                    result = result + ("P" + fields[i].getShip().getIdentifier()) + AS;
                     break;
                 default:
-                    result = result + 0 + ProtocolMessages.AS;
+                    result = result + 0 + AS;
                     break;
             }
         }

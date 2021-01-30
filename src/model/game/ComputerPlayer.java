@@ -1,13 +1,11 @@
 package model.game;
 
 import model.ProtocolMessages;
-
-import java.util.Random;
+import static model.ProtocolMessages.*;
 
 public class ComputerPlayer extends Player {
-    private String name;
-    public static final int WIDTH = 15;
-    public static final int HEIGHT = 10;
+    public static final int WIDTH = BOARD_DIMENSIONS[1];
+    public static final int HEIGHT = BOARD_DIMENSIONS[0];
 
     /**
      * @ensures that a ComputerPlayer is constructed with the Player constructor and pre-defined name (We figured Admiral AI was funny)
