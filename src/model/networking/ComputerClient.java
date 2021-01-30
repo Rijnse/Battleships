@@ -1,38 +1,41 @@
 package model.networking;
 
-import controller.ViewController;
 import model.ProtocolMessages;
 import model.game.*;
 
 import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.net.UnknownHostException;
 
+//This class is basically a stripped down version of the Client interface/class
 public class ComputerClient implements Runnable, ClientInterface{
     private Player player;
     private Socket sock;
     private BufferedReader in;
     private BufferedWriter out;
 
-    public ComputerClient(String IP, String port) {
+    /**
+     * @ensures that Client object is created and that client tries to connect to server with given parameters
+     * @requires valid Strings (meaning non-null)
+     * @param IP is the ip address of the desired server
+     * @param port is the port of the desired server
+     * @throws IOException if unable to connect to server for whatever reason. The controller catches this exception to make sure the user is notified of this error.
+     */
+    public ComputerClient(String IP, String port) throws IOException {
         this.player = new ComputerPlayer();
-        try {
             this.sock = new Socket(InetAddress.getByName(IP), Integer.parseInt(port));
             in = new BufferedReader(
                     new InputStreamReader(sock.getInputStream()));
             out = new BufferedWriter(
                     new OutputStreamWriter(sock.getOutputStream()));
             sendMessage(ProtocolMessages.HELLO + ProtocolMessages.CS + player.getName());
-        } catch (UnknownHostException e) {
-            System.out.println("Host could not be found!");
-            exit();
-        } catch (IOException e) {
-            System.out.println("Some I/O error has occurred. Try again!");
-            exit();
-        }
     }
 
+    /**
+     * @ensures that ComputerClient continuously awaits a message from the socket. This is happening on a new Thread.
+     * Calls for receiveMessage() method when it receives a new command from server.
+     * @requires a proper connection with a server using the this.socket.
+     */
     @Override
     public void run() {
         String msg;
@@ -48,16 +51,11 @@ public class ComputerClient implements Runnable, ClientInterface{
         }
     }
 
-    @Override
-    public Player getPlayer() {
-        return this.player;
-    }
-
-    @Override
-    public Socket getSock() {
-        return this.sock;
-    }
-
+    /**
+     * @ensures that message from server is broken down and properly handled on clientside. If command is unknown, client will not respond.
+     * @requires a valid String as a command
+     * @param message != null
+     */
     @Override
     public void receiveMessage(String message) {
         System.out.println("ComputerClient receives: " + message);
@@ -157,6 +155,20 @@ public class ComputerClient implements Runnable, ClientInterface{
     }
 
     @Override
+    public Player getPlayer() {
+        return this.player;
+    }
+
+    @Override
+    public Socket getSock() {
+        return this.sock;
+    }
+
+    /**
+     * @ensures that given message is sent to server
+     * @param message is the message that the client wishes to send (!= null)
+     */
+    @Override
     public void sendMessage(String message) {
         try {
             System.out.println("Computerclient sends: " + message);
@@ -168,6 +180,9 @@ public class ComputerClient implements Runnable, ClientInterface{
         }
     }
 
+    /**
+     * @ensures that socket streams are closed down
+     */
     @Override
     public void exit() {
         try {
