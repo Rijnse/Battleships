@@ -46,20 +46,6 @@
                </children></StackPane>
          </children>
       </VBox>
-       <AnchorPane fx:id="popup" layoutX="184.0" layoutY="149.0" prefHeight="303.0" prefWidth="532.0" style="-fx-background-color: white; -fx-border-color: black; -fx-border-width: 2; -fx-border-radius: 3;" visible="false">
-           <children>
-               <Text fx:id="popuptitle" layoutX="196.0" layoutY="142.0" strokeType="OUTSIDE" strokeWidth="0.0" text="HIT!" textAlignment="CENTER" wrappingWidth="114.044921875">
-                   <font>
-                       <Font size="34.0" />
-                   </font>
-               </Text>
-               <Text fx:id="popupdesc" layoutX="141.0" layoutY="168.0" strokeType="OUTSIDE" strokeWidth="0.0" text="*NAME* shot at *COORDINATES*" textAlignment="CENTER" wrappingWidth="224.044921875">
-                   <font>
-                       <Font size="15.0" />
-                   </font>
-               </Text>
-           </children>
-       </AnchorPane>
       <AnchorPane layoutX="148.0" layoutY="135.0" prefHeight="151.0" prefWidth="598.0" stylesheets="@../resources/titlefont.css">
          <children>
             <Text layoutX="12.0" layoutY="110.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="title" text="BATTLESHIPS" textAlignment="CENTER">
@@ -74,5 +60,19 @@
             </Text>
          </children>
       </AnchorPane>
+       <AnchorPane fx:id="popup" layoutX="184.0" layoutY="149.0" prefHeight="303.0" prefWidth="532.0" style="-fx-background-color: white; -fx-border-color: black; -fx-border-width: 2; -fx-border-radius: 3;" visible="false">
+           <children>
+               <Text fx:id="popuptitle" layoutX="196.0" layoutY="142.0" strokeType="OUTSIDE" strokeWidth="0.0" text="HIT!" textAlignment="CENTER" wrappingWidth="114.044921875">
+                   <font>
+                       <Font size="34.0" />
+                   </font>
+               </Text>
+               <Text fx:id="popupdesc" layoutX="141.0" layoutY="168.0" strokeType="OUTSIDE" strokeWidth="0.0" text="*NAME* shot at *COORDINATES*" textAlignment="CENTER" wrappingWidth="224.044921875">
+                   <font>
+                       <Font size="15.0" />
+                   </font>
+               </Text>
+           </children>
+       </AnchorPane>
    </children>
 </AnchorPane>

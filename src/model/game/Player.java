@@ -24,6 +24,8 @@ public abstract class Player {
      * @ensures that a Player object (either computer or human) is created with score 0, a board with empty fields (as opposed to random) and the player name
      * @requires the Board(Field[]) constructor to be fully functional
      * @param name is a String containing the name of the player
+     * @param emptyFields is a boolean telling the constructor if the players Board should only contain empty fields
+     * This is used when the opponents board is generated on clientside
      */
     public Player(String name, boolean emptyFields) {
         this.score = 0;

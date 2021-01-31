@@ -90,6 +90,7 @@ public class ComputerPlayer extends Player {
     /**
      * @ensures that a random int between 0 and 149 is generated
      * @return an int
+     * @param array is the Field[] in which a move should be found
      */
     public static int randomMove (Field[] array) {
         int number = (int) (Math.random() * WIDTH * HEIGHT);
