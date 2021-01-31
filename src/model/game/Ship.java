@@ -4,7 +4,6 @@ import model.ProtocolMessages;
 public class Ship {
     private int identifier; // between 0 and 9, depends on ship type, -1 if empty
     private ProtocolMessages.Ship type;
-    private boolean sunk;
     private int length;
 
     /**
@@ -14,7 +13,6 @@ public class Ship {
      * @param type is the type of the Ship object as described in the protocol. UNKNOWN is used when the type of the ship is yet to be determined by the player shooting at it...
      */
     public Ship(int identifier, ProtocolMessages.Ship type) {
-        this.sunk = false;
         this.identifier = identifier;
         this.type = type;
         switch (type) {
@@ -37,23 +35,6 @@ public class Ship {
                 this.length = 0;
                 break;
         }
-    }
-
-    /**
-     * @ensures that the sunk property of the Ship object is set to the parameter-given boolean value
-     * @requires a valid boolean
-     * @param sunk is a boolean true/false
-     */
-    public void setSunk(boolean sunk) {
-        this.sunk = sunk;
-    }
-
-    /**
-     * @ensures that a boolean is returned with the state of the 'sunk' property of the Ship object
-     * @return a boolean true/false
-     */
-    public boolean isSunk() {
-        return this.sunk;
     }
 
     /**

@@ -149,7 +149,6 @@ public class Game {
                 }
                 else {
                     stopTurnTimer(timer);
-                    controller.sendMove(String.valueOf(ViewController.getInstance().getClient().getPlayer().determineMove()));
                 }
             }
         }, 0, 1000);

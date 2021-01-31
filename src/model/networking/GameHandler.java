@@ -213,7 +213,6 @@ public class GameHandler implements Runnable{
        }
 
        if (count == ship.getLength()) {
-           ship.setSunk(true);
            int firstSquare = -1;
 
            //Checks for first occurrence of ship on board

@@ -62,6 +62,7 @@ public class Board {
         this.fields = array;
     }
 
+
     /**
      * @param array is the fields array of the board created using the method (see constructor above)
      * @param ship  is the ship object which needs to be placed in the array

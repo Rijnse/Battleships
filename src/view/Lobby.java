@@ -20,6 +20,9 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class Lobby {
+    //instance of controller is called for and set
+    private ViewController controller = ViewController.getInstance();
+
     //All JavaFX attributes used in the lobby
     @FXML public Button leavebutton;
     @FXML public Text ipaddress;
@@ -39,8 +42,8 @@ public class Lobby {
      * @ensures that important attributes in ViewController are set on opening the game view
      */
     @FXML public void initialize() {
-        ViewController.getInstance().setLobby(this);
-        ViewController.getInstance().currentScreen = "lobby";
+        controller.setLobby(this);
+        controller.currentScreen = "lobby";
     }
 
     /**
@@ -48,7 +51,7 @@ public class Lobby {
      */
     @FXML public void leaveGame() {
         try {
-            ViewController.getInstance().leaveGame();
+            controller.leaveGame();
             switchToStart();
         }
         catch (IOException e) {
@@ -97,7 +100,7 @@ public class Lobby {
     }
 
     @FXML public void pressStartButton() {
-        ViewController.getInstance().pressStartButton();
+        controller.pressStartButton();
     }
 
     /**

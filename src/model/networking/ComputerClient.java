@@ -136,7 +136,6 @@ public class ComputerClient implements Runnable, ClientInterface{
                         ship = new Ship(-1, ProtocolMessages.Ship.PATROLBOAT);
                         break;
                 }
-                ship.setSunk(true);
                 if (array[3].contains("0")) {
                     for (int i = Integer.parseInt(array[2]); i < ship.getLength(); i++) {
                         playerDestroyed.getBoard().getFieldsArray()[i] = new Field(ship);

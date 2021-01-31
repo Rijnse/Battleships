@@ -180,7 +180,6 @@ public class Client implements Runnable, ClientInterface{
                                 ship = new Ship(-1, ProtocolMessages.Ship.PATROLBOAT);
                                 break;
                         }
-                        ship.setSunk(true);
                         if (array[3].contains("0")) {
                             for (int i = 0; i < ship.getLength(); i++) {
                                 playerDestroyed.getBoard().getFieldsArray()[Integer.parseInt(array[2]) + i] = new Field(ship);
